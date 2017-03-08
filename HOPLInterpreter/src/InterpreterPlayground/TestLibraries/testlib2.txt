@@ -1,0 +1,8 @@
+﻿import TestLib2Namespace as AnAlias;
+
+namespace TestLib1Namespace
+{
+	string function1(){
+		return AnAlias.function1();
+	}
+}

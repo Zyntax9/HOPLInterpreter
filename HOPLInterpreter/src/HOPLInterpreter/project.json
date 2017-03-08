@@ -1,0 +1,30 @@
+{
+	"version": "1.0.0-*",
+
+    "dependencies": {
+        "NETStandard.Library": "1.6.0",
+        "Antlr4": "4.5.3-rc1",
+        "System.Threading.Thread": "4.3.0",
+        "HOPLInterpreterInterface": "1.0.0-*",
+        "System.Reflection.TypeExtensions": "4.4.0-beta-24913-01"
+    },
+
+	"frameworks": {
+		"netstandard1.6": {
+			"imports": "portable-net45+win8"
+		}
+	},
+
+	"buildOptions": {
+		"compile": {
+			"includeFiles": [
+				"../../HOPLGrammar/obj/Release/HOPLGrammarBaseListener.cs",
+				"../../HOPLGrammar/obj/Release/HOPLGrammarBaseVisitor.cs",
+				"../../HOPLGrammar/obj/Release/HOPLGrammarLexer.cs",
+				"../../HOPLGrammar/obj/Release/HOPLGrammarListener.cs",
+				"../../HOPLGrammar/obj/Release/HOPLGrammarParser.cs",
+				"../../HOPLGrammar/obj/Release/HOPLGrammarVisitor.cs"
+			]
+		}
+	}
+}

@@ -1,0 +1,1127 @@
+﻿using System;
+using Antlr4.Runtime.Misc;
+using Antlr4.Runtime.Tree;
+using HOPLGrammar;
+using Parser = HOPLGrammar.HOPLGrammarParser;
+using System.Collections.Generic;
+using HomeControlInterpreter.NamespaceTypes;
+using HomeControlInterpreter.Exceptions;
+using HomeControlInterpreter.Faults.TypeCheck;
+using Antlr4.Runtime;
+using HomeControlInterpreter.Exploration;
+
+namespace HomeControlInterpreter.TypeCheck
+{
+	public class TypeChecker : IHOPLGrammarVisitor<InterpreterType>
+	{
+		public TypeFaultCollection Faults { get; private set; } = new TypeFaultCollection();
+
+		private string filename;
+		private NamespaceSet namespaceSet = new NamespaceSet();
+		private ImportAccessTable accessTable = new ImportAccessTable();
+
+		private Namespace currentNamespace;
+		private TypeScope currentScope;
+		private InterpreterType currentCallable;
+
+		public TypeChecker() { }
+
+		public TypeChecker(string filename, NamespaceSet namespaces, ImportAccessTable accessTable)
+		{
+			this.filename = filename;
+			namespaceSet = namespaces;
+			this.accessTable = accessTable;
+		}
+
+		#region Auxiliary methods
+		private bool AssignmentAllowed(InterpreterType assignTo, InterpreterType assignFrom)
+		{
+			if (assignTo == assignFrom ||
+				assignTo == InterpreterType.FLOAT && assignFrom == InterpreterType.INT)
+				return true;
+
+			if (assignTo.TypeOf == InterpreterType.Types.LIST &&
+			   assignFrom.TypeOf == InterpreterType.Types.LIST)
+				return AssignmentAllowed(assignTo.TypeArray[0], assignFrom.TypeArray[0]);
+
+			if (assignTo.TypeOf == InterpreterType.Types.TUPLE &&
+				assignFrom.TypeOf == InterpreterType.Types.TUPLE &&
+				assignTo.TypeArray.Length == assignFrom.TypeArray.Length)
+			{
+				for (int i = 0; i < assignTo.TypeArray.Length; i++)
+				{
+					if (!AssignmentAllowed(assignTo.TypeArray[i], assignFrom.TypeArray[i]))
+						return false;
+				}
+				return true;
+			}
+
+			return false;
+		}
+
+		private Namespace ResolveNamespace(Parser.NamespaceContext context)
+		{
+			Import import;
+			if (!accessTable.TryGetImport(filename, context.GetText(), out import))
+				return null;
+			Namespace ns = currentNamespace;
+			if (context != null && !namespaceSet.TryGet(import.NamespaceName, out ns))
+				return null;
+			return ns;
+		}
+
+		private InterpreterType ResolveIdentifier(Parser.IdentifierContext context, bool toAssign = false)
+		{
+			IGlobalEntity ge;
+			InterpreterType varType = InterpreterType.NONE;
+			Parser.NamespaceContext nscontext = context.@namespace();
+			string idName = context.ID().GetText();
+			if (nscontext != null)
+			{
+				Namespace ns = ResolveNamespace(nscontext);
+				if (ns == null)
+					return RaiseFault(TypeFaultMessage.NS_MISSING, context);
+
+				if (!ns.TryGetGlobalEntity(idName, out ge))
+					return RaiseFault(TypeFaultMessage.VAR_NOTDEF, context);
+
+				if (toAssign && ge.Constant)
+					return RaiseFault(TypeFaultMessage.ASSIGN_CONST, context);
+
+				varType = ge.Type;
+			}
+			else
+			{
+				if (!currentScope.TryGetVariable(idName, out varType))
+					return RaiseFault(TypeFaultMessage.VAR_NOTDEF, context);
+
+				if (toAssign && currentScope.IsConstant(idName))
+					return RaiseFault(TypeFaultMessage.ASSIGN_CONST, context);
+			}
+
+			foreach(Parser.ExprContext expr in context.expr())
+			{
+				if (varType.TypeOf == InterpreterType.Types.LIST)
+					varType = ResolveListIndex(varType, expr, context);
+				else if (varType.TypeOf == InterpreterType.Types.TUPLE)
+					varType = ResolveTupleIndex(varType, expr, context);
+				else
+					return RaiseFault(TypeFaultMessage.INDEX_LORT, context);
+				
+				if (varType == InterpreterType.FAULT)
+					return InterpreterType.FAULT;
+			}
+
+			return varType;
+		}
+
+		private InterpreterType ResolveListIndex(InterpreterType type, Parser.ExprContext index, 
+			ParserRuleContext context)
+		{
+			if (type.IsEmptyList)
+				return RaiseFault(TypeFaultMessage.INDEX_EMPTY, context);
+
+			InterpreterType itype = VisitExpr(index);
+			if (itype == InterpreterType.FAULT)
+				return InterpreterType.FAULT;
+
+			if (itype.TypeOf != InterpreterType.Types.INT)
+				return RaiseFault(TypeFaultMessage.INDEX_LINT, context);
+
+			return type.TypeArray[0];
+		}
+
+		private InterpreterType ResolveTupleIndex(InterpreterType type, Parser.ExprContext index,
+			ParserRuleContext context)
+		{
+			int i;
+			if (!int.TryParse(index.GetText(), out i))
+				return RaiseFault(TypeFaultMessage.INDEX_TCINT, context);
+
+			if (i >= type.TypeArray.Length || i < 0)
+				return RaiseFault(TypeFaultMessage.INDEX_TOOR, context);
+
+			return type.TypeArray[i];
+		}
+
+		private InterpreterType RaiseFault(TypeFaultMessage msg, ParserRuleContext context)
+		{
+			Faults.Add(msg, context, filename);
+			return InterpreterType.FAULT;
+		}
+		#endregion
+
+		#region Visitor implementation
+		public InterpreterType Visit(IParseTree tree)
+		{
+			throw new NotImplementedException();
+		}
+
+		public InterpreterType VisitChildren(IRuleNode node)
+		{
+			throw new NotImplementedException();
+		}
+
+		public InterpreterType VisitErrorNode(IErrorNode node)
+		{
+			throw new NotImplementedException();
+		}
+
+		public InterpreterType VisitAddiExpr([NotNull] Parser.AddiExprContext context)
+		{
+			Parser.ExprContext[] exprs = context.expr();
+
+			InterpreterType left = VisitExpr(exprs[0]);
+			InterpreterType right = VisitExpr(exprs[1]);
+
+			if (left == InterpreterType.FAULT || right == InterpreterType.FAULT)
+				return InterpreterType.FAULT;
+
+			if (context.op.Type == Parser.PLUS && left == InterpreterType.STRING &&
+				right == InterpreterType.STRING)
+				return InterpreterType.STRING;
+
+			if (left != InterpreterType.INT && left != InterpreterType.FLOAT ||
+				right != InterpreterType.INT && right != InterpreterType.FLOAT)
+			{
+				if (context.op.Type == Parser.PLUS)
+					return RaiseFault(TypeFaultMessage.ADDI_MISMATCH, context);
+				else
+					return RaiseFault(TypeFaultMessage.NUMERICAL_MISMATCH, context);
+			}
+
+			return left == InterpreterType.FLOAT || right == InterpreterType.FLOAT ?
+				InterpreterType.FLOAT : InterpreterType.INT;
+		}
+
+		public InterpreterType VisitAndExpr([NotNull] Parser.AndExprContext context)
+		{
+			Parser.ExprContext[] exprs = context.expr();
+
+			InterpreterType left = VisitExpr(exprs[0]);
+			InterpreterType right = VisitExpr(exprs[1]);
+
+			if (left == InterpreterType.FAULT || right == InterpreterType.FAULT)
+				return InterpreterType.FAULT;
+
+			if (left != InterpreterType.BOOL || right != InterpreterType.BOOL)
+				return RaiseFault(TypeFaultMessage.BOOLEAN_MISMATCH, context);
+
+			return InterpreterType.BOOL;
+		}
+
+		public InterpreterType VisitArg([NotNull] Parser.ArgContext context)
+		{
+			return VisitTypeName(context.typeName());
+		}
+
+		public InterpreterType VisitArgs([NotNull] Parser.ArgsContext context)
+		{
+			Parser.ArgContext[] args = context.arg();
+			InterpreterType[] domain = currentCallable.GetCallableDomain();
+
+			if (args.Length != domain.Length)
+				return RaiseFault(TypeFaultMessage.ARGCOUNT_MISMATCH, context);
+
+			foreach (Parser.ArgContext arg in args)
+				VisitArg(arg);
+
+			return InterpreterType.NONE;
+		}
+
+		public InterpreterType VisitAssign([NotNull] Parser.AssignContext context)
+		{
+			InterpreterType right = VisitExpr(context.expr());
+			if (right == InterpreterType.FAULT)
+				return InterpreterType.FAULT;
+
+			InterpreterType varType = ResolveIdentifier(context.identifier(), true);
+			if (varType == InterpreterType.FAULT)
+				return InterpreterType.FAULT;
+
+			if (AssignmentAllowed(varType, right))
+				return varType;
+
+			return RaiseFault(TypeFaultMessage.ASSIGN_MISMATCH, context);
+		}
+
+		public InterpreterType VisitAssignStat([NotNull] Parser.AssignStatContext context)
+		{
+			return VisitAssign(context.assign());
+		}
+
+		public InterpreterType VisitBody([NotNull] Parser.BodyContext context)
+		{
+			return VisitBody(context, null);
+		}
+
+		public InterpreterType VisitBody([NotNull] Parser.BodyContext context, IEnumerable<Argument> bodyArgs)
+		{
+			currentScope.PushDepth();
+
+			if (bodyArgs != null)
+				foreach (Argument arg in bodyArgs)
+					if (!currentScope.TryAddVariable(arg.Name, arg.Type))
+						return RaiseFault(TypeFaultMessage.ARG_SHADOW, context);
+
+			foreach (Parser.StatContext stat in context.stat())
+				VisitStat(stat);
+
+			currentScope.PopDepth();
+			return InterpreterType.NONE;
+		}
+
+		public InterpreterType VisitBoolType([NotNull] Parser.BoolTypeContext context)
+		{
+			return InterpreterType.BOOL;
+		}
+
+		public InterpreterType VisitBoolVal([NotNull] Parser.BoolValContext context)
+		{
+			return InterpreterType.BOOL;
+		}
+
+		public InterpreterType VisitCall([NotNull] Parser.CallContext context)
+		{
+			InterpreterType upperCallable = currentCallable;
+
+			InterpreterType callableType = VisitIdentifier(context.identifier());
+
+			if (!callableType.IsCallable)
+				return RaiseFault(TypeFaultMessage.CALLABLE_NOTCALLABLE, context);
+
+			if (callableType == InterpreterType.FAULT)
+				return InterpreterType.FAULT;
+
+			currentCallable = callableType;
+
+			Parser.ExprContext[] exprs = context.expr();
+			InterpreterType[] domain = currentCallable.GetCallableDomain();
+
+			if (exprs.Length != domain.Length)
+			{
+				currentCallable = upperCallable;
+				return RaiseFault(TypeFaultMessage.ARGCOUNT_MISMATCH, context);
+			}
+
+			for (int i = 0; i < exprs.Length; i++)
+			{
+				Parser.ExprContext expr = exprs[i];
+				InterpreterType exprType = VisitExpr(expr);
+
+				if (exprType == InterpreterType.FAULT)
+				{
+					currentCallable = upperCallable;
+					return InterpreterType.FAULT;
+				}
+
+				if (exprType != domain[i])
+				{
+					currentCallable = upperCallable;
+					return RaiseFault(TypeFaultMessage.CALL_ARGMISMATCH, context);
+				}
+			}
+
+			InterpreterType returnType = currentCallable.GetCallableRange();
+			currentCallable = upperCallable;
+			return returnType;
+		}
+
+		public InterpreterType VisitIdentifier([NotNull] Parser.IdentifierContext context)
+		{
+			return VisitIdentifier(context, false);
+		}
+
+		public InterpreterType VisitIdentifier([NotNull] Parser.IdentifierContext context, bool toAssign)
+		{
+			return ResolveIdentifier(context, toAssign);
+		}
+
+		public InterpreterType VisitCallExpr([NotNull] Parser.CallExprContext context)
+		{
+			return VisitCall(context.call());
+		}
+
+		public InterpreterType VisitCompExpr([NotNull] Parser.CompExprContext context)
+		{
+			Parser.ExprContext[] exprs = context.expr();
+
+			InterpreterType left = VisitExpr(exprs[0]);
+			InterpreterType right = VisitExpr(exprs[1]);
+
+			if (left == InterpreterType.FAULT || right == InterpreterType.FAULT)
+				return InterpreterType.FAULT;
+
+			if (left == InterpreterType.BOOL || right == InterpreterType.BOOL)
+				return RaiseFault(TypeFaultMessage.BOOLEAN_MISMATCH, context);
+
+			if (!(left == InterpreterType.FLOAT && right == InterpreterType.INT ||
+				 left == InterpreterType.INT && right == InterpreterType.FLOAT ||
+				 left == right))
+				return RaiseFault(TypeFaultMessage.COMPEXPR_MISMATCH, context);
+
+			return InterpreterType.BOOL;
+		}
+
+		public InterpreterType VisitCompileUnit([NotNull] Parser.CompileUnitContext context)
+		{
+			foreach (Parser.ImportNamespaceContext import in context.importNamespace())
+				VisitImportNamespace(import);
+
+			foreach (Parser.NamespaceDecContext namespaceDec in context.namespaceDec())
+				VisitNamespaceDec(namespaceDec);
+
+			return InterpreterType.NONE;
+		}
+
+		public InterpreterType VisitDecStat([NotNull] Parser.DecStatContext context)
+		{
+			return VisitVarDec(context.varDec());
+		}
+
+		public InterpreterType VisitExpr([NotNull] Parser.ExprContext context)
+		{
+			Type t = context.GetType();
+			if (t == typeof(Parser.ParanExprContext))
+				return VisitParanExpr((Parser.ParanExprContext)context);
+			if (t == typeof(Parser.MultExprContext))
+				return VisitMultExpr((Parser.MultExprContext)context);
+			if (t == typeof(Parser.AddiExprContext))
+				return VisitAddiExpr((Parser.AddiExprContext)context);
+			if (t == typeof(Parser.AndExprContext))
+				return VisitAndExpr((Parser.AndExprContext)context);
+			if (t == typeof(Parser.OrExprContext))
+				return VisitOrExpr((Parser.OrExprContext)context);
+			if (t == typeof(Parser.CompExprContext))
+				return VisitCompExpr((Parser.CompExprContext)context);
+			if (t == typeof(Parser.NegExprContext))
+				return VisitNegExpr((Parser.NegExprContext)context);
+			if (t == typeof(Parser.NotExprContext))
+				return VisitNotExpr((Parser.NotExprContext)context);
+			if (t == typeof(Parser.ValExprContext))
+				return VisitValExpr((Parser.ValExprContext)context);
+			if (t == typeof(Parser.VarExprContext))
+				return VisitVarExpr((Parser.VarExprContext)context);
+			if (t == typeof(Parser.CallExprContext))
+				return VisitCallExpr((Parser.CallExprContext)context);
+			if (t == typeof(Parser.AwaitExprContext))
+				return VisitAwaitExpr((Parser.AwaitExprContext)context);
+			if (t == typeof(Parser.ListExprContext))
+				return VisitListExpr((Parser.ListExprContext)context);
+			if (t == typeof(Parser.TupleExprContext))
+				return VisitTupleExpr((Parser.TupleExprContext)context);
+			if (t == typeof(Parser.IndexExprContext))
+				return VisitIndexExpr((Parser.IndexExprContext)context);
+			throw new InternalTypeCheckerException("expr alias not recognized.");
+		}
+
+		public InterpreterType VisitFloatType([NotNull] Parser.FloatTypeContext context)
+		{
+			return InterpreterType.FLOAT;
+		}
+
+		public InterpreterType VisitFloatVal([NotNull] Parser.FloatValContext context)
+		{
+			return InterpreterType.FLOAT;
+		}
+
+		public InterpreterType VisitFunctionDec([NotNull] Parser.FunctionDecContext context)
+		{
+			IFunction f = currentNamespace.GetFunction(context.ID().GetText());
+			currentCallable = new InterpreterType(f.Signature);
+
+			VisitArgs(context.args());
+			VisitBody(context.body(), f.Arguments);
+
+			currentCallable = null;
+			return VisitTypeName(context.typeName());
+		}
+
+		public InterpreterType VisitFunctionDecNamespace([NotNull] Parser.FunctionDecNamespaceContext context)
+		{
+			return VisitFunctionDec(context.functionDec());
+		}
+
+		public InterpreterType VisitGlobalDec([NotNull] Parser.GlobalDecContext context)
+		{
+			return VisitVarDec(context.varDec(), true);
+		}
+
+		public InterpreterType VisitGlobalDecNamespace([NotNull] Parser.GlobalDecNamespaceContext context)
+		{
+			return VisitGlobalDec(context.globalDec());
+		}
+
+		public InterpreterType VisitHandlerDec([NotNull] Parser.HandlerDecContext context)
+		{
+			InterpreterType callableType = VisitExpr(context.expr());
+
+			if (!callableType.IsCallable)
+				return RaiseFault(TypeFaultMessage.CALLABLE_NOTCALLABLE, context);
+
+			if (callableType == InterpreterType.FAULT)
+				return InterpreterType.FAULT;
+
+			currentCallable = callableType;
+
+			if (currentCallable.TypeOf != InterpreterType.Types.TRIGGER)
+			{
+				currentCallable = null;
+				return RaiseFault(TypeFaultMessage.HANDLERDEC_NOTTRIGGER, context);
+			}
+
+			ITerminalNode[] ids = context.ID();
+			Parser.TypeNameContext[] tncontexts = context.typeName();
+			InterpreterType[] domain = currentCallable.GetCallableDomain();
+			if (ids.Length != domain.Length)
+			{
+				currentCallable = null;
+				return RaiseFault(TypeFaultMessage.ARGCOUNT_MISMATCH, context);
+			}
+
+			InterpreterType[] tns = new InterpreterType[tncontexts.Length];
+			for (int i = 0; i < tncontexts.Length; i++)
+			{
+				tns[i] = VisitTypeName(tncontexts[i]);
+
+				if (tns[i] == InterpreterType.FAULT)
+				{
+					currentCallable = null;
+					return InterpreterType.FAULT;
+				}
+
+				if (tns[i] != domain[i])
+				{
+					currentCallable = null;
+					return RaiseFault(TypeFaultMessage.HANDLERDEC_ARGMISMATCH, context);
+				}
+			}
+
+			Argument[] handlerArgs = new Argument[ids.Length];
+			for (int i = 0; i < ids.Length; i++)
+				handlerArgs[i] = new Argument(ids[i].GetText(), domain[i]);
+
+			VisitBody(context.body(), handlerArgs);
+
+			currentCallable = null;
+			return InterpreterType.NONE;
+		}
+
+		public InterpreterType VisitVarExpr([NotNull] Parser.VarExprContext context)
+		{
+			return ResolveIdentifier(context.identifier());
+		}
+
+		public InterpreterType VisitIntType([NotNull] Parser.IntTypeContext context)
+		{
+			return InterpreterType.INT;
+		}
+
+		public InterpreterType VisitIntVal([NotNull] Parser.IntValContext context)
+		{
+			return InterpreterType.INT;
+		}
+
+		public InterpreterType VisitMultExpr([NotNull] Parser.MultExprContext context)
+		{
+			Parser.ExprContext[] exprs = context.expr();
+
+			InterpreterType left = VisitExpr(exprs[0]);
+			InterpreterType right = VisitExpr(exprs[1]);
+
+			if (left == InterpreterType.FAULT || right == InterpreterType.FAULT)
+				return InterpreterType.FAULT;
+
+			if (left != InterpreterType.INT && left != InterpreterType.FLOAT ||
+				right != InterpreterType.INT && right != InterpreterType.FLOAT)
+				return RaiseFault(TypeFaultMessage.NUMERICAL_MISMATCH, context);
+
+			return left == InterpreterType.FLOAT || right == InterpreterType.FLOAT ?
+				InterpreterType.FLOAT : InterpreterType.INT;
+		}
+
+		public InterpreterType VisitNamespace([NotNull] Parser.NamespaceContext context)
+		{
+			return InterpreterType.NONE;
+		}
+
+		public InterpreterType VisitNamespaceBody([NotNull] Parser.NamespaceBodyContext context)
+		{
+			currentScope = new TypeScope(currentNamespace);
+
+			foreach (Parser.NamespacePartContext part in context.namespacePart())
+				VisitNamespacePart(part);
+
+			currentScope = null;
+			return InterpreterType.NONE;
+		}
+
+		public InterpreterType VisitNamespaceDec([NotNull] Parser.NamespaceDecContext context)
+		{
+			currentNamespace = namespaceSet.Get(context.@namespace().GetText());
+			VisitNamespace(context.@namespace());
+			VisitNamespaceBody(context.namespaceBody());
+			currentNamespace = null;
+			return InterpreterType.NONE;
+		}
+
+		public InterpreterType VisitNegExpr([NotNull] Parser.NegExprContext context)
+		{
+			InterpreterType exprType = VisitExpr(context.expr());
+
+			if (exprType == InterpreterType.FAULT)
+				return InterpreterType.FAULT;
+
+			if (exprType != InterpreterType.INT || exprType != InterpreterType.FLOAT)
+				return RaiseFault(TypeFaultMessage.NEG_NUMMISMATCH, context);
+
+			return exprType;
+		}
+
+		public InterpreterType VisitNotExpr([NotNull] Parser.NotExprContext context)
+		{
+			InterpreterType exprType = VisitExpr(context.expr());
+
+			if (exprType == InterpreterType.FAULT)
+				return InterpreterType.FAULT;
+
+			if (exprType != InterpreterType.BOOL)
+				return RaiseFault(TypeFaultMessage.NOT_BOOLMISMATCH, context);
+
+			return exprType;
+		}
+
+		public InterpreterType VisitOrExpr([NotNull] Parser.OrExprContext context)
+		{
+			Parser.ExprContext[] exprs = context.expr();
+
+			InterpreterType left = VisitExpr(exprs[0]);
+			InterpreterType right = VisitExpr(exprs[1]);
+
+			if (left == InterpreterType.FAULT || right == InterpreterType.FAULT)
+				return InterpreterType.FAULT;
+
+			if (left != InterpreterType.BOOL || right != InterpreterType.BOOL)
+				return RaiseFault(TypeFaultMessage.BOOLEAN_MISMATCH, context);
+
+			return left;
+		}
+
+		public InterpreterType VisitParanExpr([NotNull] Parser.ParanExprContext context)
+		{
+			return VisitExpr(context.expr());
+		}
+
+		public InterpreterType VisitReturn([NotNull] Parser.ReturnContext context)
+		{
+			Parser.ExprContext expr = context.expr();
+			InterpreterType returnType = expr == null ? InterpreterType.NONE : VisitExpr(expr);
+
+			if (returnType == InterpreterType.FAULT)
+				return InterpreterType.FAULT;
+
+			if (currentCallable.TypeOf == InterpreterType.Types.TRIGGER && returnType != InterpreterType.NONE)
+				return RaiseFault(TypeFaultMessage.RETURN_TRIGGERVAL, context);
+
+			if (returnType != currentCallable.GetCallableRange())
+				return RaiseFault(TypeFaultMessage.RETURN_MISMATCH, context);
+
+			return returnType;
+		}
+
+		public InterpreterType VisitReturnStat([NotNull] Parser.ReturnStatContext context)
+		{
+			return VisitReturn(context.@return());
+		}
+
+		public InterpreterType VisitStat([NotNull] Parser.StatContext context)
+		{
+			if (context.GetType() == typeof(Parser.AssignStatContext))
+				return VisitAssignStat((Parser.AssignStatContext)context);
+			if (context.GetType() == typeof(Parser.DecStatContext))
+				return VisitDecStat((Parser.DecStatContext)context);
+			if (context.GetType() == typeof(Parser.ReturnStatContext))
+				return VisitReturnStat((Parser.ReturnStatContext)context);
+			if (context.GetType() == typeof(Parser.ExprStatContext))
+				return VisitExprStat((Parser.ExprStatContext)context);
+			if (context.GetType() == typeof(Parser.UnpackStatContext))
+				return VisitUnpackStat((Parser.UnpackStatContext)context);
+			if (context.GetType() == typeof(Parser.IfStatContext))
+				return VisitIfStat((Parser.IfStatContext)context);
+			if (context.GetType() == typeof(Parser.WhileStatContext))
+				return VisitWhileStat((Parser.WhileStatContext)context);
+			if (context.GetType() == typeof(Parser.ForStatContext))
+				return VisitForStat((Parser.ForStatContext)context);
+			if (context.GetType() == typeof(Parser.ForeachStatContext))
+				return VisitForeachStat((Parser.ForeachStatContext)context);
+			throw new InternalTypeCheckerException("stat not recognized.");
+		}
+
+		public InterpreterType VisitStringType([NotNull] Parser.StringTypeContext context)
+		{
+			return InterpreterType.STRING;
+		}
+
+		public InterpreterType VisitStringVal([NotNull] Parser.StringValContext context)
+		{
+			return InterpreterType.STRING;
+		}
+
+		public InterpreterType VisitTerminal(ITerminalNode node)
+		{
+			return InterpreterType.NONE;
+		}
+
+		public InterpreterType VisitTypeName([NotNull] Parser.TypeNameContext context)
+		{
+			if (context.GetType() == typeof(Parser.IntTypeContext))
+				return VisitIntType((Parser.IntTypeContext)context);
+			if (context.GetType() == typeof(Parser.FloatTypeContext))
+				return VisitFloatType((Parser.FloatTypeContext)context);
+			if (context.GetType() == typeof(Parser.BoolTypeContext))
+				return VisitBoolType((Parser.BoolTypeContext)context);
+			if (context.GetType() == typeof(Parser.StringTypeContext))
+				return VisitStringType((Parser.StringTypeContext)context);
+			if (context.GetType() == typeof(Parser.ListTypeContext))
+				return VisitListType((Parser.ListTypeContext)context);
+			if (context.GetType() == typeof(Parser.TupleTypeContext))
+				return VisitTupleType((Parser.TupleTypeContext)context);
+			if (context.GetType() == typeof(Parser.TriggerTypeContext))
+				return VisitTriggerType((Parser.TriggerTypeContext)context);
+			if (context.GetType() == typeof(Parser.FunctionTypeContext))
+				return VisitFunctionType((Parser.FunctionTypeContext)context);
+			throw new InternalTypeCheckerException("typename not recognized.");
+		}
+
+		public InterpreterType VisitTypeVal([NotNull] Parser.TypeValContext context)
+		{
+			if (context.GetType() == typeof(Parser.IntValContext))
+				return VisitIntVal((Parser.IntValContext)context);
+			if (context.GetType() == typeof(Parser.FloatValContext))
+				return VisitFloatVal((Parser.FloatValContext)context);
+			if (context.GetType() == typeof(Parser.BoolValContext))
+				return VisitBoolVal((Parser.BoolValContext)context);
+			if (context.GetType() == typeof(Parser.StringValContext))
+				return VisitStringVal((Parser.StringValContext)context);
+			throw new InternalTypeCheckerException("typeval not recognized.");
+		}
+
+		public InterpreterType VisitValExpr([NotNull] Parser.ValExprContext context)
+		{
+			return VisitTypeVal(context.typeVal());
+		}
+
+		public InterpreterType VisitVarDec([NotNull] Parser.VarDecContext context)
+		{
+			return VisitVarDec(context, false);
+		}
+
+		public InterpreterType VisitVarDec([NotNull] Parser.VarDecContext context, bool global)
+		{
+			string varName = context.ID().GetText();
+			InterpreterType varType = VisitTypeName(context.typeName());
+
+			Parser.ExprContext expr = context.expr();
+			if (expr != null)
+			{
+				InterpreterType exprType = VisitExpr(expr);
+
+				if (exprType == InterpreterType.FAULT)
+					return InterpreterType.FAULT;
+
+				if (!AssignmentAllowed(varType, exprType))
+					return RaiseFault(TypeFaultMessage.VARDEC_MISMATCH, context);
+			}
+
+			if (!global && !currentScope.TryAddVariable(varName, varType))
+				return RaiseFault(TypeFaultMessage.VARDEC_REDEF, context);
+
+			return varType;
+		}
+
+		public InterpreterType VisitNamespacePart([NotNull] Parser.NamespacePartContext context)
+		{
+			if (context.GetType() == typeof(Parser.FunctionDecNamespaceContext))
+				return VisitFunctionDecNamespace((Parser.FunctionDecNamespaceContext)context);
+			if (context.GetType() == typeof(Parser.GlobalDecNamespaceContext))
+				return VisitGlobalDecNamespace((Parser.GlobalDecNamespaceContext)context);
+			if (context.GetType() == typeof(Parser.HandlerDecNamespaceContext))
+				return VisitHandlerDecNamespace((Parser.HandlerDecNamespaceContext)context);
+			throw new InternalTypeCheckerException("namespacepart not recognized.");
+		}
+
+		public InterpreterType VisitHandlerDecNamespace([NotNull] Parser.HandlerDecNamespaceContext context)
+		{
+			return VisitHandlerDec(context.handlerDec());
+		}
+
+		public InterpreterType VisitAwait([NotNull] Parser.AwaitContext context)
+		{
+			Parser.ExprContext exprContext = context.expr();
+			InterpreterType etype = VisitExpr(exprContext);
+			if (etype == InterpreterType.FAULT)
+				return InterpreterType.FAULT;
+
+			if (!etype.IsTriggerable)
+				return RaiseFault(TypeFaultMessage.AWAIT_NOTTRIGGER, context);
+
+			return new InterpreterType(InterpreterType.Types.TUPLE, etype.GetArgumentTypes());
+		}
+
+		public InterpreterType VisitTupleType([NotNull] Parser.TupleTypeContext context)
+		{
+			Parser.TypeNameContext[] typeContexts = context.typeName();
+			InterpreterType[] types = new InterpreterType[typeContexts.Length];
+
+			for (int i = 0; i < typeContexts.Length; i++)
+				types[i] = VisitTypeName(typeContexts[i]);
+
+			foreach (InterpreterType type in types)
+				if (type == InterpreterType.FAULT)
+					return InterpreterType.FAULT;
+
+			return new InterpreterType(InterpreterType.Types.TUPLE, types);
+		}
+
+		public InterpreterType VisitListType([NotNull] Parser.ListTypeContext context)
+		{
+			Parser.TypeNameContext typeContext = context.typeName();
+			InterpreterType type = VisitTypeName(typeContext);
+
+			if (type == InterpreterType.FAULT)
+				return InterpreterType.FAULT;
+
+			return new InterpreterType(InterpreterType.Types.LIST, type);
+		}
+
+		public InterpreterType VisitTupleExpr([NotNull] Parser.TupleExprContext context)
+		{
+			Parser.ExprContext[] exprContexts = context.expr();
+			InterpreterType[] types = new InterpreterType[exprContexts.Length];
+
+			for (int i = 0; i < exprContexts.Length; i++)
+				types[i] = VisitExpr(exprContexts[i]);
+
+			foreach (InterpreterType type in types)
+				if (type == InterpreterType.FAULT)
+					return InterpreterType.FAULT;
+
+			return new InterpreterType(InterpreterType.Types.TUPLE, types);
+		}
+
+		public InterpreterType VisitListExpr([NotNull] Parser.ListExprContext context)
+		{
+			Parser.ExprContext[] exprContexts = context.expr();
+
+			if (exprContexts.Length == 0)
+				return InterpreterType.EMPTY_LIST;
+
+			InterpreterType type = VisitExpr(exprContexts[0]);
+
+			for (int i = 1; i < exprContexts.Length; i++)
+			{
+				if (type != VisitExpr(exprContexts[i]))
+					return RaiseFault(TypeFaultMessage.LISTEXPR_ALL, context);
+			}
+
+			return new InterpreterType(InterpreterType.Types.LIST, type);
+		}
+
+		public InterpreterType VisitIfStat([NotNull] Parser.IfStatContext context)
+		{
+			if (VisitIf(context.@if()) == InterpreterType.FAULT)
+				return InterpreterType.FAULT;
+
+			foreach (Parser.ElseIfContext eifcontext in context.elseIf())
+				if (VisitElseIf(eifcontext) == InterpreterType.FAULT)
+					return InterpreterType.FAULT;
+
+			Parser.ElseContext elseContext = context.@else();
+			if (elseContext != null)
+				if (VisitElse(elseContext) == InterpreterType.FAULT)
+					return InterpreterType.FAULT;
+
+			return InterpreterType.NONE;
+		}
+
+		public InterpreterType VisitForeachStat([NotNull] Parser.ForeachStatContext context)
+		{
+			return VisitForeach(context.@foreach());
+		}
+
+		public InterpreterType VisitForStat([NotNull] Parser.ForStatContext context)
+		{
+			return VisitFor(context.@for());
+		}
+
+		public InterpreterType VisitWhileStat([NotNull] Parser.WhileStatContext context)
+		{
+			return VisitWhile(context.@while());
+		}
+
+		public InterpreterType VisitIf([NotNull] Parser.IfContext context)
+		{
+			InterpreterType exprType = VisitExpr(context.expr());
+			if (exprType == InterpreterType.FAULT)
+				return InterpreterType.FAULT;
+
+			if (exprType != InterpreterType.BOOL)
+				return RaiseFault(TypeFaultMessage.STAT_BOOLEAN, context);
+
+			return VisitBody(context.body());
+		}
+
+		public InterpreterType VisitElseIf([NotNull] Parser.ElseIfContext context)
+		{
+			InterpreterType exprType = VisitExpr(context.expr());
+			if (exprType == InterpreterType.FAULT)
+				return InterpreterType.FAULT;
+
+			if (exprType != InterpreterType.BOOL)
+				return RaiseFault(TypeFaultMessage.STAT_BOOLEAN, context);
+
+			return VisitBody(context.body());
+		}
+
+		public InterpreterType VisitElse([NotNull] Parser.ElseContext context)
+		{
+			return VisitBody(context.body());
+		}
+
+		public InterpreterType VisitWhile([NotNull] Parser.WhileContext context)
+		{
+			InterpreterType exprType = VisitExpr(context.expr());
+			if (exprType == InterpreterType.FAULT)
+				return InterpreterType.FAULT;
+
+			if (exprType != InterpreterType.BOOL)
+				return RaiseFault(TypeFaultMessage.STAT_BOOLEAN, context);
+
+			return VisitBody(context.body());
+		}
+
+		public InterpreterType VisitFor([NotNull] Parser.ForContext context)
+		{
+			currentScope.PushDepth();
+
+			if (context.declare != null)
+			{
+				InterpreterType dec = VisitVarDec(context.declare);
+				if (dec == InterpreterType.FAULT)
+				{
+					currentScope.PopDepth();
+					return InterpreterType.FAULT;
+				}
+			}
+
+			InterpreterType pred = VisitExpr(context.predicate);
+			if (pred == InterpreterType.FAULT)
+			{
+				currentScope.PopDepth();
+				return InterpreterType.FAULT;
+			}
+			if (pred != InterpreterType.BOOL)
+			{
+				currentScope.PopDepth();
+				return RaiseFault(TypeFaultMessage.STAT_BOOLEAN, context);
+			}
+
+			if (context.reeval != null)
+			{
+				InterpreterType reeval = VisitAssign(context.reeval);
+				if (reeval == InterpreterType.FAULT)
+				{
+					currentScope.PopDepth();
+					return InterpreterType.FAULT;
+				}
+			}
+
+			InterpreterType body = VisitBody(context.body());
+
+			currentScope.PopDepth();
+			return body;
+		}
+
+		public InterpreterType VisitForeach([NotNull] Parser.ForeachContext context)
+		{
+			string iteratorName = context.ID().GetText();
+			InterpreterType iteratorType = VisitTypeName(context.typeName());
+
+			InterpreterType exprType = VisitExpr(context.expr());
+			if (exprType == InterpreterType.FAULT)
+				return InterpreterType.FAULT;
+
+			if (exprType.TypeOf != InterpreterType.Types.LIST)
+				return RaiseFault(TypeFaultMessage.FOREACH_LIST, context);
+
+			if (!exprType.IsEmptyList && exprType.TypeArray[0] != iteratorType)
+				return RaiseFault(TypeFaultMessage.FOREACH_ITERMISMATCH, context);
+
+			Argument iteratorVar = new Argument(iteratorName, iteratorType);
+
+			return VisitBody(context.body(), new Argument[] { iteratorVar });
+		}
+
+		public InterpreterType VisitIndexExpr([NotNull] Parser.IndexExprContext context)
+		{
+			Parser.ExprContext[] exprs = context.expr();
+
+			InterpreterType etype = VisitExpr(exprs[0]);
+			if (etype == InterpreterType.FAULT)
+				return InterpreterType.FAULT;
+
+			if (etype.TypeOf == InterpreterType.Types.LIST)
+				return ResolveListIndex(etype, exprs[1], context);
+			else if (etype.TypeOf == InterpreterType.Types.TUPLE)
+				return ResolveTupleIndex(etype, exprs[1], context);
+
+			return RaiseFault(TypeFaultMessage.INDEX_LORT, context);
+		}
+
+		public InterpreterType VisitTriggerType([NotNull] Parser.TriggerTypeContext context)
+		{
+			Parser.TypeNameContext[] typeNames = context.typeName();
+			InterpreterType[] enclosedTypes = new InterpreterType[typeNames.Length];
+			for (int i = 0; i < typeNames.Length; i++)
+				enclosedTypes[i] = VisitTypeName(typeNames[i]);
+			return new InterpreterType(InterpreterType.Types.TRIGGER, enclosedTypes);
+		}
+
+		public InterpreterType VisitFunctionType([NotNull] Parser.FunctionTypeContext context)
+		{
+			Parser.TypeNameContext[] typeContexts = context.typeName();
+
+			InterpreterType[] types = new InterpreterType[typeContexts.Length];
+			for (int i = 0; i < typeContexts.Length; i++)
+				types[i] = VisitTypeName(typeContexts[i]);
+
+			return new InterpreterType(InterpreterType.Types.FUNCTION, types);
+		}
+
+		public InterpreterType VisitImportNamespace([NotNull] Parser.ImportNamespaceContext context)
+		{
+			return InterpreterType.NONE;
+		}
+
+		public InterpreterType VisitConcatExpr([NotNull] Parser.ConcatExprContext context)
+		{
+			Parser.ExprContext[] exprs = context.expr();
+			InterpreterType left = VisitExpr(exprs[0]);
+			InterpreterType right = VisitExpr(exprs[1]);
+
+			if (left == InterpreterType.FAULT || right == InterpreterType.FAULT)
+				return InterpreterType.FAULT;
+
+			if (left.TypeOf == InterpreterType.Types.LIST && right.TypeOf == InterpreterType.Types.LIST)
+			{
+				if (left != right)
+				{
+					if (left == right.TypeArray[0])
+						return right;
+					else if (right == left.TypeArray[0])
+						return left;
+					else
+						return RaiseFault(TypeFaultMessage.CONCAT_LIST, context);
+				}
+				return left;
+			}
+			else if (left.TypeOf == InterpreterType.Types.LIST)
+			{
+				if (right != left.TypeArray[0])
+					return RaiseFault(TypeFaultMessage.CONCAT_RIGHTM, context);
+				return left;
+			}
+			else if (right.TypeOf == InterpreterType.Types.LIST)
+			{
+				if (left != right.TypeArray[0])
+					return RaiseFault(TypeFaultMessage.CONCAT_LEFTM, context);
+				return right;
+			}
+			else
+			{
+				return RaiseFault(TypeFaultMessage.CONCAT_MISMATCH, context);
+			}
+		}
+
+		public InterpreterType VisitAwaitExpr([NotNull] Parser.AwaitExprContext context)
+		{
+			return VisitAwait(context.await());
+		}
+
+		public InterpreterType VisitExprStat([NotNull] Parser.ExprStatContext context)
+		{
+			return VisitExpr(context.expr());
+		}
+
+		public InterpreterType VisitUnpackStat([NotNull] Parser.UnpackStatContext context)
+		{
+			return VisitUnpack(context.unpack());
+		}
+
+		public InterpreterType VisitUnpack([NotNull] Parser.UnpackContext context)
+		{
+			InterpreterType exprType = VisitExpr(context.expr());
+			if (exprType == InterpreterType.FAULT)
+				return InterpreterType.FAULT;
+
+			if (exprType.TypeOf != InterpreterType.Types.TUPLE)
+				return RaiseFault(TypeFaultMessage.UNPACK_NOTTUPLE, context);
+
+			Parser.UnpackedContext[] unpackedArray = context.unpacked();
+			InterpreterType[] unpackedTypes = new InterpreterType[unpackedArray.Length];
+			for (int i = 0; i < unpackedArray.Length; i++)
+			{
+				unpackedTypes[i] = VisitUnpacked(unpackedArray[i]);
+				if (unpackedTypes[i] == InterpreterType.FAULT)
+					return InterpreterType.FAULT;
+			}
+
+			if (unpackedTypes.Length > exprType.TypeArray.Length)
+				return RaiseFault(TypeFaultMessage.UNPACK_TOOFEW, context);
+
+			if (unpackedTypes.Length < exprType.TypeArray.Length)
+				return RaiseFault(TypeFaultMessage.UNPACK_TOOMANY, context);
+
+			InterpreterType unpackedTuple = new InterpreterType(InterpreterType.Types.TUPLE, unpackedTypes);
+			if (!AssignmentAllowed(unpackedTuple, exprType))
+				return RaiseFault(TypeFaultMessage.VARDEC_MISMATCH, context);
+
+			return InterpreterType.NONE;
+		}
+
+		public InterpreterType VisitUnpacked([NotNull] Parser.UnpackedContext context)
+		{
+			Type t = context.GetType();
+			if (t == typeof(Parser.IdUnpackedContext))
+				return VisitIdUnpacked((Parser.IdUnpackedContext)context);
+			if (t == typeof(Parser.DecUnpackedContext))
+				return VisitDecUnpacked((Parser.DecUnpackedContext)context);
+			if (t == typeof(Parser.IgnoreUnpackedContext))
+				return VisitIgnoreUnpacked((Parser.IgnoreUnpackedContext)context);
+			throw new InternalTypeCheckerException("unpacked alias not recognized.");
+		}
+
+		public InterpreterType VisitIdUnpacked([NotNull] Parser.IdUnpackedContext context)
+		{
+			return VisitIdentifier(context.identifier(), true);
+		}
+
+		public InterpreterType VisitDecUnpacked([NotNull] Parser.DecUnpackedContext context)
+		{
+			string varName = context.ID().GetText();
+			InterpreterType varType = VisitTypeName(context.typeName());
+
+			if (!currentScope.TryAddVariable(varName, varType))
+				return RaiseFault(TypeFaultMessage.VARDEC_REDEF, context);
+
+			return varType;
+		}
+
+		public InterpreterType VisitIgnoreUnpacked([NotNull] Parser.IgnoreUnpackedContext context)
+		{
+			return InterpreterType.IGNORE; // Ignore assignment
+		}
+
+		#endregion
+	}
+}

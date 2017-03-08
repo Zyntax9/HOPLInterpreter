@@ -1,0 +1,6 @@
+﻿namespace TestLib2Namespace
+{
+	string function1(){
+		return "Oh, yeah!";
+	}
+}
