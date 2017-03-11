@@ -6,9 +6,9 @@ using HOPLGrammar;
 using System.Reflection;
 using HomeControlInterpreterInterface.Attributes;
 using HomeControlInterpreterInterface;
-using HomeControlInterpreter.NamespaceTypes.Values;
+using HOPLInterpreter.NamespaceTypes.Values;
 
-namespace HomeControlInterpreter.NamespaceTypes
+namespace HOPLInterpreter.NamespaceTypes
 {
 	public class SuppliedGlobalEntity : IGlobalEntity
 	{
@@ -39,17 +39,9 @@ namespace HomeControlInterpreter.NamespaceTypes
 			}
 		}
 
-		public SuppliedGlobalEntity(PropertyInfo pi, InterpreterGlobalVariableAttribute attr, object suppNamespace)
+		public SuppliedGlobalEntity(PropertyInfo pi, object suppNamespace, InterpreterGlobalVariableAttribute attr)
 		{
-			Name = attr.Name != null ? attr.Name : pi.Name;
-			Supplier = suppNamespace;
-			Property = pi;
-			Type = InterpreterType.FromNative(pi.PropertyType);
-		}
-
-		public SuppliedGlobalEntity(PropertyInfo pi, InterpreterTriggerAttribute attr, object suppNamespace)
-		{
-			Name = attr.Name != null ? attr.Name : pi.Name;
+			Name = attr.Name ?? pi.Name;
 			Supplier = suppNamespace;
 			Property = pi;
 			Type = InterpreterType.FromNative(pi.PropertyType);

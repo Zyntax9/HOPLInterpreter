@@ -4,7 +4,7 @@ using HOPLGrammar;
 using Antlr4.Runtime.Misc;
 using Antlr4.Runtime;
 
-namespace HomeControlInterpreter.Exploration
+namespace HOPLInterpreter.Exploration
 {
 	public enum DependencyType
 	{

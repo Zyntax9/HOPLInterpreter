@@ -5,7 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Parser = HOPLGrammar.HOPLGrammarParser;
 
-namespace HomeControlInterpreter.Faults.TypeCheck
+namespace HOPLInterpreter.Faults.TypeCheck
 {
 	public class TypeFault
 	{

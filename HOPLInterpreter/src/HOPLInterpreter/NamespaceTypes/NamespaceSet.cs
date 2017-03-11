@@ -1,4 +1,4 @@
-﻿using HomeControlInterpreter.Exceptions;
+﻿using HOPLInterpreter.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +7,7 @@ using System.Reflection;
 using Parser = HOPLGrammar.HOPLGrammarParser;
 using HomeControlInterpreterInterface.Attributes;
 
-namespace HomeControlInterpreter.NamespaceTypes
+namespace HOPLInterpreter.NamespaceTypes
 {
 	public class NamespaceSet
 	{
@@ -42,16 +42,8 @@ namespace HomeControlInterpreter.NamespaceTypes
 
 					if (ge != null)
 					{
-						SuppliedGlobalEntity sge = new SuppliedGlobalEntity(pi, ge, sn);
+						SuppliedGlobalEntity sge = new SuppliedGlobalEntity(pi, sn, ge);
 						ns.AddGlobalEntity(sge);
-					}
-
-					InterpreterTriggerAttribute tr = pi.GetCustomAttribute<InterpreterTriggerAttribute>();
-
-					if (tr != null)
-					{
-						SuppliedGlobalEntity str = new SuppliedGlobalEntity(pi, tr, sn);
-						ns.AddGlobalEntity(str);
 					}
 				}
 
@@ -61,7 +53,7 @@ namespace HomeControlInterpreter.NamespaceTypes
 
 					if (fun != null)
 					{
-						SuppliedFunction sfun = new SuppliedFunction(mi, fun, sn);
+						SuppliedFunction sfun = new SuppliedFunction(mi, sn, fun);
 						SuppliedGlobalEntity sfge = new SuppliedGlobalEntity(sfun);
 						ns.AddFunction(sfun);
 						ns.AddGlobalEntity(sfge);

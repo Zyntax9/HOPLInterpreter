@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Antlr4.Runtime.Tree;
 using Parser = HOPLGrammar.HOPLGrammarParser;
 
-namespace HomeControlInterpreter.NamespaceTypes
+namespace HOPLInterpreter.NamespaceTypes
 {
 	public class Function : IFunction
 	{

@@ -1,11 +1,11 @@
-﻿using HomeControlInterpreter.Exploration;
-using HomeControlInterpreter.Faults.Exploration;
+﻿using HOPLInterpreter.Exploration;
+using HOPLInterpreter.Faults.Exploration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace HomeControlInterpreter.Exceptions
+namespace HOPLInterpreter.Exceptions
 {
 	public class ExploreFaultsException : Exception
 	{

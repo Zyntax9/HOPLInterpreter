@@ -3,19 +3,19 @@ using Antlr4.Runtime;
 using System.IO;
 using Lexer = HOPLGrammar.HOPLGrammarLexer;
 using Parser = HOPLGrammar.HOPLGrammarParser;
-using HomeControlInterpreter.NamespaceTypes;
-using HomeControlInterpreter.NamespaceMapping;
-using HomeControlInterpreter.Exploration;
-using HomeControlInterpreter.TypeCheck;
-using HomeControlInterpreter.Exceptions;
-using HomeControlInterpreter.Faults.Parsing;
-using HomeControlInterpreter.Faults.Preparation;
-using HomeControlInterpreter.Interpretation.ThreadPool;
-using HomeControlInterpreter.Interpretation;
-using HomeControlInterpreter.NamespaceTypes.Values;
+using HOPLInterpreter.NamespaceTypes;
+using HOPLInterpreter.NamespaceMapping;
+using HOPLInterpreter.Exploration;
+using HOPLInterpreter.TypeCheck;
+using HOPLInterpreter.Exceptions;
+using HOPLInterpreter.Faults.Parsing;
+using HOPLInterpreter.Faults.Preparation;
+using HOPLInterpreter.Interpretation.ThreadPool;
+using HOPLInterpreter.Interpretation;
+using HOPLInterpreter.NamespaceTypes.Values;
 using Api = HomeControlInterpreterInterface;
 
-namespace HomeControlInterpreter
+namespace HOPLInterpreter
 {
 	public class Interpreter
 	{

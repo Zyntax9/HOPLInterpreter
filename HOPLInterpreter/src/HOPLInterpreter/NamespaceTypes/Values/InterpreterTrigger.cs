@@ -1,6 +1,6 @@
 ﻿using Api = HomeControlInterpreterInterface;
 
-namespace HomeControlInterpreter.NamespaceTypes.Values
+namespace HOPLInterpreter.NamespaceTypes.Values
 {
 	public class InterpreterTrigger : InterpreterValue<Api.SuppliedTrigger>, IInterpreterTriggerable
 	{

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace HomeControlInterpreter.Faults.Preparation
+namespace HOPLInterpreter.Faults.Preparation
 {
 	public class PrepareFault
 	{

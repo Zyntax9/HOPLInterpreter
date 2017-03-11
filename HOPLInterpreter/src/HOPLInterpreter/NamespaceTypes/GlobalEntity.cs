@@ -1,5 +1,5 @@
-﻿using HomeControlInterpreter.NamespaceTypes.Values;
-using HomeControlInterpreter.TypeCheck;
+﻿using HOPLInterpreter.NamespaceTypes.Values;
+using HOPLInterpreter.TypeCheck;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Parser = HOPLGrammar.HOPLGrammarParser;
 
-namespace HomeControlInterpreter.NamespaceTypes
+namespace HOPLInterpreter.NamespaceTypes
 {
 	public class GlobalEntity : IGlobalEntity
 	{

@@ -5,7 +5,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace HomeControlInterpreter.Interpretation.ThreadPool
+namespace HOPLInterpreter.Interpretation.ThreadPool
 {
 	public delegate void ReadyEventHandler(AwaitingThread waiter);
 

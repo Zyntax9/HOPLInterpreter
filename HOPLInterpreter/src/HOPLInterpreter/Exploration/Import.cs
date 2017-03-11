@@ -1,4 +1,4 @@
-﻿namespace HomeControlInterpreter.Exploration
+﻿namespace HOPLInterpreter.Exploration
 {
 	public class Import
 	{

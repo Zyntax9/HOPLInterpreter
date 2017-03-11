@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace HomeControlInterpreter.NamespaceTypes.Values
+namespace HOPLInterpreter.NamespaceTypes.Values
 {
 	public class InterpreterFloat : InterpreterValue<float>
 	{

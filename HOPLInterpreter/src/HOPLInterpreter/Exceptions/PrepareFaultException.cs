@@ -1,7 +1,7 @@
 ﻿using System;
-using HomeControlInterpreter.Faults.Preparation;
+using HOPLInterpreter.Faults.Preparation;
 
-namespace HomeControlInterpreter.Exceptions
+namespace HOPLInterpreter.Exceptions
 {
 	public class PrepareFaultException : Exception
 	{

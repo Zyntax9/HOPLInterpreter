@@ -3,14 +3,15 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using HOPLInterpreter.Exceptions;
 
-namespace HomeControlInterpreter.Interpretation.ThreadPool
+namespace HOPLInterpreter.Interpretation.ThreadPool
 {
 	public class StaticThreadPool : IThreadPool
 	{
 		private Semaphore queueSemaphore = new Semaphore(0, int.MaxValue);
 		private Queue<HandlerContext> queue = new Queue<HandlerContext>();
-		public bool Running { get; protected set; } = true;
+		public BooleanRef Running { get; protected set; } = new BooleanRef(true);
 
 		private Thread[] pool;
 		private LinkedList<AwaitingThread> awaiting = new LinkedList<AwaitingThread>();
@@ -32,9 +33,12 @@ namespace HomeControlInterpreter.Interpretation.ThreadPool
 
 		private void ThreadRuntime()
 		{
-			while (Running)
+			while (Running.Value)
 			{
 				queueSemaphore.WaitOne();
+
+				if (!Running.Value)
+					break; // Finish if we stopped after wait
 
 				AwaitingThread readyThread = null;
 				lock (ready)
@@ -57,8 +61,12 @@ namespace HomeControlInterpreter.Interpretation.ThreadPool
 				lock (queue)
 					handler = queue.Dequeue();
 
-				Executor executor = new Executor(handler, this);
-				executor.ExecuteHandler(handler.Handler.Context);
+				Executor executor = new Executor(handler, this, Running);
+				try
+				{
+					executor.ExecuteHandler(handler.Handler.Context);
+				}
+				catch (ExecutorInterruptException) { }
 			}
 		}
 
@@ -71,12 +79,14 @@ namespace HomeControlInterpreter.Interpretation.ThreadPool
 
 		public void Stop()
 		{
-			Running = false;
+			Running.Value = false;
 		}
 
 		public void StopAndJoin()
 		{
-			Running = false;
+			Running.Value = false;
+			for (int i = 0; i < pool.Length; i++)
+				queueSemaphore.Release(); // Wake up all waiting threads
 			foreach (Thread t in pool)
 				t.Join();
 		}

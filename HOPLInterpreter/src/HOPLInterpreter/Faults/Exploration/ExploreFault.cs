@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace HomeControlInterpreter.Faults.Exploration
+namespace HOPLInterpreter.Faults.Exploration
 {
 	public class ExploreFault
 	{

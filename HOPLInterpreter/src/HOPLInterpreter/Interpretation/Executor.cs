@@ -2,19 +2,19 @@
 using System.Collections.Generic;
 using System.Linq;
 using HOPLGrammar;
-using HomeControlInterpreter.NamespaceTypes.Values;
+using HOPLInterpreter.NamespaceTypes.Values;
 using Antlr4.Runtime.Misc;
 using Antlr4.Runtime.Tree;
 using Parser = HOPLGrammar.HOPLGrammarParser;
-using HomeControlInterpreter.NamespaceTypes;
-using HomeControlInterpreter.Exploration;
-using HomeControlInterpreter.Exceptions;
-using HomeControlInterpreter.Faults.Runtime;
+using HOPLInterpreter.NamespaceTypes;
+using HOPLInterpreter.Exploration;
+using HOPLInterpreter.Exceptions;
+using HOPLInterpreter.Faults.Runtime;
 using Antlr4.Runtime;
-using HomeControlInterpreter.Interpretation.ThreadPool;
+using HOPLInterpreter.Interpretation.ThreadPool;
 using Api = HomeControlInterpreterInterface;
 
-namespace HomeControlInterpreter.Interpretation
+namespace HOPLInterpreter.Interpretation
 {
 	public class Executor : IHOPLGrammarVisitor<InterpreterValue>
 	{
@@ -31,11 +31,13 @@ namespace HomeControlInterpreter.Interpretation
 		Stack<StackEntry> scopeStack = new Stack<StackEntry>();
 		ValueScope currentScope { get { return scopeStack.Peek().scope; } }
 		string currentFile { get { return scopeStack.Peek().file; } }
+		BooleanRef running;
 
-		public Executor(HandlerContext handler, IThreadPool pool = null)
+		public Executor(HandlerContext handler, IThreadPool pool = null, BooleanRef running = null)
 		{
 			this.pool = pool;
 			this.accessTable = handler.Handler.AccessTable;
+			this.running = running ?? new BooleanRef();
 
 			namespaces = handler.Handler.Namespaces;
 
@@ -55,11 +57,12 @@ namespace HomeControlInterpreter.Interpretation
 		}
 
 		public Executor(Namespace @namespace, NamespaceSet namespaces, string file, 
-			ImportAccessTable accessTable, IThreadPool pool = null)
+			ImportAccessTable accessTable, IThreadPool pool = null, BooleanRef running = null)
 		{
 			this.pool = pool;
 			this.namespaces = namespaces;
 			this.accessTable = accessTable;
+			this.running = running ?? new BooleanRef();
 
 			StackEntry se = new StackEntry()
 			{
@@ -293,6 +296,9 @@ namespace HomeControlInterpreter.Interpretation
 
 		public InterpreterValue VisitAwait([NotNull] Parser.AwaitContext context)
 		{
+			if (!running.Value)
+				throw new ExecutorInterruptException();
+
 			InterpreterValue trigger = VisitExpr(context.expr());
 			object[] values = pool.Await((Api.SuppliedTrigger)trigger.Value);
 			return new InterpreterTuple(values);
@@ -331,6 +337,9 @@ namespace HomeControlInterpreter.Interpretation
 
 		public InterpreterValue VisitCall([NotNull] Parser.CallContext context)
 		{
+			if (!running.Value)
+				throw new ExecutorInterruptException();
+
 			Parser.ExprContext[] exprs = context.expr();
 			InterpreterValue[] arguments = new InterpreterValue[exprs.Length];
 			for (int i = 0; i < exprs.Length; i++)
@@ -529,6 +538,9 @@ namespace HomeControlInterpreter.Interpretation
 			VisitVarDec(context.declare);
 			while ((bool)VisitExpr(context.predicate).Value)
 			{
+				if (!running.Value)
+					throw new ExecutorInterruptException();
+
 				InterpreterValue bodyValue = VisitBody(context.body());
 
 				if(!ReferenceEquals(bodyValue, null))
@@ -551,6 +563,9 @@ namespace HomeControlInterpreter.Interpretation
 			
 			foreach (InterpreterValue value in list)
 			{
+				if (!running.Value)
+					throw new ExecutorInterruptException();
+
 				currentScope.PushDepth();
 				currentScope.AddVariable(context.ID().GetText(), value);
 				InterpreterValue bodyValue = VisitBody(context.body());
@@ -779,7 +794,10 @@ namespace HomeControlInterpreter.Interpretation
 
 		public InterpreterValue VisitReturn([NotNull] Parser.ReturnContext context)
 		{
-			return VisitExpr(context.expr());
+			Parser.ExprContext expr = context.expr();
+			if(expr != null)
+				return VisitExpr(expr);
+			return new InterpreterEmptyReturn();
 		}
 
 		public InterpreterValue VisitReturnStat([NotNull] Parser.ReturnStatContext context)
@@ -926,6 +944,9 @@ namespace HomeControlInterpreter.Interpretation
 			Parser.ExprContext expr = context.expr();
 			while ((bool)VisitExpr(expr).Value)
 			{
+				if (!running.Value)
+					throw new ExecutorInterruptException();
+
 				InterpreterValue bodyValue = VisitBody(context.body());
 
 				if (!ReferenceEquals(bodyValue, null))

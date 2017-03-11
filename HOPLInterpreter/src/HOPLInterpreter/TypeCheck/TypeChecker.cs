@@ -4,13 +4,13 @@ using Antlr4.Runtime.Tree;
 using HOPLGrammar;
 using Parser = HOPLGrammar.HOPLGrammarParser;
 using System.Collections.Generic;
-using HomeControlInterpreter.NamespaceTypes;
-using HomeControlInterpreter.Exceptions;
-using HomeControlInterpreter.Faults.TypeCheck;
+using HOPLInterpreter.NamespaceTypes;
+using HOPLInterpreter.Exceptions;
+using HOPLInterpreter.Faults.TypeCheck;
 using Antlr4.Runtime;
-using HomeControlInterpreter.Exploration;
+using HOPLInterpreter.Exploration;
 
-namespace HomeControlInterpreter.TypeCheck
+namespace HOPLInterpreter.TypeCheck
 {
 	public class TypeChecker : IHOPLGrammarVisitor<InterpreterType>
 	{

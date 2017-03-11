@@ -5,8 +5,7 @@ using System.Threading.Tasks;
 
 namespace HOPLInterpreter.Exceptions
 {
-	public class DuplicateFunctionException : Exception
-	{
-		public DuplicateFunctionException(string functionName) : base(functionName) { }
-	}
+    public class ExecutorInterruptException : Exception
+    {
+    }
 }

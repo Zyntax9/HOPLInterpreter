@@ -1,10 +1,10 @@
-﻿using HomeControlInterpreter.Faults.Runtime;
+﻿using HOPLInterpreter.Faults.Runtime;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace HomeControlInterpreter.Exceptions
+namespace HOPLInterpreter.Exceptions
 {
 	public class RuntimeFaultException : Exception
 	{

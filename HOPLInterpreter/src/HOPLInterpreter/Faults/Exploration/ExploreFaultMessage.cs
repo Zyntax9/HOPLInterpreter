@@ -1,4 +1,4 @@
-﻿namespace HomeControlInterpreter.Faults.Exploration
+﻿namespace HOPLInterpreter.Faults.Exploration
 {
 	public class ExploreFaultMessage
 	{

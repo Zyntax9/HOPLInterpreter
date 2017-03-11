@@ -1,11 +1,11 @@
-﻿using HomeControlInterpreter.NamespaceTypes;
-using HomeControlInterpreter.NamespaceTypes.Values;
+﻿using HOPLInterpreter.NamespaceTypes;
+using HOPLInterpreter.NamespaceTypes.Values;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace HomeControlInterpreter.Interpretation
+namespace HOPLInterpreter.Interpretation
 {
 	public class ValueScope : Scope<InterpreterValue>
 	{

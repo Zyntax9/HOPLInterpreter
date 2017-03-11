@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace HomeControlInterpreter.Exceptions
+namespace HOPLInterpreter.Exceptions
 {
 	public class RecursiveVariableDependencyException : Exception
 	{

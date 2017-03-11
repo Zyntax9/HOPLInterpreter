@@ -1,8 +1,8 @@
-﻿using HomeControlInterpreter.Exceptions;
-using HomeControlInterpreter.NamespaceTypes;
+﻿using HOPLInterpreter.Exceptions;
+using HOPLInterpreter.NamespaceTypes;
 using System.Collections.Generic;
 
-namespace HomeControlInterpreter.TypeCheck
+namespace HOPLInterpreter.TypeCheck
 {
 	public class TypeScope : Scope<InterpreterType>
 	{

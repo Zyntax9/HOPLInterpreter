@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Parser = HOPLGrammar.HOPLGrammarParser;
 
-namespace HomeControlInterpreter.NamespaceTypes
+namespace HOPLInterpreter.NamespaceTypes
 {
 	public interface IFunction
 	{

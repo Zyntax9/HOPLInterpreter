@@ -29,7 +29,8 @@ namespace someNamespace
 		{c, _, _} = tu;
 		int out_gv = Playground.gv_int;
 		out_gv = Playground.PlaygroundFunction(3.12);
-		//int<float> delegate = Playground.ReturnsFunction();
+		int<string> delegate = Playground.ReturnsFunction();
+		delegate("This was a delegate function");
 
 		list<list<tuple<int, string>>> nested = [
 			[ {0, "hello"}, {2, "world"} ], 
@@ -44,6 +45,11 @@ namespace someNamespace
 			int _x = i;
 			string _s = Playground.IntToString(_x);
 			Playground.Print(_s);
+		}
+
+		while(true)
+		{
+			Playground.Print("Unending loop!");
 		}
 		
 		return a;
@@ -62,6 +68,9 @@ namespace someNamespace
 	handle Playground.trigger_test1(int a, string b)
 	{
 		trigger1(a, b);
+		Playground.Print("This should print!");
+		return;
+		Playground.Print("This should not print!");
 	}
 
 	int function3(int i){

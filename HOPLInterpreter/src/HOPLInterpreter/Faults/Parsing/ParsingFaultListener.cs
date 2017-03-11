@@ -1,7 +1,7 @@
 ﻿using Antlr4.Runtime;
 using System.Collections.Generic;
 
-namespace HomeControlInterpreter.Faults.Parsing
+namespace HOPLInterpreter.Faults.Parsing
 {
 	public class ParsingFaultListener : IAntlrErrorListener<IToken>
 	{

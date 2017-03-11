@@ -1,11 +1,11 @@
-﻿using HomeControlInterpreter.TypeCheck;
+﻿using HOPLInterpreter.TypeCheck;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using HomeControlInterpreter.Faults.TypeCheck;
+using HOPLInterpreter.Faults.TypeCheck;
 
-namespace HomeControlInterpreter.Exceptions
+namespace HOPLInterpreter.Exceptions
 {
 	public class TypeFaultsException : Exception
 	{

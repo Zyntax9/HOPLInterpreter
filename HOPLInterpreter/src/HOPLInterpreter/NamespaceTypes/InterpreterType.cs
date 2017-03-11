@@ -4,10 +4,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Reflection;
 using System.Collections;
-using HomeControlInterpreter.Exceptions;
+using HOPLInterpreter.Exceptions;
 using Api = HomeControlInterpreterInterface;
 
-namespace HomeControlInterpreter.NamespaceTypes
+namespace HOPLInterpreter.NamespaceTypes
 {
 
 	public class InterpreterType

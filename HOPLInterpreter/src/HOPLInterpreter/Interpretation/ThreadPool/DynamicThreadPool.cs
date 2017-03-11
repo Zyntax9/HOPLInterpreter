@@ -1,15 +1,16 @@
-﻿using System;
+﻿using HOPLInterpreter.Exceptions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Api = HomeControlInterpreterInterface;
 
-namespace HomeControlInterpreter.Interpretation.ThreadPool
+namespace HOPLInterpreter.Interpretation.ThreadPool
 {
 	public class DynamicThreadPool : IThreadPool
 	{
-		public bool Running { get; protected set; } = true;
+		public BooleanRef Running { get; protected set; } = new BooleanRef();
 
 		private LinkedList<Thread> pool = new LinkedList<Thread>();
 
@@ -19,8 +20,12 @@ namespace HomeControlInterpreter.Interpretation.ThreadPool
 		{
 			ThreadContext tcontext = (ThreadContext)context;
 			
-			Executor executor = new Executor(tcontext.Handler, this);
-			executor.ExecuteHandler(tcontext.Handler.Handler.Context);
+			Executor executor = new Executor(tcontext.Handler, this, Running);
+			try
+			{
+				executor.ExecuteHandler(tcontext.Handler.Handler.Context);
+			}
+			catch(ExecutorInterruptException) { }
 
 			lock (pool)
 				pool.Remove(tcontext.ThreadNode);
@@ -41,12 +46,12 @@ namespace HomeControlInterpreter.Interpretation.ThreadPool
 
 		public void Stop()
 		{
-			Running = false;
+			Running.Value = false;
 		}
 
 		public void StopAndJoin()
 		{
-			Running = false;
+			Running.Value = false;
 			lock (pool)
 			{
 				foreach (Thread t in pool)

@@ -3,10 +3,10 @@ using System;
 using System.Collections.Generic;
 using Antlr4.Runtime.Misc;
 using Parser = HOPLGrammar.HOPLGrammarParser;
-using HomeControlInterpreter.NamespaceTypes;
+using HOPLInterpreter.NamespaceTypes;
 using Antlr4.Runtime;
 
-namespace HomeControlInterpreter.Exploration
+namespace HOPLInterpreter.Exploration
 {
 	public class FunctionDependencyExplorer : DependencyExplorer
 	{

@@ -1,4 +1,4 @@
-﻿namespace HomeControlInterpreter.Faults.Preparation
+﻿namespace HOPLInterpreter.Faults.Preparation
 {
 	public class PrepareFaultMessage
 	{

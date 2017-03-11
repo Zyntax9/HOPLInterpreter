@@ -1,4 +1,4 @@
-﻿namespace HomeControlInterpreter.Faults.TypeCheck
+﻿namespace HOPLInterpreter.Faults.TypeCheck
 {
 	public class TypeFaultMessage
 	{

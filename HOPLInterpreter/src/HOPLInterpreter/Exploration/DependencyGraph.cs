@@ -1,10 +1,10 @@
-﻿using HomeControlInterpreter.Exceptions;
+﻿using HOPLInterpreter.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace HomeControlInterpreter.Exploration
+namespace HOPLInterpreter.Exploration
 {
 	public class DependencyGraph
 	{

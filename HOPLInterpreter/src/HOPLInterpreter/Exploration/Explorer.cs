@@ -1,13 +1,13 @@
 ﻿using System.Collections.Generic;
 using Antlr4.Runtime.Misc;
 using HOPLGrammar;
-using HomeControlInterpreter.Exceptions;
+using HOPLInterpreter.Exceptions;
 using Parser = HOPLGrammar.HOPLGrammarParser;
-using HomeControlInterpreter.NamespaceTypes;
-using HomeControlInterpreter.Faults.Exploration;
+using HOPLInterpreter.NamespaceTypes;
+using HOPLInterpreter.Faults.Exploration;
 using System;
 
-namespace HomeControlInterpreter.Exploration
+namespace HOPLInterpreter.Exploration
 {
 	public class Explorer : HOPLGrammarBaseListener
 	{

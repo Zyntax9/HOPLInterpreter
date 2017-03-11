@@ -1,5 +1,5 @@
-﻿using HomeControlInterpreter.Exceptions;
-using HomeControlInterpreter.Faults.Runtime;
+﻿using HOPLInterpreter.Exceptions;
+using HOPLInterpreter.Faults.Runtime;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using Api = HomeControlInterpreterInterface;
 using Parser = HOPLGrammar.HOPLGrammarParser;
 
-namespace HomeControlInterpreter.NamespaceTypes.Values
+namespace HOPLInterpreter.NamespaceTypes.Values
 {
 	public abstract class InterpreterValue
 	{
@@ -215,7 +215,7 @@ namespace HomeControlInterpreter.NamespaceTypes.Values
 			}
 			if (typeof(Delegate).IsAssignableFrom(t))
 			{
-				throw new InvalidNativeTypeException(t); // FIX THIS
+				return new InterpreterFunction((Delegate)obj);
 			}
 
 			throw new InvalidNativeTypeException(t);

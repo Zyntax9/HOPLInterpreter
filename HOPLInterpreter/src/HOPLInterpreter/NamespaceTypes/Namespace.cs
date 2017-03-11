@@ -1,6 +1,6 @@
 ﻿using Antlr4.Runtime.Tree;
-using HomeControlInterpreter.Exceptions;
-using HomeControlInterpreter.NamespaceTypes.Values;
+using HOPLInterpreter.Exceptions;
+using HOPLInterpreter.NamespaceTypes.Values;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +8,7 @@ using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Parser = HOPLGrammar.HOPLGrammarParser;
 
-namespace HomeControlInterpreter.NamespaceTypes
+namespace HOPLInterpreter.NamespaceTypes
 {
 	public class Namespace
 	{

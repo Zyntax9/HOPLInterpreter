@@ -1,15 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using HomeControlInterpreter;
-using HomeControlInterpreter.Faults.Parsing;
-using HomeControlInterpreter.Faults.TypeCheck;
-using HomeControlInterpreter.Faults.Exploration;
-using HomeControlInterpreter.Exceptions;
-using HomeControlInterpreter.NamespaceTypes;
+using HOPLInterpreter;
+using HOPLInterpreter.Faults.Parsing;
+using HOPLInterpreter.Faults.TypeCheck;
+using HOPLInterpreter.Faults.Exploration;
+using HOPLInterpreter.Exceptions;
+using HOPLInterpreter.NamespaceTypes;
 using System.Threading;
-using HomeControlInterpreter.Interpretation;
-using HomeControlInterpreter.Interpretation.ThreadPool;
+using HOPLInterpreter.Interpretation;
+using HOPLInterpreter.Interpretation.ThreadPool;
 
 namespace InterpreterPlayground
 {
@@ -82,7 +82,7 @@ namespace InterpreterPlayground
 			IThreadPool pool = Interpreter.Run(interpreterContext, setupValues, 4);
 
 			//ReadWriteLockTest();
-			while (pool.Running)
+			while (pool.Running.Value)
 			{
 				string s = Console.ReadLine();
 				switch (s.ToLower())
@@ -92,6 +92,9 @@ namespace InterpreterPlayground
 						break;
 					case "b":
 						pg.trigger_test2.Fire(null);
+						break;
+					case "e":
+						pool.StopAndJoin();
 						break;
 					default:
 						pg.console_input.Fire(new object[] { s });

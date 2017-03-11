@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Antlr4.Runtime;
 
-namespace HomeControlInterpreter.Faults.Runtime
+namespace HOPLInterpreter.Faults.Runtime
 {
 	public class RuntimeFault
 	{

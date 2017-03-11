@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace HomeControlInterpreter.NamespaceTypes.Values
+namespace HOPLInterpreter.NamespaceTypes.Values
 {
 	public class InterpreterInt : InterpreterValue<int>
 	{

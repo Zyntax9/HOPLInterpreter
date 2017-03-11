@@ -5,10 +5,10 @@ using System.Threading.Tasks;
 using Antlr4.Runtime.Misc;
 using HOPLGrammar;
 using Parser = HOPLGrammar.HOPLGrammarParser;
-using HomeControlInterpreter.NamespaceTypes;
+using HOPLInterpreter.NamespaceTypes;
 using Antlr4.Runtime;
 
-namespace HomeControlInterpreter.Exploration
+namespace HOPLInterpreter.Exploration
 {
 	public class VariableDependencyExplorer : DependencyExplorer
 	{

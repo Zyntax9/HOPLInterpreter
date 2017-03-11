@@ -6,7 +6,7 @@ using Antlr4.Runtime.Misc;
 using HOPLGrammar;
 using Parser = HOPLGrammar.HOPLGrammarParser;
 
-namespace HomeControlInterpreter.Exploration
+namespace HOPLInterpreter.Exploration
 {
 	public class ReturnChecker : HOPLGrammarBaseVisitor<bool>
 	{

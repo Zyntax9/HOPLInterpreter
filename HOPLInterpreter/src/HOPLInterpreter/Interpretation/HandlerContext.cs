@@ -1,8 +1,8 @@
-﻿using HomeControlInterpreter.Exploration;
-using HomeControlInterpreter.NamespaceTypes;
+﻿using HOPLInterpreter.Exploration;
+using HOPLInterpreter.NamespaceTypes;
 using Parser = HOPLGrammar.HOPLGrammarParser;
 
-namespace HomeControlInterpreter.Interpretation
+namespace HOPLInterpreter.Interpretation
 {
 	public class HandlerContext
 	{

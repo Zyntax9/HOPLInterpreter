@@ -1,8 +1,8 @@
-﻿using HomeControlInterpreter.NamespaceTypes;
+﻿using HOPLInterpreter.NamespaceTypes;
 using System;
 using System.Collections.Generic;
 
-namespace HomeControlInterpreter.Exploration
+namespace HOPLInterpreter.Exploration
 {
 	public class ImportAccessTable : Dictionary<string, HashSet<Import>>
 	{

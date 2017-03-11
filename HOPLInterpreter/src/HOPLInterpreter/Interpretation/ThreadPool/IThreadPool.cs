@@ -1,10 +1,11 @@
-﻿using Api = HomeControlInterpreterInterface;
+﻿using System;
+using Api = HomeControlInterpreterInterface;
 
-namespace HomeControlInterpreter.Interpretation.ThreadPool
+namespace HOPLInterpreter.Interpretation.ThreadPool
 {
 	public interface IThreadPool
 	{
-		bool Running { get; }
+		BooleanRef Running { get; }
 
 		void QueueHandler(HandlerContext context);
 		void Stop();

@@ -1,11 +1,11 @@
-﻿using HomeControlInterpreter.Faults.Parsing;
+﻿using HOPLInterpreter.Faults.Parsing;
 using System.IO;
 using System.Collections.Generic;
 using Parser = HOPLGrammar.HOPLGrammarParser;
 using Lexer = HOPLGrammar.HOPLGrammarLexer;
 using Antlr4.Runtime;
 
-namespace HomeControlInterpreter.NamespaceMapping
+namespace HOPLInterpreter.NamespaceMapping
 {
 	public class NamespaceMapper
 	{

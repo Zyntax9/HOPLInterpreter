@@ -1,6 +1,6 @@
 ﻿using HomeControlInterpreterInterface;
 
-namespace HomeControlInterpreter.NamespaceTypes.Values
+namespace HOPLInterpreter.NamespaceTypes.Values
 {
 	public class InterpreterTuple : InterpreterValue<InterpreterValue[]>
 	{

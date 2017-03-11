@@ -1,11 +1,11 @@
-﻿using HomeControlInterpreter.Exploration;
-using HomeControlInterpreter.NamespaceTypes;
+﻿using HOPLInterpreter.Exploration;
+using HOPLInterpreter.NamespaceTypes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace HomeControlInterpreter.Interpretation
+namespace HOPLInterpreter.Interpretation
 {
     public class InterpretationContext
     {

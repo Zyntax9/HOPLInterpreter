@@ -1,5 +1,5 @@
-﻿using HomeControlInterpreter.Exploration;
-using HomeControlInterpreter.TypeCheck;
+﻿using HOPLInterpreter.Exploration;
+using HOPLInterpreter.TypeCheck;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +7,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using Parser = HOPLGrammar.HOPLGrammarParser;
 
-namespace HomeControlInterpreter.NamespaceTypes
+namespace HOPLInterpreter.NamespaceTypes
 {
 	public class Argument
 	{

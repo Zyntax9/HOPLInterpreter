@@ -1,8 +1,8 @@
-﻿using HomeControlInterpreter.Faults.Parsing;
+﻿using HOPLInterpreter.Faults.Parsing;
 using System;
 using System.Collections.Generic;
 
-namespace HomeControlInterpreter.Exceptions
+namespace HOPLInterpreter.Exceptions
 {
 	public class ParsingFaultsException : Exception
 	{

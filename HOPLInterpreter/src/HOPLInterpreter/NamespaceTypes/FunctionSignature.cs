@@ -1,11 +1,11 @@
-﻿using HomeControlInterpreter.TypeCheck;
+﻿using HOPLInterpreter.TypeCheck;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Parser = HOPLGrammar.HOPLGrammarParser;
 
-namespace HomeControlInterpreter.NamespaceTypes
+namespace HOPLInterpreter.NamespaceTypes
 {
 	public class FunctionSignature
 	{

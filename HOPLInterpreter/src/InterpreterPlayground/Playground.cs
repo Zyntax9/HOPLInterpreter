@@ -29,21 +29,21 @@ namespace InterpreterPlayground
 		[InterpreterGlobalVariable]
 		public SuppliedTuple<string, float> gv_tuple { get; set; } = new SuppliedTuple<string, float>("Tuple", 3.14f);
 
-		[InterpreterTrigger]
+		[InterpreterGlobalVariable]
 		public SuppliedTrigger<int, string> trigger_test1 { get; set; } = new SuppliedTrigger<int, string>();
 
-		[InterpreterTrigger]
+		[InterpreterGlobalVariable]
 		public SuppliedTrigger trigger_test2 { get; set; } = new SuppliedTrigger();
 
-		[InterpreterTrigger]
+		[InterpreterGlobalVariable]
 		public SuppliedTrigger<string> console_input { get; set; } = new SuppliedTrigger<string>();
 
-		public delegate int func(float f);
+		public delegate int func(string f);
 
 		[InterpreterFunction]
 		public func ReturnsFunction()
 		{
-			return new func(PlaygroundFunction);
+			return new func(Print);
 		}
 
 		[InterpreterFunction]

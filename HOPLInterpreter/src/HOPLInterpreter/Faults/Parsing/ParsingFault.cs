@@ -1,6 +1,6 @@
 ﻿using Antlr4.Runtime;
 
-namespace HomeControlInterpreter.Faults.Parsing
+namespace HOPLInterpreter.Faults.Parsing
 {
 	public class ParsingFault
 	{

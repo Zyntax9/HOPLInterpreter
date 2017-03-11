@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Antlr4.Runtime;
 
-namespace HomeControlInterpreter.Faults.Exploration
+namespace HOPLInterpreter.Faults.Exploration
 {
 	public class ExploreFaultCollection : List<ExploreFault>
 	{
