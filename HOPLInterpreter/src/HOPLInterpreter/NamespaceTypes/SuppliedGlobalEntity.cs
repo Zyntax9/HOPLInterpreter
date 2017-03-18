@@ -4,8 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using HOPLGrammar;
 using System.Reflection;
-using HomeControlInterpreterInterface.Attributes;
-using HomeControlInterpreterInterface;
+using HOPLInterpreterInterface.Attributes;
+using HOPLInterpreterInterface;
 using HOPLInterpreter.NamespaceTypes.Values;
 
 namespace HOPLInterpreter.NamespaceTypes

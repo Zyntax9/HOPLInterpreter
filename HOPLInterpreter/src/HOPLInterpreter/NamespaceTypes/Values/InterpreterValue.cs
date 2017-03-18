@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
-using Api = HomeControlInterpreterInterface;
+using Api = HOPLInterpreterInterface;
 using Parser = HOPLGrammar.HOPLGrammarParser;
 
 namespace HOPLInterpreter.NamespaceTypes.Values

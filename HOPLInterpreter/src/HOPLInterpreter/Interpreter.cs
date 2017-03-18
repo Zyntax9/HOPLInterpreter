@@ -13,7 +13,7 @@ using HOPLInterpreter.Faults.Preparation;
 using HOPLInterpreter.Interpretation.ThreadPool;
 using HOPLInterpreter.Interpretation;
 using HOPLInterpreter.NamespaceTypes.Values;
-using Api = HomeControlInterpreterInterface;
+using Api = HOPLInterpreterInterface;
 
 namespace HOPLInterpreter
 {

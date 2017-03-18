@@ -1,0 +1,61 @@
+﻿import UTest;
+
+namespace LogicalOperators
+{
+	int tests = 10;
+
+	handle UTest.BeforeTests()
+	{
+		UTest.SetTestCount(tests);
+	}
+
+	handle UTest.RunTests() // And operator (T T)
+	{
+		UTest.AssertBoolTrue(true and true, "And operator (T T)");
+	}
+
+	handle UTest.RunTests() // And operator (T F)
+	{
+		UTest.AssertBoolFalse(true and false, "And operator (T F)");
+	}
+
+	handle UTest.RunTests() // And operator (F T)
+	{
+		UTest.AssertBoolFalse(false and true, "And operator (F T)");
+	}
+
+	handle UTest.RunTests() // And operator (F F)
+	{
+		UTest.AssertBoolFalse(false and false, "And operator (F F)");
+	}
+
+	handle UTest.RunTests() // Or operator (T T)
+	{
+		UTest.AssertBoolTrue(true or true, "Or operator (T T)");
+	}
+
+	handle UTest.RunTests() // Or operator (T F)
+	{
+		UTest.AssertBoolTrue(true or false, "Or operator (T F)");
+	}
+
+	handle UTest.RunTests() // Or operator (F T)
+	{
+		UTest.AssertBoolTrue(false or true, "Or operator (F T)");
+	}
+
+	handle UTest.RunTests() // Or operator (F F)
+	{
+		UTest.AssertBoolFalse(false or false, "Or operator (F F)");
+	}
+
+	handle UTest.RunTests() // Not operator (T)
+	{
+		UTest.AssertBoolFalse(not true, "Not operator (T)");
+	}
+
+	handle UTest.RunTests() // Not operator (F)
+	{
+		UTest.AssertBoolTrue(not false, "Not operator (F)");
+	}
+}

@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using System.Reflection;
 using System.Collections;
 using HOPLInterpreter.Exceptions;
-using Api = HomeControlInterpreterInterface;
+using Api = HOPLInterpreterInterface;
 
 namespace HOPLInterpreter.NamespaceTypes
 {

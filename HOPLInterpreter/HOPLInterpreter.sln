@@ -21,6 +21,10 @@ Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "InterpreterPlayground", "sr
 EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "HOPLInterpreterInterface", "src\HOPLInterpreterInterface\HOPLInterpreterInterface.xproj", "{96E9CC5B-BD4D-443B-890D-6511ED8D6CAA}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{272639A6-D697-4D81-B8A8-995CCD2F5F7E}"
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "InternalTest", "InternalTest\InternalTest.xproj", "{6F06FB74-6266-4E64-B430-27876613528F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -43,6 +47,10 @@ Global
 		{96E9CC5B-BD4D-443B-890D-6511ED8D6CAA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{96E9CC5B-BD4D-443B-890D-6511ED8D6CAA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{96E9CC5B-BD4D-443B-890D-6511ED8D6CAA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6F06FB74-6266-4E64-B430-27876613528F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6F06FB74-6266-4E64-B430-27876613528F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6F06FB74-6266-4E64-B430-27876613528F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6F06FB74-6266-4E64-B430-27876613528F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -51,5 +59,6 @@ Global
 		{25EDEFD8-5723-4538-BAEE-2952AD62FD3D} = {35A61876-250A-4A9D-8D6B-E82C1EA7818C}
 		{5E6A9BF7-91FB-4EF9-9335-7B8960492753} = {35A61876-250A-4A9D-8D6B-E82C1EA7818C}
 		{96E9CC5B-BD4D-443B-890D-6511ED8D6CAA} = {35A61876-250A-4A9D-8D6B-E82C1EA7818C}
+		{6F06FB74-6266-4E64-B430-27876613528F} = {272639A6-D697-4D81-B8A8-995CCD2F5F7E}
 	EndGlobalSection
 EndGlobal

@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using HomeControlInterpreterInterface.Attributes;
-using HomeControlInterpreterInterface;
+using HOPLInterpreterInterface.Attributes;
+using HOPLInterpreterInterface;
 using System.Diagnostics.Tracing;
 
 namespace InterpreterPlayground

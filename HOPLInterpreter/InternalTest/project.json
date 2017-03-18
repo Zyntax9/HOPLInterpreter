@@ -1,8 +1,8 @@
 {
-  "version": "1.0.0-*",
-  "buildOptions": {
-    "emitEntryPoint": true
-  },
+	"version": "1.0.0-*",
+	"buildOptions": {
+		"emitEntryPoint": true
+	},
 
 	"dependencies": {
 		"HOPLInterpreter": "1.0.0-*",
@@ -13,9 +13,9 @@
 		}
 	},
 
-  "frameworks": {
+	"frameworks": {
 		"netcoreapp1.0": {
-			"imports": "dnxcore50"
+			"imports": "portable-net45+win8"
 		}
-  }
+	}
 }

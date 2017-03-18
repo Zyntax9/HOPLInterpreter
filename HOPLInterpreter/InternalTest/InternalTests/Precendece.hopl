@@ -1,0 +1,31 @@
+﻿import UTest;
+
+namespace Precedence
+{
+	int tests = 4;
+
+	handle UTest.BeforeTests()
+	{
+		UTest.SetTestCount(tests);
+	}
+
+	handle UTest.RunTests() // Multiplication over addition 1
+	{
+		UTest.AssertIntEqual(3 + 7 * 5, 38, "Multiplication over addition 1");
+	}
+
+	handle UTest.RunTests() // Multiplication over addition 2
+	{
+		UTest.AssertIntEqual(7 * 5 + 3, 38, "Multiplication over addition 2");
+	}
+
+	handle UTest.RunTests() // Parenthesis 1
+	{
+		UTest.AssertIntEqual((3 + 7) * 5, 50, "Parenthesis 1");
+	}
+
+	handle UTest.RunTests() // Parenthesis 2
+	{
+		UTest.AssertIntEqual(7 * (5 + 3), 56, "Parenthesis 2");
+	}
+}

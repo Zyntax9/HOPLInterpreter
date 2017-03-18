@@ -1,0 +1,151 @@
+﻿import UTest;
+
+namespace ArithmeticOperators
+{
+	int tests = 28;
+
+	handle UTest.BeforeTests()
+	{
+		UTest.SetTestCount(tests);
+	}
+
+	handle UTest.RunTests() // Integer addition 1
+	{
+		UTest.AssertIntEqual(1 + 2, 3, "Integer addition 1");
+	}
+
+	handle UTest.RunTests() // Integer addition 2
+	{
+		UTest.AssertIntEqual(2 + 1, 3, "Integer addition 2");
+	}
+
+	handle UTest.RunTests() // Float addition 1
+	{
+		UTest.AssertFloatEqual(1.001 + 2.34567, 3.34667, "Float addition 1");
+	}
+
+	handle UTest.RunTests() // Float addition 2
+	{
+		UTest.AssertFloatEqual(2.34567 + 1.001, 3.34667, "Float addition 2");
+	}
+
+	handle UTest.RunTests() // Float/Int addition
+	{
+		UTest.AssertFloatEqual(2.34567 + 5, 7.34567, "Float/Int addition");
+	}
+	
+	handle UTest.RunTests() // Int/Float addition
+	{
+		UTest.AssertFloatEqual(5 + 2.34567, 7.34567, "Int/Float addition");
+	}
+
+	handle UTest.RunTests() // String addition 1
+	{
+		UTest.AssertStringEqual("Hello" + " World", "Hello World", "String addition 1");
+	}
+
+	handle UTest.RunTests() // String addition 2
+	{
+		UTest.AssertStringEqual("World" + " Hello", "World Hello", "String addition 2");
+	}
+
+	handle UTest.RunTests() // Integer subtraction 1
+	{
+		UTest.AssertIntEqual(1 - 2, -1, "Integer subtraction 1");
+	}
+
+	handle UTest.RunTests() // Integer subtraction 2
+	{
+		UTest.AssertIntEqual(2 - 1, 1, "Integer subtraction 2");
+	}
+
+	handle UTest.RunTests() // Float subtraction 1
+	{
+		UTest.AssertFloatEqual(1.001 - 2.34567, -1.34467, "Float subtraction 1");
+	}
+
+	handle UTest.RunTests() // Float subtraction 2
+	{
+		UTest.AssertFloatEqual(2.34567 - 1.001, 1.34467, "Float subtraction 2");
+	}
+
+	handle UTest.RunTests() // Float/Int subtraction
+	{
+		UTest.AssertFloatEqual(2.34567 - 5, -2.65433, "Float/Int subtraction");
+	}
+	
+	handle UTest.RunTests() // Int/Float subtraction 2
+	{
+		UTest.AssertFloatEqual(5 - 2.34567, 2.65433, "Int/Float subtraction");
+	}
+
+	handle UTest.RunTests() // Integer multiplication 1
+	{
+		UTest.AssertIntEqual(3 * 7, 21, "Integer multiplication 1");
+	}
+
+	handle UTest.RunTests() // Integer multiplication 2
+	{
+		UTest.AssertIntEqual(7 * 3, 21, "Integer multiplication 2");
+	}
+
+	handle UTest.RunTests() // Float multiplication 1
+	{
+		UTest.AssertFloatEqual(1.001 * 2.34567, 2.34801567, "Float multiplication 1");
+	}
+
+	handle UTest.RunTests() // Float multiplication 2
+	{
+		UTest.AssertFloatEqual(2.34567 * 1.001, 2.34801567, "Float multiplication 2");
+	}
+
+	handle UTest.RunTests() // Float/Int multiplication
+	{
+		UTest.AssertFloatEqual(2.34567 * 5, 11.72835, "Float/Int multiplication");
+	}
+	
+	handle UTest.RunTests() // Int/Float multiplication
+	{
+		UTest.AssertFloatEqual(5 * 2.34567, 11.72835, "Int/Float multiplication");
+	}
+
+	handle UTest.RunTests() // Integer divison 1
+	{
+		UTest.AssertIntEqual(3 / 7, 0, "Integer divison 1");
+	}
+
+	handle UTest.RunTests() // Integer divison 2
+	{
+		UTest.AssertIntEqual(7 / 3, 2, "Integer divison 2");
+	}
+
+	handle UTest.RunTests() // Float divison 1
+	{
+		UTest.AssertFloatEqual(1.001 / 2.34567, 0.426743744857546, "Float divison 1");
+	}
+
+	handle UTest.RunTests() // Float divison 2
+	{
+		UTest.AssertFloatEqual(2.34567 / 1.001, 2.343326673326673, "Float divison 2");
+	}
+
+	handle UTest.RunTests() // Float/Int divison
+	{
+		UTest.AssertFloatEqual(2.34567 / 5, 0.469134, "Float/Int multiplication");
+	}
+	
+	handle UTest.RunTests() // Int/Float divison
+	{
+		UTest.AssertFloatEqual(5 / 2.34567, 2.13158713715058, "Int/Float divison");
+	}
+
+	handle UTest.RunTests() // Integer negation
+	{
+		UTest.AssertIntNegation(-3, 3, "Integer negation");
+	}
+
+	handle UTest.RunTests() // Float negation
+	{
+		UTest.AssertFloatNegation(-3.123, 3.123, "Float negation");
+	}
+}

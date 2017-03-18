@@ -4,16 +4,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using HOPLInterpreter.Faults.TypeCheck;
+using HOPLInterpreter.Faults;
 
 namespace HOPLInterpreter.Exceptions
 {
-	public class TypeFaultsException : Exception
+	public class TypeFaultsException : FaultException
 	{
-		public TypeFaultCollection Faults { get; protected set; }
+		private TypeFaultCollection faults;
+		public override IEnumerable<IFault> Faults { get { return faults; } }
+
+		public override string FaultName { get { return "Type Faults"; } }
 
 		public TypeFaultsException(TypeFaultCollection faults) : base()
 		{
-			Faults = faults;
+			this.faults = faults;
 		}
 	}
 }

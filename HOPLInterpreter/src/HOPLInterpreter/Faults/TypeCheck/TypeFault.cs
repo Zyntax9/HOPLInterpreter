@@ -7,12 +7,17 @@ using Parser = HOPLGrammar.HOPLGrammarParser;
 
 namespace HOPLInterpreter.Faults.TypeCheck
 {
-	public class TypeFault
+	public class TypeFault : IFault
 	{
 		public TypeFaultMessage Message { get; protected set; }
 		public int LineNumber { get; protected set; }
 		public int ColumnNumber { get; protected set; }
 		public string File { get; protected set; }
+
+		string IFault.Message { get { return Message.message; } }
+		public int ID { get { return Message.id; } }
+
+		public string FaultTypeName { get { return "Type Fault"; } }
 
 		public TypeFault(TypeFaultMessage message, int lineNumber, int columnNumber, string file)
 		{

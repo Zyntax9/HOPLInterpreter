@@ -4,16 +4,20 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using HOPLInterpreter.Faults;
 
 namespace HOPLInterpreter.Exceptions
 {
-	public class ExploreFaultsException : Exception
+	public class ExploreFaultsException : FaultException
 	{
-		public ExploreFaultCollection Faults { get; protected set; }
+		private ExploreFaultCollection faults;
+		public override IEnumerable<IFault> Faults { get { return faults; } }
+
+		public override string FaultName { get { return "Explore Faults"; } }
 
 		public ExploreFaultsException(ExploreFaultCollection faults) : base()
 		{
-			Faults = faults;
+			this.faults = faults;
 		}
 	}
 }

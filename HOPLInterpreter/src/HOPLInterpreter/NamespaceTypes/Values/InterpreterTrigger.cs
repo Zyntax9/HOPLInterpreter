@@ -1,4 +1,4 @@
-﻿using Api = HomeControlInterpreterInterface;
+﻿using Api = HOPLInterpreterInterface;
 
 namespace HOPLInterpreter.NamespaceTypes.Values
 {

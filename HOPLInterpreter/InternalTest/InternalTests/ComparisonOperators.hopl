@@ -1,0 +1,171 @@
+﻿import UTest;
+
+namespace ComparisonOperators
+{
+	int tests = 32;
+
+	handle UTest.BeforeTests()
+	{
+		UTest.SetTestCount(tests);
+	}
+
+	handle UTest.RunTests() // Integer equal
+	{
+		UTest.AssertBoolTrue(30 == 30, "Integer equal");
+	}
+
+	handle UTest.RunTests() // Integer equal (false) 1
+	{
+		UTest.AssertBoolFalse(1 == 2, "Integer equal (false) 1");
+	}
+
+	handle UTest.RunTests() // Integer equal (false) 2
+	{
+		UTest.AssertBoolFalse(2 == 1, "Integer equal (false) 2");
+	}
+
+	handle UTest.RunTests() // Integer inequal 1
+	{
+		UTest.AssertBoolTrue(30 != 23, "Integer inequal 1");
+	}
+
+	handle UTest.RunTests() // Integer inequal 2
+	{
+		UTest.AssertBoolTrue(23 != 30, "Integer inequal 2");
+	}
+
+	handle UTest.RunTests() // Integer inequal (false)
+	{
+		UTest.AssertBoolFalse(36 != 36, "Integer inequal (false)");
+	}
+
+	handle UTest.RunTests() // Integer less
+	{
+		UTest.AssertBoolTrue(84 < 92, "Integer less");
+	}
+
+	handle UTest.RunTests() // Integer less (false)
+	{
+		UTest.AssertBoolFalse(40 < 23, "Integer less (false)");
+	}
+
+	handle UTest.RunTests() // Integer less or equal (less)
+	{
+		UTest.AssertBoolTrue(84 <= 92, "Integer less or equal (less)");
+	}
+
+	handle UTest.RunTests() // Integer less or equal (equal)
+	{
+		UTest.AssertBoolTrue(92 <= 92, "Integer less or equal (equal)");
+	}
+
+	handle UTest.RunTests() // Integer less or equal (false)
+	{
+		UTest.AssertBoolFalse(40 <= 23, "Integer less or equal (false)");
+	}
+
+	handle UTest.RunTests() // Integer greater
+	{
+		UTest.AssertBoolTrue(40 > 23, "Integer greater");
+	}
+
+	handle UTest.RunTests() // Integer greater (false)
+	{
+		UTest.AssertBoolFalse(84 > 92, "Integer greater (false)");
+	}
+
+	handle UTest.RunTests() // Integer greater or equal (greater)
+	{
+		UTest.AssertBoolTrue(40 >= 23, "Integer greater or equal (greater)");
+	}
+
+	handle UTest.RunTests() // Integer greater or equal (equal)
+	{
+		UTest.AssertBoolTrue(92 >= 92, "Integer greater or equal (equal)");
+	}
+
+	handle UTest.RunTests() // Integer greater or equal (false)
+	{
+		UTest.AssertBoolFalse(84 >= 92, "Integer greater or equal (false)");
+	}
+	
+	handle UTest.RunTests() // Float equal
+	{
+		UTest.AssertBoolTrue(30.42948 == 30.42948, "Float equal");
+	}
+
+	handle UTest.RunTests() // Float equal (false) 1
+	{
+		UTest.AssertBoolFalse(30.42948 == 30.42048, "Float equal (false) 1");
+	}
+
+	handle UTest.RunTests() // Float equal (false) 2
+	{
+		UTest.AssertBoolFalse(30.42048 == 30.42948, "Float equal (false) 2");
+	}
+
+	handle UTest.RunTests() // Float inequal 1
+	{
+		UTest.AssertBoolTrue(30.42948 != 30.42048, "Float inequal 1");
+	}
+
+	handle UTest.RunTests() // Float inequal 2
+	{
+		UTest.AssertBoolTrue(30.42048 != 30.42948, "Float inequal 2");
+	}
+
+	handle UTest.RunTests() // Float inequal (false)
+	{
+		UTest.AssertBoolFalse(30.42948 != 30.42948, "Float inequal (false)");
+	}
+
+	handle UTest.RunTests() // Float less
+	{
+		UTest.AssertBoolTrue(84.203451 < 92.42233, "Float less");
+	}
+
+	handle UTest.RunTests() // Float less (false)
+	{
+		UTest.AssertBoolFalse(40.2223 < 23.775, "Float less (false)");
+	}
+
+	handle UTest.RunTests() // Float less or equal (less)
+	{
+		UTest.AssertBoolTrue(84.8823 <= 92.8827, "Float less or equal (less)");
+	}
+
+	handle UTest.RunTests() // Float less or equal (equal)
+	{
+		UTest.AssertBoolTrue(92.4433 <= 92.4433, "Float less or equal (equal)");
+	}
+
+	handle UTest.RunTests() // Float less or equal (false)
+	{
+		UTest.AssertBoolFalse(40.2338 <= 23.8984, "Float less or equal (false)");
+	}
+
+	handle UTest.RunTests() // Float greater
+	{
+		UTest.AssertBoolTrue(40.2338 > 23.8984, "Float greater");
+	}
+
+	handle UTest.RunTests() // Float greater (false)
+	{
+		UTest.AssertBoolFalse(84.8823 > 92.8827, "Float greater (false)");
+	}
+
+	handle UTest.RunTests() // Float greater or equal (greater)
+	{
+		UTest.AssertBoolTrue(40.2338 >= 23.8984, "Float greater or equal (greater)");
+	}
+
+	handle UTest.RunTests() // Float greater or equal (equal)
+	{
+		UTest.AssertBoolTrue(92.8827 >= 92.8827, "Float greater or equal (equal)");
+	}
+
+	handle UTest.RunTests() // Float greater or equal (false)
+	{
+		UTest.AssertBoolFalse(84.8823 >= 92.8827, "Float greater or equal (false)");
+	}
+}

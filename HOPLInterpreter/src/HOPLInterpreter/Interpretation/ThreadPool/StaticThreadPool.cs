@@ -1,4 +1,4 @@
-﻿using Api = HomeControlInterpreterInterface;
+﻿using Api = HOPLInterpreterInterface;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -77,6 +77,14 @@ namespace HOPLInterpreter.Interpretation.ThreadPool
 			queueSemaphore.Release();
 		}
 
+		public int GetQueuedCount()
+		{
+			int c = 0;
+			lock (queue)
+				c = queue.Count;
+			return c;
+		}
+
 		public void Stop()
 		{
 			Running.Value = false;
@@ -84,7 +92,7 @@ namespace HOPLInterpreter.Interpretation.ThreadPool
 
 		public void StopAndJoin()
 		{
-			Running.Value = false;
+			Stop();
 			for (int i = 0; i < pool.Length; i++)
 				queueSemaphore.Release(); // Wake up all waiting threads
 			foreach (Thread t in pool)

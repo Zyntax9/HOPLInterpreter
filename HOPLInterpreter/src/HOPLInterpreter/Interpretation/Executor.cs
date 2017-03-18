@@ -12,7 +12,8 @@ using HOPLInterpreter.Exceptions;
 using HOPLInterpreter.Faults.Runtime;
 using Antlr4.Runtime;
 using HOPLInterpreter.Interpretation.ThreadPool;
-using Api = HomeControlInterpreterInterface;
+using Api = HOPLInterpreterInterface;
+using System.Globalization;
 
 namespace HOPLInterpreter.Interpretation
 {
@@ -528,7 +529,9 @@ namespace HOPLInterpreter.Interpretation
 
 		public InterpreterValue VisitFloatVal([NotNull] Parser.FloatValContext context)
 		{
-			return new InterpreterFloat(float.Parse(context.FLOAT_VAL().GetText()));
+			string valString = context.FLOAT_VAL().GetText();
+			float val = float.Parse(valString, CultureInfo.InvariantCulture.NumberFormat);
+			return new InterpreterFloat(val);
 		}
 
 		public InterpreterValue VisitFor([NotNull] Parser.ForContext context)

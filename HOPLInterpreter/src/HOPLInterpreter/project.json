@@ -3,7 +3,7 @@
 
     "dependencies": {
         "NETStandard.Library": "1.6.0",
-        "Antlr4": "4.5.3-rc1",
+        "Antlr4": "4.6.1-beta002",
         "System.Threading.Thread": "4.3.0",
         "HOPLInterpreterInterface": "1.0.0-*",
         "System.Reflection.TypeExtensions": "4.4.0-beta-24913-01"
@@ -11,7 +11,7 @@
 
 	"frameworks": {
 		"netstandard1.6": {
-			"imports": "portable-net45+win8"
+			"imports": "dnxcore50"
 		}
 	},
 

@@ -6,12 +6,17 @@ using Antlr4.Runtime;
 
 namespace HOPLInterpreter.Faults.Runtime
 {
-	public class RuntimeFault
+	public class RuntimeFault : IFault
 	{
 		public RuntimeFaultMessage Message { get; protected set; }
 		public int LineNumber { get; protected set; }
 		public int ColumnNumber { get; protected set; }
 		public string File { get; protected set; }
+
+		string IFault.Message { get { return Message.message; } }
+		public int ID { get { return Message.id; } }
+
+		public string FaultTypeName { get { return "Runtime Fault"; } }
 
 		public RuntimeFault(RuntimeFaultMessage message, int lineNumber, int columnNumber, string file)
 		{

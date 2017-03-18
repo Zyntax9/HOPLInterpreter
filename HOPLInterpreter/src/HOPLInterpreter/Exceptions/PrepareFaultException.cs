@@ -1,20 +1,25 @@
 ﻿using System;
 using HOPLInterpreter.Faults.Preparation;
+using System.Collections.Generic;
+using HOPLInterpreter.Faults;
 
 namespace HOPLInterpreter.Exceptions
 {
-	public class PrepareFaultException : Exception
+	public class PrepareFaultException : FaultException
 	{
-		public PrepareFault Fault { get; protected set; }
+		private PrepareFault fault;
+		public override IEnumerable<IFault> Faults { get { return new PrepareFault[] { fault }; } }
+
+		public override string FaultName { get { return "Prepare Faults"; } }
 
 		public PrepareFaultException(PrepareFault fault) : base()
 		{
-			Fault = fault;
+			this.fault = fault;
 		}
 
 		public PrepareFaultException(PrepareFaultMessage msg, string info) : base()
 		{
-			Fault = new PrepareFault(msg, info);
+			this.fault = new PrepareFault(msg, info);
 		}
 	}
 }

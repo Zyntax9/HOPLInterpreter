@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Reflection;
 
-namespace HomeControlInterpreterInterface
+namespace HOPLInterpreterInterface
 {
 	public delegate void TriggerEventHandler(object sender, object[] arguments);
 

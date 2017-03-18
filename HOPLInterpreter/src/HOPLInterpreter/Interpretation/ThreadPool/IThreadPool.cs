@@ -1,5 +1,5 @@
 ﻿using System;
-using Api = HomeControlInterpreterInterface;
+using Api = HOPLInterpreterInterface;
 
 namespace HOPLInterpreter.Interpretation.ThreadPool
 {
@@ -8,6 +8,7 @@ namespace HOPLInterpreter.Interpretation.ThreadPool
 		BooleanRef Running { get; }
 
 		void QueueHandler(HandlerContext context);
+		int GetQueuedCount();
 		void Stop();
 		void StopAndJoin();
 		object[] Await(Api.SuppliedTrigger trigger);

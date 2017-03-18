@@ -5,7 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Reflection;
 using Parser = HOPLGrammar.HOPLGrammarParser;
-using HomeControlInterpreterInterface.Attributes;
+using HOPLInterpreterInterface.Attributes;
 
 namespace HOPLInterpreter.NamespaceTypes
 {

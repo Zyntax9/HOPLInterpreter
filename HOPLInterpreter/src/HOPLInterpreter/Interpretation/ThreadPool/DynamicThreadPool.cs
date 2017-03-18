@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Api = HomeControlInterpreterInterface;
+using Api = HOPLInterpreterInterface;
 
 namespace HOPLInterpreter.Interpretation.ThreadPool
 {
@@ -44,6 +44,11 @@ namespace HOPLInterpreter.Interpretation.ThreadPool
 			t.Start(tcontext);
 		}
 
+		public int GetQueuedCount()
+		{
+			return 0;
+		}
+
 		public void Stop()
 		{
 			Running.Value = false;
@@ -51,14 +56,10 @@ namespace HOPLInterpreter.Interpretation.ThreadPool
 
 		public void StopAndJoin()
 		{
-			Running.Value = false;
+			Stop();
 			lock (pool)
-			{
 				foreach (Thread t in pool)
-				{
 					t.Join();
-				}
-			}
 		}
 
 		public object[] Await(Api.SuppliedTrigger trigger)

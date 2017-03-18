@@ -11,9 +11,19 @@ namespace HOPLInterpreter.NamespaceTypes.Values
 
 		public InterpreterBool(bool value) : base(value) { }
 		
-		protected override InterpreterValue Negate()
+		protected override InterpreterValue Not()
 		{
 			return new InterpreterBool(!value);
+		}
+
+		protected override InterpreterValue And(InterpreterValue other)
+		{
+			return new InterpreterBool(value && (bool)other.Value);
+		}
+
+		protected override InterpreterValue Or(InterpreterValue other)
+		{
+			return new InterpreterBool(value || (bool)other.Value);
 		}
 
 		protected override InterpreterValue Equal(InterpreterValue other)
