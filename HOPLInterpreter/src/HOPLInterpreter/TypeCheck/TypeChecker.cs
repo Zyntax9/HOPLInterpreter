@@ -456,23 +456,19 @@ namespace HOPLInterpreter.TypeCheck
 		{
 			InterpreterType callableType = VisitExpr(context.expr());
 
-			if (!callableType.IsCallable)
-				return RaiseError(TypeErrorMessage.CALLABLE_NOTCALLABLE, context);
-
 			if (callableType == InterpreterType.ERROR)
 				return InterpreterType.ERROR;
 
-			currentCallable = callableType;
-
-			if (currentCallable.TypeOf != InterpreterType.Types.TRIGGER)
+			if (!callableType.IsTriggerable)
 			{
-				currentCallable = null;
 				return RaiseError(TypeErrorMessage.HANDLERDEC_NOTTRIGGER, context);
 			}
+			
+			currentCallable = callableType;
 
 			ITerminalNode[] ids = context.ID();
 			Parser.TypeNameContext[] tncontexts = context.typeName();
-			InterpreterType[] domain = currentCallable.GetCallableDomain();
+			InterpreterType[] domain = currentCallable.GetTriggerableDomain();
 			if (ids.Length != domain.Length)
 			{
 				currentCallable = null;

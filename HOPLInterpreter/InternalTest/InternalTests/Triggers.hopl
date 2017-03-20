@@ -1,0 +1,117 @@
+﻿import UTest;
+
+namespace TriggerReference
+{
+	int tests = 12;
+
+	handle UTest.BeforeTests()
+	{
+		UTest.SetTestCount(tests);
+	}
+	
+	trigger<> a1;
+	handle UTest.RunTests() // Trigger call (No arg)
+	{
+		a1();
+	}
+
+	handle a1()
+	{
+		UTest.AssertBoolTrue(true, "Trigger call (No arg)");
+	}
+	
+	trigger<int> a2;
+	handle UTest.RunTests() // Trigger call (One int arg)
+	{
+		a2(13);
+	}
+
+	handle a2(int x)
+	{
+		UTest.AssertIntEqual(x, 13, "Trigger call (One int arg)");
+	}
+	
+	trigger<float> a3;
+	handle UTest.RunTests() // Trigger call (One float arg)
+	{
+		a3(842.3345);
+	}
+
+	handle a3(float x)
+	{
+		UTest.AssertFloatEqual(x, 842.3345, "Trigger call (One float arg)");
+	}
+	
+	trigger<bool> a4;
+	handle UTest.RunTests() // Trigger call (One bool arg)
+	{
+		a4(false);
+	}
+
+	handle a4(bool x)
+	{
+		UTest.AssertBoolFalse(x, "Trigger call (One bool arg)");
+	}
+	
+	trigger<string> a5;
+	handle UTest.RunTests() // Trigger call (One string arg)
+	{
+		a5("string arg");
+	}
+
+	handle a5(string x)
+	{
+		UTest.AssertStringEqual(x, "string arg", "Trigger call (One string arg)");
+	}
+	
+	trigger<list<int>> a6;
+	handle UTest.RunTests() // Trigger call (One list arg)
+	{
+		a6([4,5,6,2]);
+	}
+
+	handle a6(list<int> x)
+	{
+		UTest.AssertIntListEqual(x, [4,5,6,2], "Trigger call (One list arg)");
+	}
+	
+	trigger<tuple<bool, string>> a7;
+	handle UTest.RunTests() // Trigger call (One tuple arg)
+	{
+		a7({true, "tuple arg"});
+	}
+
+	handle a7(tuple<bool, string> x)
+	{
+		UTest.AssertBoolTrue(x[0], "Trigger call (One tuple[0] arg)");
+		UTest.AssertStringEqual(x[1], "tuple arg", "Trigger call (One tuple[1] arg)");
+	}
+	
+	trigger<int> a8;
+	trigger<int> b8;
+	handle UTest.RunTests() // Trigger list
+	{
+		a8(324);
+		b8(324);
+	}
+
+	handle [a8, b8](int x)
+	{
+		UTest.AssertIntEqual(x, 324, "Trigger list");
+	}
+	
+
+	trigger<int> a9;
+	trigger<int> b9;
+	list<trigger<int>> c9 = [a9, b9];
+	handle UTest.RunTests() // Trigger list GV
+	{
+		a9(324);
+		b9(324);
+	}
+
+	handle c9(int x)
+	{
+		UTest.AssertIntEqual(x, 324, "Trigger list GV");
+	}
+}

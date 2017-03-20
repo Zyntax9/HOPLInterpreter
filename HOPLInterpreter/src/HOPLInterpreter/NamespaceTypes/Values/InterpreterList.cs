@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
+using System.Linq;
 using HOPLInterpreter.Interpretation;
 using System;
 
@@ -11,7 +12,7 @@ namespace HOPLInterpreter.NamespaceTypes.Values
 	{
 		private Lock eventLock = new Lock();
 		private event Api.TriggerEventHandler triggerFire;
-
+		
 		public InterpreterList() : base(new List<InterpreterValue>()) { }
 
 		public InterpreterList(IList value) : base(FromNativeList(value))
@@ -59,12 +60,33 @@ namespace HOPLInterpreter.NamespaceTypes.Values
 			return tentry.TypeEqual(oentry);
 		}
 
-		public override object ToNative()
+		public override object ToNative(InterpreterType expected = null)
 		{
+			InterpreterType subexpect = expected?.TypeArray[0];
+
 			List<object> nativeList = new List<object>();
 			foreach (InterpreterValue value in value)
-				nativeList.Add(value.ToNative());
-			return nativeList;
+				nativeList.Add(value.ToNative(subexpect));
+
+			Type generator;
+			if(value.Count <= 0)
+			{
+				generator = expected.ToNative();
+			}
+			else
+			{
+				Type listGenericType = typeof(List<>);
+				generator = listGenericType.MakeGenericType(nativeList.First().GetType());
+			}
+
+			ConstructorInfo ci = generator.GetConstructor(new Type[] { });
+
+			IList result = (IList)ci.Invoke(new object[] { });
+
+			foreach (object native in nativeList)
+				result.Add(native);
+
+			return result;
 		}
 
 		public override InterpreterValue Clone()

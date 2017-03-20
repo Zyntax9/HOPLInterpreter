@@ -52,11 +52,14 @@ namespace HOPLInterpreter.NamespaceTypes.Values
 			return new InterpreterBool(true);
 		}
 
-		public override object ToNative()
+		public override object ToNative(InterpreterType expected = null)
 		{
 			object[] nativeArray = new object[value.Length];
 			for (int i = 0; i < value.Length; i++)
-				nativeArray[i] = value[i].ToNative();
+			{
+				InterpreterType subexpect = expected?.TypeArray[i];
+				nativeArray[i] = value[i].ToNative(subexpect);
+			}
 			return nativeArray;
 		}
 

@@ -203,7 +203,7 @@ STRING		:	'string';
 
 // variable values
 INTEGER_VAL	:	'-'?[0-9]+;
-FLOAT_VAL	:	'-'?[0-9]+.[0-9]+;
+FLOAT_VAL	:	'-'?[0-9]+'.'[0-9]+;
 BOOLEAN_VAL :	'true'|'false';
 STRING_VAL  :	 '"' (~["\\] | '\\' (. | EOF))* '"';
 

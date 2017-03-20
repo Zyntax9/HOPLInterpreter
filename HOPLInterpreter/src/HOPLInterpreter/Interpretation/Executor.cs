@@ -210,10 +210,11 @@ namespace HOPLInterpreter.Interpretation
 			if(ifunction.GetType() == typeof(SuppliedFunction))
 			{
 				SuppliedFunction function = (SuppliedFunction)ifunction;
+				Argument[] fArgs = ifunction.Arguments;
 
 				object[] nativeArguments = new object[arguments.Length];
 				for (int i = 0; i < arguments.Length; i++)
-					nativeArguments[i] = arguments[i].ToNative();
+					nativeArguments[i] = arguments[i].ToNative(fArgs[i].Type);
 
 				object retval = function.Method.Invoke(function.Supplier, nativeArguments);
 				return InterpreterValue.FromNative(retval);

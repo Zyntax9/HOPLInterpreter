@@ -35,7 +35,7 @@ namespace HOPLInterpreter.NamespaceTypes.Values
 			return GetType() == other.GetType();
 		}
 
-		public virtual object ToNative()
+		public virtual object ToNative(InterpreterType expected = null)
 		{
 			return Value;
 		}
