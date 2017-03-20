@@ -75,7 +75,7 @@ namespace HOPLInterpreter
 				Executor executor = new Executor(handler.Namespace, handler.Namespaces, 
 					handler.File, handler.AccessTable);
 				InterpreterValue expr = executor.VisitExpr(handler.Context.expr());
-				Api.SuppliedTrigger trigger = (Api.SuppliedTrigger)expr.Value;
+				IInterpreterTriggerable trigger = (IInterpreterTriggerable)expr;
 				trigger.Subscribe(handler.OnTrigger);
 				handler.HandlerTriggered += pool.QueueHandler;
 			}

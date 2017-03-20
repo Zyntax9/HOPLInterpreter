@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using HOPLInterpreter.Exceptions;
+using HOPLInterpreter.Errors.Runtime;
 
 namespace HOPLInterpreter.Interpretation.ThreadPool
 {
@@ -16,6 +17,8 @@ namespace HOPLInterpreter.Interpretation.ThreadPool
 		private Thread[] pool;
 		private LinkedList<AwaitingThread> awaiting = new LinkedList<AwaitingThread>();
 		private Queue<AwaitingThread> ready = new Queue<AwaitingThread>();
+
+		public event RuntimeErrorEventHandler RuntimeErrorEvent;
 
 		public StaticThreadPool(int poolSize)
 		{
@@ -65,6 +68,10 @@ namespace HOPLInterpreter.Interpretation.ThreadPool
 				try
 				{
 					executor.ExecuteHandler(handler.Handler.Context);
+				}
+				catch (RuntimeErrorException e)
+				{
+					RuntimeErrorEvent?.Invoke(this, (RuntimeError)e.Errors.First());
 				}
 				catch (ExecutorInterruptException) { }
 			}

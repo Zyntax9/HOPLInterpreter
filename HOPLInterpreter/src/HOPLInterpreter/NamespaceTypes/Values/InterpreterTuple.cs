@@ -16,15 +16,15 @@ namespace HOPLInterpreter.NamespaceTypes.Values
 		{
 			if (GetType() != other.GetType())
 				return false;
-			InterpreterTuple otherArray = (InterpreterTuple)other;
-			InterpreterValue[] oarray = (InterpreterValue[])otherArray.Value;
+			InterpreterTuple otherTuple = (InterpreterTuple)other;
+			InterpreterValue[] otherArray = (InterpreterValue[])otherTuple.Value;
 
-			if (value.Length != oarray.Length)
+			if (value.Length != otherArray.Length)
 				return false;
 
 			for (int i = 0; i <= value.Length; i++)
 			{
-				if (!value[i].TypeEqual(oarray[i]))
+				if (!value[i].TypeEqual(otherArray[i]))
 					return false;
 			}
 

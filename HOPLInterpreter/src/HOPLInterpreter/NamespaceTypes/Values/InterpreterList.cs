@@ -1,16 +1,16 @@
 ﻿using Api = HOPLInterpreterInterface;
-using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Reflection;
+using HOPLInterpreter.Interpretation;
+using System;
 
 namespace HOPLInterpreter.NamespaceTypes.Values
 {
 	public class InterpreterList : InterpreterValue<List<InterpreterValue>>, IInterpreterTriggerable
 	{
-		public Api.SuppliedTrigger collectiveTrigger { get; protected set; } = new Api.SuppliedTrigger();
+		private Lock eventLock = new Lock();
+		private event Api.TriggerEventHandler triggerFire;
 
 		public InterpreterList() : base(new List<InterpreterValue>()) { }
 
@@ -30,7 +30,7 @@ namespace HOPLInterpreter.NamespaceTypes.Values
 
 		private void AnyFired(object sender, object[] arguments)
 		{
-			collectiveTrigger.Fire(sender, arguments);
+			triggerFire?.Invoke(sender, arguments);
 		}
 
 		private static List<InterpreterValue> FromNativeList(IList native)
@@ -107,12 +107,30 @@ namespace HOPLInterpreter.NamespaceTypes.Values
 
 		public void Subscribe(Api.TriggerEventHandler handler)
 		{
-			collectiveTrigger.Subscribe(handler);
+			lock(eventLock)
+				triggerFire += handler;
 		}
 
 		public void Unsubscribe(Api.TriggerEventHandler handler)
 		{
-			collectiveTrigger.Unsubscribe(handler);
+			lock (eventLock)
+				triggerFire -= handler;
+		}
+
+		public void TransferSubscribers(IInterpreterTriggerable triggerable)
+		{
+			if (ReferenceEquals(triggerable, this))
+				return; // Otherwise we will deadlock
+
+			lock (eventLock)
+			{
+				foreach (Delegate del in triggerFire.GetInvocationList())
+				{
+					Api.TriggerEventHandler handler = (Api.TriggerEventHandler)del;
+					triggerFire -= handler;
+					triggerable.Subscribe(handler);
+				}
+			}
 		}
 	}
 }

@@ -17,10 +17,28 @@ namespace HOPLInterpreter.Interpretation
 				TopNamespace.TryGetGlobalEntityValue(name, out value); // Then in top-namespace
 		}
 
+		public override void PopDepth()
+		{
+			foreach(string varName in scopeLayout[Depth])
+			{
+				InterpreterValue val = variables[varName];
+				if(val.GetType() == typeof(InterpreterTrigger))
+					((InterpreterTrigger)val).DropReference(); // Drop any references
+			}
+			base.PopDepth();
+		}
+
 		public void SetVariable(string name, InterpreterValue value)
 		{
 			if (variables.ContainsKey(name))
 			{
+				if (variables[name].GetType() == typeof(InterpreterTrigger))
+				{
+					// Change reference of all referencing triggers
+					InterpreterTrigger trigger = (InterpreterTrigger)variables[name];
+					trigger.ReferenceChanging((InterpreterTrigger)value);
+				}
+
 				variables[name] = value;
 				return;
 			}

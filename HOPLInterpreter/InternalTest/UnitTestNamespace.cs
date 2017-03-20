@@ -76,7 +76,7 @@ namespace InternalTest
 		{
 			bool done = false;
 			lock (countLock)
-				done = SuccessCount + FailCount == TestCount;
+				done = SuccessCount + FailCount >= TestCount;
 			return done;
 		}
 

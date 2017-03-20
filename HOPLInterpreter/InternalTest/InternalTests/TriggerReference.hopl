@@ -1,0 +1,96 @@
+﻿import UTest;
+
+namespace TriggerReference
+{
+	int tests = 5;
+
+	handle UTest.BeforeTests()
+	{
+		UTest.SetTestCount(tests);
+	}
+	
+	trigger<int> a1;
+	trigger<int> b1 = a1;
+	handle UTest.RunTests() // Call through reference
+	{
+		b1(13);
+	}
+
+	handle a1(int x)
+	{
+		UTest.AssertIntEqual(x, 13, "Call through reference");
+	}
+	
+	
+	trigger<int> a2;
+	trigger<int> b2 = a2;
+	handle UTest.RunTests() // Call referenced
+	{
+		a2(42);
+	}
+
+	handle b2(int x)
+	{
+		UTest.AssertIntEqual(x, 42, "Call referenced");
+	}
+	
+	
+	trigger<int> a3 = b3;
+	trigger<int> b3;
+	trigger<int> c3;
+	handle UTest.RunTests() // Call through changed reference
+	{
+		a3 = c3;
+		a3(2);
+	}
+
+	handle b3(int x)
+	{
+		UTest.AssertBoolTrue(false, "Call through changed reference (Bad path)");
+	}
+
+	handle c3(int x)
+	{
+		UTest.AssertIntEqual(x, 2, "Call through changed reference");
+	}
+	
+	
+	trigger<int> a4 = b4;
+	trigger<int> b4;
+	trigger<int> c4;
+	handle UTest.RunTests() // Call referenced changed
+	{
+		a4 = c4;
+		c4(8887);
+	}
+
+	handle b4(int x)
+	{
+		UTest.AssertBoolTrue(false, "Call referenced changed (Bad path)");
+	}
+
+	handle a4(int x)
+	{
+		UTest.AssertIntEqual(x, 8887, "Call referenced changed");
+	}
+	
+	
+	trigger<int> a5;
+	trigger<int> b5;
+	handle UTest.RunTests() // Call on local reference
+	{
+		trigger<int> loc = b5;
+		loc = a5;
+		loc(87);
+	}
+
+	handle b5(int x)
+	{
+		UTest.AssertBoolTrue(false, "Call on local reference (Bad path)");
+	}
+
+	handle a5(int x)
+	{
+		UTest.AssertIntEqual(x, 87, "Call on local reference");
+	}
+}

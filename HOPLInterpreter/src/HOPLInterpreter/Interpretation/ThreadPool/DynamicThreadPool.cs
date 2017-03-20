@@ -1,9 +1,8 @@
-﻿using HOPLInterpreter.Exceptions;
-using System;
+﻿using HOPLInterpreter.Errors.Runtime;
+using HOPLInterpreter.Exceptions;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
-using System.Threading.Tasks;
 using Api = HOPLInterpreterInterface;
 
 namespace HOPLInterpreter.Interpretation.ThreadPool
@@ -13,6 +12,8 @@ namespace HOPLInterpreter.Interpretation.ThreadPool
 		public BooleanRef Running { get; protected set; } = new BooleanRef();
 
 		private LinkedList<Thread> pool = new LinkedList<Thread>();
+
+		public event RuntimeErrorEventHandler RuntimeErrorEvent;
 
 		public DynamicThreadPool() { }
 
@@ -25,7 +26,11 @@ namespace HOPLInterpreter.Interpretation.ThreadPool
 			{
 				executor.ExecuteHandler(tcontext.Handler.Handler.Context);
 			}
-			catch(ExecutorInterruptException) { }
+			catch (RuntimeErrorException e)
+			{
+				RuntimeErrorEvent?.Invoke(this, (RuntimeError)e.Errors.First());
+			}
+			catch (ExecutorInterruptException) { }
 
 			lock (pool)
 				pool.Remove(tcontext.ThreadNode);

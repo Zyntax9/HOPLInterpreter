@@ -1,11 +1,15 @@
-﻿using System;
+﻿using HOPLInterpreter.Errors.Runtime;
 using Api = HOPLInterpreterInterface;
 
 namespace HOPLInterpreter.Interpretation.ThreadPool
 {
+	public delegate void RuntimeErrorEventHandler(object sender, RuntimeError e);
+
 	public interface IThreadPool
 	{
 		BooleanRef Running { get; }
+
+		event RuntimeErrorEventHandler RuntimeErrorEvent;
 
 		void QueueHandler(HandlerContext context);
 		int GetQueuedCount();

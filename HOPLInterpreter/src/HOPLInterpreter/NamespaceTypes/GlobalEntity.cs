@@ -33,6 +33,13 @@ namespace HOPLInterpreter.NamespaceTypes
 			set
 			{
 				rwlock.Write();
+				if (!ReferenceEquals(this.value, null) && 
+					this.value.GetType() == typeof(InterpreterTrigger))
+				{
+					// Change reference of all referencing triggers
+					InterpreterTrigger trigger = (InterpreterTrigger)this.value;
+					trigger.ReferenceChanging((InterpreterTrigger)value);
+				}
 				this.value = value;
 				rwlock.WriteRelease();
 			}

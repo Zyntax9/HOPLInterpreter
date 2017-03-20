@@ -10,5 +10,6 @@ namespace HOPLInterpreter.NamespaceTypes.Values
     {
 		void Subscribe(Api.TriggerEventHandler handler);
 		void Unsubscribe(Api.TriggerEventHandler handler);
+		void TransferSubscribers(IInterpreterTriggerable to);
 	}
 }

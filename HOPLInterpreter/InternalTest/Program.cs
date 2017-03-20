@@ -14,6 +14,8 @@ namespace InternalTest
 {
 	public class Program
 	{
+		private static TimeSpan TIMEOUT = new TimeSpan(0, 0, 50);
+
 		public static void Main(string[] args)
 		{
 			string[] files = Directory.GetFiles("./InternalTests", "*.hopl");
@@ -26,9 +28,14 @@ namespace InternalTest
 
 				IThreadPool pool = Interpreter.Run(context, null);
 				unitTestNamespace.Run();
-				while(!unitTestNamespace.IsComplete())
+
+				DateTime startTime = DateTime.Now;
+				while(!unitTestNamespace.IsComplete() && DateTime.Now - startTime < TIMEOUT)
 					Thread.Sleep(100);
 				pool.StopAndJoin();
+
+				if (DateTime.Now - startTime >= TIMEOUT)
+					Console.WriteLine("Timeout on {0}", file);
 
 				WriteStat(unitTestNamespace.TestCount, unitTestNamespace.SuccessCount,
 					Path.GetFileName(file));
