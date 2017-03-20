@@ -8,9 +8,10 @@ using System.Diagnostics.Tracing;
 
 namespace InterpreterPlayground
 {
-	[InterpreterNamespace]
-	public class Playground
+	public class Playground : ISuppliedNamespace
 	{
+		public string Name { get { return "InterpreterPlayground.Playground"; } }
+
 		[InterpreterGlobalVariable]
 		public int gv_int { get; set; } = 10;
 

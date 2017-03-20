@@ -12,13 +12,13 @@ namespace HOPLInterpreter.NamespaceTypes
 
 	public class InterpreterType
 	{
-		public enum Types { NONE, INT, FLOAT, STRING, BOOL, LIST, TUPLE, TRIGGER, FUNCTION, IGNORE, FAULT };
+		public enum Types { NONE, INT, FLOAT, STRING, BOOL, LIST, TUPLE, TRIGGER, FUNCTION, IGNORE, ERROR };
 
 		public static readonly Types[] callableTypes = { Types.FUNCTION, Types.TRIGGER };
 
 		public static InterpreterType NONE { get; } = new InterpreterType(Types.NONE);
 		public static InterpreterType IGNORE { get; } = new InterpreterType(Types.IGNORE);
-		public static InterpreterType FAULT { get; } = new InterpreterType(Types.FAULT);
+		public static InterpreterType ERROR { get; } = new InterpreterType(Types.ERROR);
 
 		public static InterpreterType INT { get; } = new InterpreterType(Types.INT);
 		public static InterpreterType FLOAT { get; } = new InterpreterType(Types.FLOAT);
@@ -109,9 +109,9 @@ namespace HOPLInterpreter.NamespaceTypes
 			InterpreterType t = (InterpreterType)obj;
 
 			if (this.TypeOf == Types.IGNORE)
-				return t.TypeOf != Types.FAULT;
+				return t.TypeOf != Types.ERROR;
 			if (t.TypeOf == Types.IGNORE)
-				return this.TypeOf != Types.FAULT;
+				return this.TypeOf != Types.ERROR;
 
 			if (t.IsEmptyList)
 				return this.TypeOf == Types.LIST;

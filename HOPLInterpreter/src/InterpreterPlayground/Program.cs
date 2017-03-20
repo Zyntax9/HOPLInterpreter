@@ -2,14 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using HOPLInterpreter;
-using HOPLInterpreter.Faults.Parsing;
-using HOPLInterpreter.Faults.TypeCheck;
-using HOPLInterpreter.Faults.Exploration;
+using HOPLInterpreter.Errors.Parsing;
+using HOPLInterpreter.Errors.TypeCheck;
+using HOPLInterpreter.Errors.Exploration;
 using HOPLInterpreter.Exceptions;
 using HOPLInterpreter.NamespaceTypes;
 using System.Threading;
 using HOPLInterpreter.Interpretation;
 using HOPLInterpreter.Interpretation.ThreadPool;
+using HOPLInterpreterInterface;
 
 namespace InterpreterPlayground
 {
@@ -25,13 +26,13 @@ namespace InterpreterPlayground
 			{
 				HashSet<string> importPaths = new HashSet<string>();
 				importPaths.Add("./TestLibraries");
-				NamespaceSet ns = new NamespaceSet(new object[] { pg });
+				NamespaceSet ns = new NamespaceSet(new ISuppliedNamespace[] { pg });
 				interpreterContext = Interpreter.PrepareFile("testscript.txt", importPaths, ns);
 			}
-			catch (ParsingFaultsException pfe)
+			catch (ParsingErrorsException pfe)
 			{
-				Console.WriteLine("Parsing encountered {0} faults.", pfe.Faults.Count());
-				foreach (ParsingFault pf in pfe.Faults)
+				Console.WriteLine("Parsing encountered {0} errors.", pfe.Errors.Count());
+				foreach (ParsingError pf in pfe.Errors)
 				{
 					Console.WriteLine("Message: {0}", pf.Message);
 					Console.WriteLine("File: {0}", pf.File);
@@ -40,10 +41,10 @@ namespace InterpreterPlayground
 				Console.ReadKey();
 				return;
 			}
-			catch (ExploreFaultsException efe)
+			catch (ExploreErrorsException efe)
 			{
-				Console.WriteLine("Explorer encountered {0} faults.", efe.Faults.Count);
-				foreach (ExploreFault ef in efe.Faults)
+				Console.WriteLine("Explorer encountered {0} errors.", efe.Errors.Count());
+				foreach (ExploreError ef in efe.Errors)
 				{
 					Console.WriteLine("Message: {0}", ef.Message);
 					Console.WriteLine("File: {0}", ef.File);
@@ -52,10 +53,10 @@ namespace InterpreterPlayground
 				Console.ReadKey();
 				return;
 			}
-			catch (TypeFaultsException tfe)
+			catch (TypeErrorsException tfe)
 			{
-				Console.WriteLine("Type checker encountered {0} faults.", tfe.Faults.Count);
-				foreach (TypeFault tf in tfe.Faults)
+				Console.WriteLine("Type checker encountered {0} errors.", tfe.Errors.Count());
+				foreach (TypeError tf in tfe.Errors)
 				{
 					Console.WriteLine("Message: {0}", tf.Message);
 					Console.WriteLine("File: {0}", tf.File);
@@ -64,11 +65,11 @@ namespace InterpreterPlayground
 				Console.ReadKey();
 				return;
 			}
-			catch (PrepareFaultException pfe)
+			catch (PrepareErrorException pfe)
 			{
-				Console.WriteLine("Preparation encountered fault.");
-				Console.WriteLine("Message: {0}", pfe.Fault.Message);
-				Console.WriteLine("Additional info: {0}", pfe.Fault.Info);
+				Console.WriteLine("Preparation encountered error.");
+				Console.WriteLine("Message: {0}", pfe.Errors.First().Message);
+				Console.WriteLine("Additional info: {0}", pfe.Errors.First().Message);
 				Console.ReadKey();
 				return;
 			}

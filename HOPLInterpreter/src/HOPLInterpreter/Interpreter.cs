@@ -8,8 +8,8 @@ using HOPLInterpreter.NamespaceMapping;
 using HOPLInterpreter.Exploration;
 using HOPLInterpreter.TypeCheck;
 using HOPLInterpreter.Exceptions;
-using HOPLInterpreter.Faults.Parsing;
-using HOPLInterpreter.Faults.Preparation;
+using HOPLInterpreter.Errors.Parsing;
+using HOPLInterpreter.Errors.Preparation;
 using HOPLInterpreter.Interpretation.ThreadPool;
 using HOPLInterpreter.Interpretation;
 using HOPLInterpreter.NamespaceTypes.Values;
@@ -84,11 +84,11 @@ namespace HOPLInterpreter
 		public static InterpretationContext PrepareFile(string file, ISet<string> importPaths, 
 			NamespaceSet namespaces)
 		{
-			List<ParsingFault> parserFaults;
-			Parser.CompileUnitContext cUnit = GetParseTree(file, out parserFaults);
+			List<ParsingError> parserErrors;
+			Parser.CompileUnitContext cUnit = GetParseTree(file, out parserErrors);
 
-			if (parserFaults.Count > 0)
-				throw new ParsingFaultsException(parserFaults);
+			if (parserErrors.Count > 0)
+				throw new ParsingErrorsException(parserErrors);
 
 			HashSet<string> exploredFiles = new HashSet<string>();
 			Explorer explorer = new Explorer(ref namespaces);
@@ -98,8 +98,8 @@ namespace HOPLInterpreter
 			explorer.EnterCompileUnit(cUnit);
 			exploredFiles.Add(file);
 
-			if (explorer.Faults.Count > 0)
-				throw new ExploreFaultsException(explorer.Faults);
+			if (explorer.Errors.Count > 0)
+				throw new ExploreErrorsException(explorer.Errors);
 
 			HashSet<Import> topImports = explorer.ImportTable[file];
 			foreach (Import import in topImports)
@@ -118,14 +118,14 @@ namespace HOPLInterpreter
 				}
 
 				if (!namespaces.ContainsNamespace(import.NamespaceName))
-					throw new PrepareFaultException(PrepareFaultMessage.NS_NOTFOUND, import.NamespaceName);
+					throw new PrepareErrorException(PrepareErrorMessage.NS_NOTFOUND, import.NamespaceName);
 			}
 
 			TypeChecker typeCheck = new TypeChecker(file, namespaces, explorer.ImportTable);
 			typeCheck.VisitCompileUnit(cUnit);
 
-			if (typeCheck.Faults.Count > 0)
-				throw new TypeFaultsException(typeCheck.Faults);
+			if (typeCheck.Errors.Count > 0)
+				throw new TypeErrorsException(typeCheck.Errors);
 
 			Queue<Dependency> evalOrder = null;
 			try
@@ -134,11 +134,11 @@ namespace HOPLInterpreter
 			}
 			catch (RecursiveVariableDependencyException e)
 			{
-				throw new PrepareFaultException(PrepareFaultMessage.DEP_REC, e.Message);
+				throw new PrepareErrorException(PrepareErrorMessage.DEP_REC, e.Message);
 			}
 			catch (DependencyContainsAwaitException e)
 			{
-				throw new PrepareFaultException(PrepareFaultMessage.DEP_AWAIT, e.Message);
+				throw new PrepareErrorException(PrepareErrorMessage.DEP_AWAIT, e.Message);
 			}
 
 			return new InterpretationContext(explorer, evalOrder);
@@ -151,21 +151,21 @@ namespace HOPLInterpreter
 		   Explorer explorer,
 		   Dictionary<string, ISet<string>> namespaceFileMap)
 		{
-			List<ParsingFault> parserFaults;
-			Parser.CompileUnitContext cUnit = GetParseTree(file, out parserFaults);
+			List<ParsingError> parserErrors;
+			Parser.CompileUnitContext cUnit = GetParseTree(file, out parserErrors);
 
-			if (parserFaults.Count > 0)
-				throw new ParsingFaultsException(parserFaults);
+			if (parserErrors.Count > 0)
+				throw new ParsingErrorsException(parserErrors);
 
 			explorer.CurrentFile = file;
 			explorer.EnterCompileUnit(cUnit);
 			exploredFiles.Add(file);
 
-			if (explorer.Faults.Count > 0)
-				throw new ExploreFaultsException(explorer.Faults);
+			if (explorer.Errors.Count > 0)
+				throw new ExploreErrorsException(explorer.Errors);
 
 			if (explorer.ContainedRequired)
-				throw new PrepareFaultException(PrepareFaultMessage.NS_REQ, file);
+				throw new PrepareErrorException(PrepareErrorMessage.NS_REQ, file);
 
 			HashSet<Import> topImports = explorer.ImportTable[file];
 			foreach (Import import in topImports)
@@ -184,14 +184,14 @@ namespace HOPLInterpreter
 				}
 
 				if (!namespaces.ContainsNamespace(import.NamespaceName))
-					throw new PrepareFaultException(PrepareFaultMessage.NS_NOTFOUND, import.NamespaceName);
+					throw new PrepareErrorException(PrepareErrorMessage.NS_NOTFOUND, import.NamespaceName);
 			}
 
 			TypeChecker typeCheck = new TypeChecker(file, namespaces, explorer.ImportTable);
 			typeCheck.VisitCompileUnit(cUnit);
 
-			if (typeCheck.Faults.Count > 0)
-				throw new TypeFaultsException(typeCheck.Faults);
+			if (typeCheck.Errors.Count > 0)
+				throw new TypeErrorsException(typeCheck.Errors);
 		}
 
 		public static CommonTokenStream GetTokenStream(string file)
@@ -208,9 +208,9 @@ namespace HOPLInterpreter
 			return tokenStream;
 		}
 
-		public static Parser.CompileUnitContext GetParseTree(string file, out List<ParsingFault> parserFaults)
+		public static Parser.CompileUnitContext GetParseTree(string file, out List<ParsingError> parserErrorss)
 		{
-			parserFaults = new List<ParsingFault>();
+			parserErrorss = new List<ParsingError>();
 
 			using (FileStream fs = File.Open(file, FileMode.Open))
 			{
@@ -222,12 +222,12 @@ namespace HOPLInterpreter
 
 				Parser parser = new Parser(tokenStream);
 
-				ParsingFaultListener faultListener = new ParsingFaultListener(file);
-				parser.AddErrorListener(faultListener);
+				ParsingErrorListener errorListener = new ParsingErrorListener(file);
+				parser.AddErrorListener(errorListener);
 
 				Parser.CompileUnitContext compileUnit = parser.compileUnit();
 
-				parserFaults = faultListener.Faults;
+				parserErrorss = errorListener.Errors;
 
 				return compileUnit;
 			}

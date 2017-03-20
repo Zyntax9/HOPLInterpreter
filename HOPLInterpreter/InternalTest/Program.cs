@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using System.IO;
 using HOPLInterpreter;
 using HOPLInterpreter.Interpretation.ThreadPool;
@@ -9,9 +7,8 @@ using HOPLInterpreter.Interpretation;
 using HOPLInterpreter.NamespaceTypes;
 using System.Threading;
 using HOPLInterpreter.Exceptions;
-using HOPLInterpreter.Faults.TypeCheck;
-using HOPLInterpreter.Faults.Parsing;
-using HOPLInterpreter.Faults;
+using HOPLInterpreter.Errors;
+using HOPLInterpreterInterface;
 
 namespace InternalTest
 {
@@ -50,19 +47,19 @@ namespace InternalTest
 			context = null;
 
 			HashSet<string> importPaths = new HashSet<string>();
-			NamespaceSet namespaces = new NamespaceSet(new object[] { unitTestNamespace });
+			NamespaceSet namespaces = new NamespaceSet(new ISuppliedNamespace[] { unitTestNamespace });
 
 			try
 			{
 				context = Interpreter.PrepareFile(file, importPaths, namespaces);
 			}
-			catch (FaultException e)
+			catch (ErrorException e)
 			{
-				Console.WriteLine("Test of {0} failed due to {1}:", file, e.FaultName);
-				foreach (IFault fault in e.Faults)
+				Console.WriteLine("Test of {0} failed due to {1}:", file, e.ErrorName);
+				foreach (IError error in e.Errors)
 				{
-					Console.WriteLine("\"{0}\" ({1}) at {2}:{3}", fault.Message,
-						fault.ID, fault.LineNumber, fault.ColumnNumber);
+					Console.WriteLine("\"{0}\" ({1}) at {2}:{3}", error.Message,
+						error.ID, error.LineNumber, error.ColumnNumber);
 				}
 				return false;
 			}

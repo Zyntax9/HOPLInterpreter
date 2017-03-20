@@ -6,7 +6,7 @@ using Parser = HOPLGrammar.HOPLGrammarParser;
 using System.Collections.Generic;
 using HOPLInterpreter.NamespaceTypes;
 using HOPLInterpreter.Exceptions;
-using HOPLInterpreter.Faults.TypeCheck;
+using HOPLInterpreter.Errors.TypeCheck;
 using Antlr4.Runtime;
 using HOPLInterpreter.Exploration;
 
@@ -14,7 +14,7 @@ namespace HOPLInterpreter.TypeCheck
 {
 	public class TypeChecker : IHOPLGrammarVisitor<InterpreterType>
 	{
-		public TypeFaultCollection Faults { get; private set; } = new TypeFaultCollection();
+		public TypeErrorCollection Errors { get; private set; } = new TypeErrorCollection();
 
 		private string filename;
 		private NamespaceSet namespaceSet = new NamespaceSet();
@@ -80,23 +80,23 @@ namespace HOPLInterpreter.TypeCheck
 			{
 				Namespace ns = ResolveNamespace(nscontext);
 				if (ns == null)
-					return RaiseFault(TypeFaultMessage.NS_MISSING, context);
+					return RaiseError(TypeErrorMessage.NS_MISSING, context);
 
 				if (!ns.TryGetGlobalEntity(idName, out ge))
-					return RaiseFault(TypeFaultMessage.VAR_NOTDEF, context);
+					return RaiseError(TypeErrorMessage.VAR_NOTDEF, context);
 
 				if (toAssign && ge.Constant)
-					return RaiseFault(TypeFaultMessage.ASSIGN_CONST, context);
+					return RaiseError(TypeErrorMessage.ASSIGN_CONST, context);
 
 				varType = ge.Type;
 			}
 			else
 			{
 				if (!currentScope.TryGetVariable(idName, out varType))
-					return RaiseFault(TypeFaultMessage.VAR_NOTDEF, context);
+					return RaiseError(TypeErrorMessage.VAR_NOTDEF, context);
 
 				if (toAssign && currentScope.IsConstant(idName))
-					return RaiseFault(TypeFaultMessage.ASSIGN_CONST, context);
+					return RaiseError(TypeErrorMessage.ASSIGN_CONST, context);
 			}
 
 			foreach(Parser.ExprContext expr in context.expr())
@@ -106,10 +106,10 @@ namespace HOPLInterpreter.TypeCheck
 				else if (varType.TypeOf == InterpreterType.Types.TUPLE)
 					varType = ResolveTupleIndex(varType, expr, context);
 				else
-					return RaiseFault(TypeFaultMessage.INDEX_LORT, context);
+					return RaiseError(TypeErrorMessage.INDEX_LORT, context);
 				
-				if (varType == InterpreterType.FAULT)
-					return InterpreterType.FAULT;
+				if (varType == InterpreterType.ERROR)
+					return InterpreterType.ERROR;
 			}
 
 			return varType;
@@ -119,14 +119,14 @@ namespace HOPLInterpreter.TypeCheck
 			ParserRuleContext context)
 		{
 			if (type.IsEmptyList)
-				return RaiseFault(TypeFaultMessage.INDEX_EMPTY, context);
+				return RaiseError(TypeErrorMessage.INDEX_EMPTY, context);
 
 			InterpreterType itype = VisitExpr(index);
-			if (itype == InterpreterType.FAULT)
-				return InterpreterType.FAULT;
+			if (itype == InterpreterType.ERROR)
+				return InterpreterType.ERROR;
 
 			if (itype.TypeOf != InterpreterType.Types.INT)
-				return RaiseFault(TypeFaultMessage.INDEX_LINT, context);
+				return RaiseError(TypeErrorMessage.INDEX_LINT, context);
 
 			return type.TypeArray[0];
 		}
@@ -136,18 +136,18 @@ namespace HOPLInterpreter.TypeCheck
 		{
 			int i;
 			if (!int.TryParse(index.GetText(), out i))
-				return RaiseFault(TypeFaultMessage.INDEX_TCINT, context);
+				return RaiseError(TypeErrorMessage.INDEX_TCINT, context);
 
 			if (i >= type.TypeArray.Length || i < 0)
-				return RaiseFault(TypeFaultMessage.INDEX_TOOR, context);
+				return RaiseError(TypeErrorMessage.INDEX_TOOR, context);
 
 			return type.TypeArray[i];
 		}
 
-		private InterpreterType RaiseFault(TypeFaultMessage msg, ParserRuleContext context)
+		private InterpreterType RaiseError(TypeErrorMessage msg, ParserRuleContext context)
 		{
-			Faults.Add(msg, context, filename);
-			return InterpreterType.FAULT;
+			Errors.Add(msg, context, filename);
+			return InterpreterType.ERROR;
 		}
 		#endregion
 
@@ -174,8 +174,8 @@ namespace HOPLInterpreter.TypeCheck
 			InterpreterType left = VisitExpr(exprs[0]);
 			InterpreterType right = VisitExpr(exprs[1]);
 
-			if (left == InterpreterType.FAULT || right == InterpreterType.FAULT)
-				return InterpreterType.FAULT;
+			if (left == InterpreterType.ERROR || right == InterpreterType.ERROR)
+				return InterpreterType.ERROR;
 
 			if (context.op.Type == Parser.PLUS && left == InterpreterType.STRING &&
 				right == InterpreterType.STRING)
@@ -185,9 +185,9 @@ namespace HOPLInterpreter.TypeCheck
 				right != InterpreterType.INT && right != InterpreterType.FLOAT)
 			{
 				if (context.op.Type == Parser.PLUS)
-					return RaiseFault(TypeFaultMessage.ADDI_MISMATCH, context);
+					return RaiseError(TypeErrorMessage.ADDI_MISMATCH, context);
 				else
-					return RaiseFault(TypeFaultMessage.NUMERICAL_MISMATCH, context);
+					return RaiseError(TypeErrorMessage.NUMERICAL_MISMATCH, context);
 			}
 
 			return left == InterpreterType.FLOAT || right == InterpreterType.FLOAT ?
@@ -201,11 +201,11 @@ namespace HOPLInterpreter.TypeCheck
 			InterpreterType left = VisitExpr(exprs[0]);
 			InterpreterType right = VisitExpr(exprs[1]);
 
-			if (left == InterpreterType.FAULT || right == InterpreterType.FAULT)
-				return InterpreterType.FAULT;
+			if (left == InterpreterType.ERROR || right == InterpreterType.ERROR)
+				return InterpreterType.ERROR;
 
 			if (left != InterpreterType.BOOL || right != InterpreterType.BOOL)
-				return RaiseFault(TypeFaultMessage.BOOLEAN_MISMATCH, context);
+				return RaiseError(TypeErrorMessage.BOOLEAN_MISMATCH, context);
 
 			return InterpreterType.BOOL;
 		}
@@ -221,7 +221,7 @@ namespace HOPLInterpreter.TypeCheck
 			InterpreterType[] domain = currentCallable.GetCallableDomain();
 
 			if (args.Length != domain.Length)
-				return RaiseFault(TypeFaultMessage.ARGCOUNT_MISMATCH, context);
+				return RaiseError(TypeErrorMessage.ARGCOUNT_MISMATCH, context);
 
 			foreach (Parser.ArgContext arg in args)
 				VisitArg(arg);
@@ -232,17 +232,17 @@ namespace HOPLInterpreter.TypeCheck
 		public InterpreterType VisitAssign([NotNull] Parser.AssignContext context)
 		{
 			InterpreterType right = VisitExpr(context.expr());
-			if (right == InterpreterType.FAULT)
-				return InterpreterType.FAULT;
+			if (right == InterpreterType.ERROR)
+				return InterpreterType.ERROR;
 
 			InterpreterType varType = ResolveIdentifier(context.identifier(), true);
-			if (varType == InterpreterType.FAULT)
-				return InterpreterType.FAULT;
+			if (varType == InterpreterType.ERROR)
+				return InterpreterType.ERROR;
 
 			if (AssignmentAllowed(varType, right))
 				return varType;
 
-			return RaiseFault(TypeFaultMessage.ASSIGN_MISMATCH, context);
+			return RaiseError(TypeErrorMessage.ASSIGN_MISMATCH, context);
 		}
 
 		public InterpreterType VisitAssignStat([NotNull] Parser.AssignStatContext context)
@@ -262,7 +262,7 @@ namespace HOPLInterpreter.TypeCheck
 			if (bodyArgs != null)
 				foreach (Argument arg in bodyArgs)
 					if (!currentScope.TryAddVariable(arg.Name, arg.Type))
-						return RaiseFault(TypeFaultMessage.ARG_SHADOW, context);
+						return RaiseError(TypeErrorMessage.ARG_SHADOW, context);
 
 			foreach (Parser.StatContext stat in context.stat())
 				VisitStat(stat);
@@ -288,10 +288,10 @@ namespace HOPLInterpreter.TypeCheck
 			InterpreterType callableType = VisitIdentifier(context.identifier());
 
 			if (!callableType.IsCallable)
-				return RaiseFault(TypeFaultMessage.CALLABLE_NOTCALLABLE, context);
+				return RaiseError(TypeErrorMessage.CALLABLE_NOTCALLABLE, context);
 
-			if (callableType == InterpreterType.FAULT)
-				return InterpreterType.FAULT;
+			if (callableType == InterpreterType.ERROR)
+				return InterpreterType.ERROR;
 
 			currentCallable = callableType;
 
@@ -301,7 +301,7 @@ namespace HOPLInterpreter.TypeCheck
 			if (exprs.Length != domain.Length)
 			{
 				currentCallable = upperCallable;
-				return RaiseFault(TypeFaultMessage.ARGCOUNT_MISMATCH, context);
+				return RaiseError(TypeErrorMessage.ARGCOUNT_MISMATCH, context);
 			}
 
 			for (int i = 0; i < exprs.Length; i++)
@@ -309,16 +309,16 @@ namespace HOPLInterpreter.TypeCheck
 				Parser.ExprContext expr = exprs[i];
 				InterpreterType exprType = VisitExpr(expr);
 
-				if (exprType == InterpreterType.FAULT)
+				if (exprType == InterpreterType.ERROR)
 				{
 					currentCallable = upperCallable;
-					return InterpreterType.FAULT;
+					return InterpreterType.ERROR;
 				}
 
 				if (exprType != domain[i])
 				{
 					currentCallable = upperCallable;
-					return RaiseFault(TypeFaultMessage.CALL_ARGMISMATCH, context);
+					return RaiseError(TypeErrorMessage.CALL_ARGMISMATCH, context);
 				}
 			}
 
@@ -349,16 +349,16 @@ namespace HOPLInterpreter.TypeCheck
 			InterpreterType left = VisitExpr(exprs[0]);
 			InterpreterType right = VisitExpr(exprs[1]);
 
-			if (left == InterpreterType.FAULT || right == InterpreterType.FAULT)
-				return InterpreterType.FAULT;
+			if (left == InterpreterType.ERROR || right == InterpreterType.ERROR)
+				return InterpreterType.ERROR;
 
 			if (left == InterpreterType.BOOL || right == InterpreterType.BOOL)
-				return RaiseFault(TypeFaultMessage.BOOLEAN_MISMATCH, context);
+				return RaiseError(TypeErrorMessage.BOOLEAN_MISMATCH, context);
 
 			if (!(left == InterpreterType.FLOAT && right == InterpreterType.INT ||
 				 left == InterpreterType.INT && right == InterpreterType.FLOAT ||
 				 left == right))
-				return RaiseFault(TypeFaultMessage.COMPEXPR_MISMATCH, context);
+				return RaiseError(TypeErrorMessage.COMPEXPR_MISMATCH, context);
 
 			return InterpreterType.BOOL;
 		}
@@ -457,17 +457,17 @@ namespace HOPLInterpreter.TypeCheck
 			InterpreterType callableType = VisitExpr(context.expr());
 
 			if (!callableType.IsCallable)
-				return RaiseFault(TypeFaultMessage.CALLABLE_NOTCALLABLE, context);
+				return RaiseError(TypeErrorMessage.CALLABLE_NOTCALLABLE, context);
 
-			if (callableType == InterpreterType.FAULT)
-				return InterpreterType.FAULT;
+			if (callableType == InterpreterType.ERROR)
+				return InterpreterType.ERROR;
 
 			currentCallable = callableType;
 
 			if (currentCallable.TypeOf != InterpreterType.Types.TRIGGER)
 			{
 				currentCallable = null;
-				return RaiseFault(TypeFaultMessage.HANDLERDEC_NOTTRIGGER, context);
+				return RaiseError(TypeErrorMessage.HANDLERDEC_NOTTRIGGER, context);
 			}
 
 			ITerminalNode[] ids = context.ID();
@@ -476,7 +476,7 @@ namespace HOPLInterpreter.TypeCheck
 			if (ids.Length != domain.Length)
 			{
 				currentCallable = null;
-				return RaiseFault(TypeFaultMessage.ARGCOUNT_MISMATCH, context);
+				return RaiseError(TypeErrorMessage.ARGCOUNT_MISMATCH, context);
 			}
 
 			InterpreterType[] tns = new InterpreterType[tncontexts.Length];
@@ -484,16 +484,16 @@ namespace HOPLInterpreter.TypeCheck
 			{
 				tns[i] = VisitTypeName(tncontexts[i]);
 
-				if (tns[i] == InterpreterType.FAULT)
+				if (tns[i] == InterpreterType.ERROR)
 				{
 					currentCallable = null;
-					return InterpreterType.FAULT;
+					return InterpreterType.ERROR;
 				}
 
 				if (tns[i] != domain[i])
 				{
 					currentCallable = null;
-					return RaiseFault(TypeFaultMessage.HANDLERDEC_ARGMISMATCH, context);
+					return RaiseError(TypeErrorMessage.HANDLERDEC_ARGMISMATCH, context);
 				}
 			}
 
@@ -529,12 +529,12 @@ namespace HOPLInterpreter.TypeCheck
 			InterpreterType left = VisitExpr(exprs[0]);
 			InterpreterType right = VisitExpr(exprs[1]);
 
-			if (left == InterpreterType.FAULT || right == InterpreterType.FAULT)
-				return InterpreterType.FAULT;
+			if (left == InterpreterType.ERROR || right == InterpreterType.ERROR)
+				return InterpreterType.ERROR;
 
 			if (left != InterpreterType.INT && left != InterpreterType.FLOAT ||
 				right != InterpreterType.INT && right != InterpreterType.FLOAT)
-				return RaiseFault(TypeFaultMessage.NUMERICAL_MISMATCH, context);
+				return RaiseError(TypeErrorMessage.NUMERICAL_MISMATCH, context);
 
 			return left == InterpreterType.FLOAT || right == InterpreterType.FLOAT ?
 				InterpreterType.FLOAT : InterpreterType.INT;
@@ -569,11 +569,11 @@ namespace HOPLInterpreter.TypeCheck
 		{
 			InterpreterType exprType = VisitExpr(context.expr());
 
-			if (exprType == InterpreterType.FAULT)
-				return InterpreterType.FAULT;
+			if (exprType == InterpreterType.ERROR)
+				return InterpreterType.ERROR;
 
 			if (exprType != InterpreterType.INT || exprType != InterpreterType.FLOAT)
-				return RaiseFault(TypeFaultMessage.NEG_NUMMISMATCH, context);
+				return RaiseError(TypeErrorMessage.NEG_NUMMISMATCH, context);
 
 			return exprType;
 		}
@@ -582,11 +582,11 @@ namespace HOPLInterpreter.TypeCheck
 		{
 			InterpreterType exprType = VisitExpr(context.expr());
 
-			if (exprType == InterpreterType.FAULT)
-				return InterpreterType.FAULT;
+			if (exprType == InterpreterType.ERROR)
+				return InterpreterType.ERROR;
 
 			if (exprType != InterpreterType.BOOL)
-				return RaiseFault(TypeFaultMessage.NOT_BOOLMISMATCH, context);
+				return RaiseError(TypeErrorMessage.NOT_BOOLMISMATCH, context);
 
 			return exprType;
 		}
@@ -598,11 +598,11 @@ namespace HOPLInterpreter.TypeCheck
 			InterpreterType left = VisitExpr(exprs[0]);
 			InterpreterType right = VisitExpr(exprs[1]);
 
-			if (left == InterpreterType.FAULT || right == InterpreterType.FAULT)
-				return InterpreterType.FAULT;
+			if (left == InterpreterType.ERROR || right == InterpreterType.ERROR)
+				return InterpreterType.ERROR;
 
 			if (left != InterpreterType.BOOL || right != InterpreterType.BOOL)
-				return RaiseFault(TypeFaultMessage.BOOLEAN_MISMATCH, context);
+				return RaiseError(TypeErrorMessage.BOOLEAN_MISMATCH, context);
 
 			return left;
 		}
@@ -617,14 +617,14 @@ namespace HOPLInterpreter.TypeCheck
 			Parser.ExprContext expr = context.expr();
 			InterpreterType returnType = expr == null ? InterpreterType.NONE : VisitExpr(expr);
 
-			if (returnType == InterpreterType.FAULT)
-				return InterpreterType.FAULT;
+			if (returnType == InterpreterType.ERROR)
+				return InterpreterType.ERROR;
 
 			if (currentCallable.TypeOf == InterpreterType.Types.TRIGGER && returnType != InterpreterType.NONE)
-				return RaiseFault(TypeFaultMessage.RETURN_TRIGGERVAL, context);
+				return RaiseError(TypeErrorMessage.RETURN_TRIGGERVAL, context);
 
 			if (returnType != currentCallable.GetCallableRange())
-				return RaiseFault(TypeFaultMessage.RETURN_MISMATCH, context);
+				return RaiseError(TypeErrorMessage.RETURN_MISMATCH, context);
 
 			return returnType;
 		}
@@ -726,15 +726,15 @@ namespace HOPLInterpreter.TypeCheck
 			{
 				InterpreterType exprType = VisitExpr(expr);
 
-				if (exprType == InterpreterType.FAULT)
-					return InterpreterType.FAULT;
+				if (exprType == InterpreterType.ERROR)
+					return InterpreterType.ERROR;
 
 				if (!AssignmentAllowed(varType, exprType))
-					return RaiseFault(TypeFaultMessage.VARDEC_MISMATCH, context);
+					return RaiseError(TypeErrorMessage.VARDEC_MISMATCH, context);
 			}
 
 			if (!global && !currentScope.TryAddVariable(varName, varType))
-				return RaiseFault(TypeFaultMessage.VARDEC_REDEF, context);
+				return RaiseError(TypeErrorMessage.VARDEC_REDEF, context);
 
 			return varType;
 		}
@@ -759,11 +759,11 @@ namespace HOPLInterpreter.TypeCheck
 		{
 			Parser.ExprContext exprContext = context.expr();
 			InterpreterType etype = VisitExpr(exprContext);
-			if (etype == InterpreterType.FAULT)
-				return InterpreterType.FAULT;
+			if (etype == InterpreterType.ERROR)
+				return InterpreterType.ERROR;
 
 			if (!etype.IsTriggerable)
-				return RaiseFault(TypeFaultMessage.AWAIT_NOTTRIGGER, context);
+				return RaiseError(TypeErrorMessage.AWAIT_NOTTRIGGER, context);
 
 			return new InterpreterType(InterpreterType.Types.TUPLE, etype.GetArgumentTypes());
 		}
@@ -777,8 +777,8 @@ namespace HOPLInterpreter.TypeCheck
 				types[i] = VisitTypeName(typeContexts[i]);
 
 			foreach (InterpreterType type in types)
-				if (type == InterpreterType.FAULT)
-					return InterpreterType.FAULT;
+				if (type == InterpreterType.ERROR)
+					return InterpreterType.ERROR;
 
 			return new InterpreterType(InterpreterType.Types.TUPLE, types);
 		}
@@ -788,8 +788,8 @@ namespace HOPLInterpreter.TypeCheck
 			Parser.TypeNameContext typeContext = context.typeName();
 			InterpreterType type = VisitTypeName(typeContext);
 
-			if (type == InterpreterType.FAULT)
-				return InterpreterType.FAULT;
+			if (type == InterpreterType.ERROR)
+				return InterpreterType.ERROR;
 
 			return new InterpreterType(InterpreterType.Types.LIST, type);
 		}
@@ -803,8 +803,8 @@ namespace HOPLInterpreter.TypeCheck
 				types[i] = VisitExpr(exprContexts[i]);
 
 			foreach (InterpreterType type in types)
-				if (type == InterpreterType.FAULT)
-					return InterpreterType.FAULT;
+				if (type == InterpreterType.ERROR)
+					return InterpreterType.ERROR;
 
 			return new InterpreterType(InterpreterType.Types.TUPLE, types);
 		}
@@ -821,7 +821,7 @@ namespace HOPLInterpreter.TypeCheck
 			for (int i = 1; i < exprContexts.Length; i++)
 			{
 				if (type != VisitExpr(exprContexts[i]))
-					return RaiseFault(TypeFaultMessage.LISTEXPR_ALL, context);
+					return RaiseError(TypeErrorMessage.LISTEXPR_ALL, context);
 			}
 
 			return new InterpreterType(InterpreterType.Types.LIST, type);
@@ -829,17 +829,17 @@ namespace HOPLInterpreter.TypeCheck
 
 		public InterpreterType VisitIfStat([NotNull] Parser.IfStatContext context)
 		{
-			if (VisitIf(context.@if()) == InterpreterType.FAULT)
-				return InterpreterType.FAULT;
+			if (VisitIf(context.@if()) == InterpreterType.ERROR)
+				return InterpreterType.ERROR;
 
 			foreach (Parser.ElseIfContext eifcontext in context.elseIf())
-				if (VisitElseIf(eifcontext) == InterpreterType.FAULT)
-					return InterpreterType.FAULT;
+				if (VisitElseIf(eifcontext) == InterpreterType.ERROR)
+					return InterpreterType.ERROR;
 
 			Parser.ElseContext elseContext = context.@else();
 			if (elseContext != null)
-				if (VisitElse(elseContext) == InterpreterType.FAULT)
-					return InterpreterType.FAULT;
+				if (VisitElse(elseContext) == InterpreterType.ERROR)
+					return InterpreterType.ERROR;
 
 			return InterpreterType.NONE;
 		}
@@ -862,11 +862,11 @@ namespace HOPLInterpreter.TypeCheck
 		public InterpreterType VisitIf([NotNull] Parser.IfContext context)
 		{
 			InterpreterType exprType = VisitExpr(context.expr());
-			if (exprType == InterpreterType.FAULT)
-				return InterpreterType.FAULT;
+			if (exprType == InterpreterType.ERROR)
+				return InterpreterType.ERROR;
 
 			if (exprType != InterpreterType.BOOL)
-				return RaiseFault(TypeFaultMessage.STAT_BOOLEAN, context);
+				return RaiseError(TypeErrorMessage.STAT_BOOLEAN, context);
 
 			return VisitBody(context.body());
 		}
@@ -874,11 +874,11 @@ namespace HOPLInterpreter.TypeCheck
 		public InterpreterType VisitElseIf([NotNull] Parser.ElseIfContext context)
 		{
 			InterpreterType exprType = VisitExpr(context.expr());
-			if (exprType == InterpreterType.FAULT)
-				return InterpreterType.FAULT;
+			if (exprType == InterpreterType.ERROR)
+				return InterpreterType.ERROR;
 
 			if (exprType != InterpreterType.BOOL)
-				return RaiseFault(TypeFaultMessage.STAT_BOOLEAN, context);
+				return RaiseError(TypeErrorMessage.STAT_BOOLEAN, context);
 
 			return VisitBody(context.body());
 		}
@@ -891,11 +891,11 @@ namespace HOPLInterpreter.TypeCheck
 		public InterpreterType VisitWhile([NotNull] Parser.WhileContext context)
 		{
 			InterpreterType exprType = VisitExpr(context.expr());
-			if (exprType == InterpreterType.FAULT)
-				return InterpreterType.FAULT;
+			if (exprType == InterpreterType.ERROR)
+				return InterpreterType.ERROR;
 
 			if (exprType != InterpreterType.BOOL)
-				return RaiseFault(TypeFaultMessage.STAT_BOOLEAN, context);
+				return RaiseError(TypeErrorMessage.STAT_BOOLEAN, context);
 
 			return VisitBody(context.body());
 		}
@@ -907,32 +907,32 @@ namespace HOPLInterpreter.TypeCheck
 			if (context.declare != null)
 			{
 				InterpreterType dec = VisitVarDec(context.declare);
-				if (dec == InterpreterType.FAULT)
+				if (dec == InterpreterType.ERROR)
 				{
 					currentScope.PopDepth();
-					return InterpreterType.FAULT;
+					return InterpreterType.ERROR;
 				}
 			}
 
 			InterpreterType pred = VisitExpr(context.predicate);
-			if (pred == InterpreterType.FAULT)
+			if (pred == InterpreterType.ERROR)
 			{
 				currentScope.PopDepth();
-				return InterpreterType.FAULT;
+				return InterpreterType.ERROR;
 			}
 			if (pred != InterpreterType.BOOL)
 			{
 				currentScope.PopDepth();
-				return RaiseFault(TypeFaultMessage.STAT_BOOLEAN, context);
+				return RaiseError(TypeErrorMessage.STAT_BOOLEAN, context);
 			}
 
 			if (context.reeval != null)
 			{
 				InterpreterType reeval = VisitAssign(context.reeval);
-				if (reeval == InterpreterType.FAULT)
+				if (reeval == InterpreterType.ERROR)
 				{
 					currentScope.PopDepth();
-					return InterpreterType.FAULT;
+					return InterpreterType.ERROR;
 				}
 			}
 
@@ -948,14 +948,14 @@ namespace HOPLInterpreter.TypeCheck
 			InterpreterType iteratorType = VisitTypeName(context.typeName());
 
 			InterpreterType exprType = VisitExpr(context.expr());
-			if (exprType == InterpreterType.FAULT)
-				return InterpreterType.FAULT;
+			if (exprType == InterpreterType.ERROR)
+				return InterpreterType.ERROR;
 
 			if (exprType.TypeOf != InterpreterType.Types.LIST)
-				return RaiseFault(TypeFaultMessage.FOREACH_LIST, context);
+				return RaiseError(TypeErrorMessage.FOREACH_LIST, context);
 
 			if (!exprType.IsEmptyList && exprType.TypeArray[0] != iteratorType)
-				return RaiseFault(TypeFaultMessage.FOREACH_ITERMISMATCH, context);
+				return RaiseError(TypeErrorMessage.FOREACH_ITERMISMATCH, context);
 
 			Argument iteratorVar = new Argument(iteratorName, iteratorType);
 
@@ -967,15 +967,15 @@ namespace HOPLInterpreter.TypeCheck
 			Parser.ExprContext[] exprs = context.expr();
 
 			InterpreterType etype = VisitExpr(exprs[0]);
-			if (etype == InterpreterType.FAULT)
-				return InterpreterType.FAULT;
+			if (etype == InterpreterType.ERROR)
+				return InterpreterType.ERROR;
 
 			if (etype.TypeOf == InterpreterType.Types.LIST)
 				return ResolveListIndex(etype, exprs[1], context);
 			else if (etype.TypeOf == InterpreterType.Types.TUPLE)
 				return ResolveTupleIndex(etype, exprs[1], context);
 
-			return RaiseFault(TypeFaultMessage.INDEX_LORT, context);
+			return RaiseError(TypeErrorMessage.INDEX_LORT, context);
 		}
 
 		public InterpreterType VisitTriggerType([NotNull] Parser.TriggerTypeContext context)
@@ -1009,8 +1009,8 @@ namespace HOPLInterpreter.TypeCheck
 			InterpreterType left = VisitExpr(exprs[0]);
 			InterpreterType right = VisitExpr(exprs[1]);
 
-			if (left == InterpreterType.FAULT || right == InterpreterType.FAULT)
-				return InterpreterType.FAULT;
+			if (left == InterpreterType.ERROR || right == InterpreterType.ERROR)
+				return InterpreterType.ERROR;
 
 			if (left.TypeOf == InterpreterType.Types.LIST && right.TypeOf == InterpreterType.Types.LIST)
 			{
@@ -1021,25 +1021,25 @@ namespace HOPLInterpreter.TypeCheck
 					else if (right == left.TypeArray[0])
 						return left;
 					else
-						return RaiseFault(TypeFaultMessage.CONCAT_LIST, context);
+						return RaiseError(TypeErrorMessage.CONCAT_LIST, context);
 				}
 				return left;
 			}
 			else if (left.TypeOf == InterpreterType.Types.LIST)
 			{
 				if (right != left.TypeArray[0])
-					return RaiseFault(TypeFaultMessage.CONCAT_RIGHTM, context);
+					return RaiseError(TypeErrorMessage.CONCAT_RIGHTM, context);
 				return left;
 			}
 			else if (right.TypeOf == InterpreterType.Types.LIST)
 			{
 				if (left != right.TypeArray[0])
-					return RaiseFault(TypeFaultMessage.CONCAT_LEFTM, context);
+					return RaiseError(TypeErrorMessage.CONCAT_LEFTM, context);
 				return right;
 			}
 			else
 			{
-				return RaiseFault(TypeFaultMessage.CONCAT_MISMATCH, context);
+				return RaiseError(TypeErrorMessage.CONCAT_MISMATCH, context);
 			}
 		}
 
@@ -1061,30 +1061,30 @@ namespace HOPLInterpreter.TypeCheck
 		public InterpreterType VisitUnpack([NotNull] Parser.UnpackContext context)
 		{
 			InterpreterType exprType = VisitExpr(context.expr());
-			if (exprType == InterpreterType.FAULT)
-				return InterpreterType.FAULT;
+			if (exprType == InterpreterType.ERROR)
+				return InterpreterType.ERROR;
 
 			if (exprType.TypeOf != InterpreterType.Types.TUPLE)
-				return RaiseFault(TypeFaultMessage.UNPACK_NOTTUPLE, context);
+				return RaiseError(TypeErrorMessage.UNPACK_NOTTUPLE, context);
 
 			Parser.UnpackedContext[] unpackedArray = context.unpacked();
 			InterpreterType[] unpackedTypes = new InterpreterType[unpackedArray.Length];
 			for (int i = 0; i < unpackedArray.Length; i++)
 			{
 				unpackedTypes[i] = VisitUnpacked(unpackedArray[i]);
-				if (unpackedTypes[i] == InterpreterType.FAULT)
-					return InterpreterType.FAULT;
+				if (unpackedTypes[i] == InterpreterType.ERROR)
+					return InterpreterType.ERROR;
 			}
 
 			if (unpackedTypes.Length > exprType.TypeArray.Length)
-				return RaiseFault(TypeFaultMessage.UNPACK_TOOFEW, context);
+				return RaiseError(TypeErrorMessage.UNPACK_TOOFEW, context);
 
 			if (unpackedTypes.Length < exprType.TypeArray.Length)
-				return RaiseFault(TypeFaultMessage.UNPACK_TOOMANY, context);
+				return RaiseError(TypeErrorMessage.UNPACK_TOOMANY, context);
 
 			InterpreterType unpackedTuple = new InterpreterType(InterpreterType.Types.TUPLE, unpackedTypes);
 			if (!AssignmentAllowed(unpackedTuple, exprType))
-				return RaiseFault(TypeFaultMessage.VARDEC_MISMATCH, context);
+				return RaiseError(TypeErrorMessage.VARDEC_MISMATCH, context);
 
 			return InterpreterType.NONE;
 		}
@@ -1112,7 +1112,7 @@ namespace HOPLInterpreter.TypeCheck
 			InterpreterType varType = VisitTypeName(context.typeName());
 
 			if (!currentScope.TryAddVariable(varName, varType))
-				return RaiseFault(TypeFaultMessage.VARDEC_REDEF, context);
+				return RaiseError(TypeErrorMessage.VARDEC_REDEF, context);
 
 			return varType;
 		}

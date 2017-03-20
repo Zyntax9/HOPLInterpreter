@@ -9,7 +9,7 @@ using Parser = HOPLGrammar.HOPLGrammarParser;
 using HOPLInterpreter.NamespaceTypes;
 using HOPLInterpreter.Exploration;
 using HOPLInterpreter.Exceptions;
-using HOPLInterpreter.Faults.Runtime;
+using HOPLInterpreter.Errors.Runtime;
 using Antlr4.Runtime;
 using HOPLInterpreter.Interpretation.ThreadPool;
 using Api = HOPLInterpreterInterface;
@@ -122,8 +122,8 @@ namespace HOPLInterpreter.Interpretation
 
 			if (indexVal < 0 || indexVal > val.Count)
 			{
-				RuntimeFault fault = new RuntimeFault(RuntimeFaultMessage.INDEX_OUT, context, currentFile);
-				throw new RuntimeFaultException(fault);
+				RuntimeError error = new RuntimeError(RuntimeErrorMessage.INDEX_OUT, context, currentFile);
+				throw new RuntimeErrorException(error);
 			}
 
 			return val[indexVal];
@@ -177,8 +177,8 @@ namespace HOPLInterpreter.Interpretation
 			int index = indecies[start];
 			if (index < 0 || index > value.Count)
 			{
-				RuntimeFault fault = new RuntimeFault(RuntimeFaultMessage.INDEX_OUT, context, currentFile);
-				throw new RuntimeFaultException(fault);
+				RuntimeError error = new RuntimeError(RuntimeErrorMessage.INDEX_OUT, context, currentFile);
+				throw new RuntimeErrorException(error);
 			}
 
 			InterpreterValue retValue = value.Clone();
@@ -353,8 +353,8 @@ namespace HOPLInterpreter.Interpretation
 
 				if (function == null)
 				{
-					RuntimeFault fault = new RuntimeFault(RuntimeFaultMessage.FUNC_UNINIT, context, function.File);
-					throw new RuntimeFaultException(fault);
+					RuntimeError error = new RuntimeError(RuntimeErrorMessage.FUNC_UNINIT, context, function.File);
+					throw new RuntimeErrorException(error);
 				}
 
 				return CallFunction(function, arguments);

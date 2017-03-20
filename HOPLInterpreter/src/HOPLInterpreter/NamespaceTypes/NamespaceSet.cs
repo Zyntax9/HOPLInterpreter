@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Reflection;
 using Parser = HOPLGrammar.HOPLGrammarParser;
 using HOPLInterpreterInterface.Attributes;
+using HOPLInterpreterInterface;
 
 namespace HOPLInterpreter.NamespaceTypes
 {
@@ -22,16 +23,13 @@ namespace HOPLInterpreter.NamespaceTypes
 				Add(ns);
 		}
 
-		public NamespaceSet(IEnumerable<object> suppliedNamespaces)
+		public NamespaceSet(IEnumerable<ISuppliedNamespace> suppliedNamespaces)
 		{
-			foreach (object sn in suppliedNamespaces)
+			foreach (ISuppliedNamespace sn in suppliedNamespaces)
 			{
 				TypeInfo t = sn.GetType().GetTypeInfo();
 
-				string nsname = t.FullName;
-				InterpreterNamespaceAttribute nsattr = t.GetCustomAttribute<InterpreterNamespaceAttribute>();
-				if (nsattr != null && nsattr.Name != null)
-					nsname = nsattr.Name;
+				string nsname = sn.Name ?? t.FullName;
 
 				Namespace ns = Add(nsname);
 

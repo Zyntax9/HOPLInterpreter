@@ -4,7 +4,7 @@ using HOPLGrammar;
 using HOPLInterpreter.Exceptions;
 using Parser = HOPLGrammar.HOPLGrammarParser;
 using HOPLInterpreter.NamespaceTypes;
-using HOPLInterpreter.Faults.Exploration;
+using HOPLInterpreter.Errors.Exploration;
 using System;
 
 namespace HOPLInterpreter.Exploration
@@ -14,7 +14,7 @@ namespace HOPLInterpreter.Exploration
 		public NamespaceSet Namespaces { get; protected set; } = new NamespaceSet();
 		// Filename -many-> Import namespace access
 		public ImportAccessTable ImportTable { get; protected set; } = new ImportAccessTable();
-		public ExploreFaultCollection Faults { get; protected set; } = new ExploreFaultCollection();
+		public ExploreErrorCollection Errors { get; protected set; } = new ExploreErrorCollection();
 		public List<Handler> Handlers { get; protected set; } = new List<Handler>();
 
 		public bool ContainedRequired { get; protected set; } = false;
@@ -87,7 +87,7 @@ namespace HOPLInterpreter.Exploration
 			Import importInfo = new Import(importNamespace, importAlias);
 			if (currentFile != null)
 				if (!ImportTable[currentFile].Add(importInfo))
-					Faults.Add(ExploreFaultMessage.ALIAS_OVERLAP, context, currentFile);
+					Errors.Add(ExploreErrorMessage.ALIAS_OVERLAP, context, currentFile);
 		}
 
 		public override void EnterNamespaceBody([NotNull] Parser.NamespaceBodyContext context)
@@ -120,7 +120,7 @@ namespace HOPLInterpreter.Exploration
 
 			ReturnChecker returns = new ReturnChecker();
 			if (!returns.Check(functionDec))
-				Faults.Add(ExploreFaultMessage.FUNC_RETURN, context, currentFile);
+				Errors.Add(ExploreErrorMessage.FUNC_RETURN, context, currentFile);
 
 			try
 			{
@@ -131,11 +131,11 @@ namespace HOPLInterpreter.Exploration
 			}
 			catch (DuplicateGlobalEntityException)
 			{
-				Faults.Add(ExploreFaultMessage.GV_DUPL, context, currentFile);
+				Errors.Add(ExploreErrorMessage.GV_DUPL, context, currentFile);
 			}
 			catch (DuplicateFunctionException)
 			{
-				Faults.Add(ExploreFaultMessage.FUNC_DUPL, context, currentFile);
+				Errors.Add(ExploreErrorMessage.FUNC_DUPL, context, currentFile);
 			}
 		}
 
@@ -161,7 +161,7 @@ namespace HOPLInterpreter.Exploration
 			}
 			catch (DuplicateGlobalEntityException)
 			{
-				Faults.Add(ExploreFaultMessage.GV_DUPL, context, currentFile);
+				Errors.Add(ExploreErrorMessage.GV_DUPL, context, currentFile);
 			}
 		}
 	}

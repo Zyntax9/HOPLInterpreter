@@ -9,9 +9,10 @@ using System.Threading;
 
 namespace InternalTest
 {
-	[InterpreterNamespace(Name = "UTest")]
-    public class UnitTestNamespace
+    public class UnitTestNamespace : ISuppliedNamespace
     {
+		public string Name { get { return "UTest"; } }
+
 		private class Lock { }
 		private Lock consoleLock = new Lock();
 

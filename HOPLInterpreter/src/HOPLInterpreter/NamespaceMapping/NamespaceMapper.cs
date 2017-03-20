@@ -1,5 +1,4 @@
-﻿using HOPLInterpreter.Faults.Parsing;
-using System.IO;
+﻿using System.IO;
 using System.Collections.Generic;
 using Parser = HOPLGrammar.HOPLGrammarParser;
 using Lexer = HOPLGrammar.HOPLGrammarLexer;
