@@ -18,6 +18,8 @@ namespace InternalTest
 
 		public static void Main(string[] args)
 		{
+			int success = 0;
+
 			string[] files = Directory.GetFiles("./InternalTests", "*.hopl");
 			foreach (string file in files)
 			{
@@ -39,8 +41,14 @@ namespace InternalTest
 
 				WriteStat(unitTestNamespace.TestCount, unitTestNamespace.SuccessCount,
 					Path.GetFileName(file));
+
+				if (unitTestNamespace.TestCount == unitTestNamespace.SuccessCount)
+					success++;
 			}
-			Console.ReadLine();
+
+			Console.WriteLine("Completed internal tests! Successful tests {0}/{1}.", success, files.Length);
+
+			Console.ReadKey();
 		}
 
 		private static void WriteStat(int tests, int success, string file)

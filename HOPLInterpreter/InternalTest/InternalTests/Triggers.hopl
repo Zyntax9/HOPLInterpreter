@@ -2,7 +2,7 @@
 
 namespace TriggerReference
 {
-	int tests = 12;
+	int tests = 15;
 
 	handle UTest.BeforeTests()
 	{
@@ -87,31 +87,60 @@ namespace TriggerReference
 		UTest.AssertStringEqual(x[1], "tuple arg", "Trigger call (One tuple[1] arg)");
 	}
 	
-	trigger<int> a8;
-	trigger<int> b8;
-	handle UTest.RunTests() // Trigger list
+	trigger<int, string> a8;
+	handle UTest.RunTests() // Trigger call (Multi arg)
 	{
-		a8(324);
-		b8(324);
+		a8(8827, "multi args");
 	}
 
-	handle [a8, b8](int x)
+	handle a8(int x, string y)
 	{
-		UTest.AssertIntEqual(x, 324, "Trigger list");
+		UTest.AssertIntEqual(x, 8827, "Trigger call (Multi arg x)");
+		UTest.AssertStringEqual(y, "multi args", "Trigger call (Multi arg y)");
 	}
 	
-
 	trigger<int> a9;
 	trigger<int> b9;
-	list<trigger<int>> c9 = [a9, b9];
-	handle UTest.RunTests() // Trigger list GV
+	handle UTest.RunTests() // Trigger list
 	{
 		a9(324);
 		b9(324);
 	}
 
-	handle c9(int x)
+	handle [a9, b9](int x)
+	{
+		UTest.AssertIntEqual(x, 324, "Trigger list");
+	}
+	
+
+	trigger<int> a10;
+	trigger<int> b10;
+	list<trigger<int>> c10 = [a10, b10];
+	handle UTest.RunTests() // Trigger list GV
+	{
+		a10(324);
+		b10(324);
+	}
+
+	handle c10(int x)
 	{
 		UTest.AssertIntEqual(x, 324, "Trigger list GV");
+	}
+
+
+	trigger<int> a11;
+	handle UTest.RunTests() // Trigger by function
+	{
+		a11(774);
+	}
+
+	trigger<int> f1()
+	{
+		return a11;
+	}
+
+	handle f1()(int x)
+	{
+		UTest.AssertIntEqual(x, 774, "Trigger by function");
 	}
 }

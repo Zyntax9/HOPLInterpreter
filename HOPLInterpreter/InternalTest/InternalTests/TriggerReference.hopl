@@ -2,7 +2,7 @@
 
 namespace TriggerReference
 {
-	int tests = 5;
+	int tests = 6;
 
 	handle UTest.BeforeTests()
 	{
@@ -92,5 +92,32 @@ namespace TriggerReference
 	handle a5(int x)
 	{
 		UTest.AssertIntEqual(x, 87, "Call on local reference");
+	}
+	
+	
+	trigger<int> a6;
+	trigger<int> b6;
+	trigger<int> c6 = a6;
+	handle UTest.RunTests() // Call after rereferencing returned by function
+	{
+		trigger<int> loc = f1();
+		c6 = b6;
+		loc(9234);
+	}
+
+	trigger<int> f1()
+	{
+		trigger<int> loc = c6;
+		return loc;
+	}
+
+	handle a6(int x)
+	{
+		UTest.AssertBoolTrue(false, "Call after rereferencing returned by function (Bad path)");
+	}
+
+	handle b6(int x)
+	{
+		UTest.AssertIntEqual(x, 9234, "Call after rereferencing returned by function");
 	}
 }

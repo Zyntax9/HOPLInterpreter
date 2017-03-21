@@ -6,6 +6,16 @@ namespace HOPLInterpreter.NamespaceTypes.Values
 {
 	public class InterpreterTrigger : InterpreterValue<Api.SuppliedTrigger>, IInterpreterTriggerable
 	{
+		public override object Value
+		{
+			get
+			{
+				if (!ReferenceEquals(reference, null))
+					return reference.Value;
+				return base.Value;
+			}
+		}
+
 		private Lock fireLock = new Lock();
 		private event Api.TriggerEventHandler onFire;
 
@@ -42,7 +52,6 @@ namespace HOPLInterpreter.NamespaceTypes.Values
 
 		private void SubscribeToReference(InterpreterTrigger trigger)
 		{
-			value = trigger.value;
 			reference = trigger;
 			reference.Subscribe(Fire);
 			reference.SubscribeReference(OnReferenceChange);
@@ -53,7 +62,6 @@ namespace HOPLInterpreter.NamespaceTypes.Values
 			reference.Unsubscribe(Fire);
 			reference.UnsubscribeReference(OnReferenceChange);
 			reference = null;
-			value = null;
 		}
 
 		private void OnReferenceChange(object sender, InterpreterTrigger newTrigger)
@@ -71,7 +79,10 @@ namespace HOPLInterpreter.NamespaceTypes.Values
 		public void DropReference()
 		{
 			if (!ReferenceEquals(reference, null))
+			{
+				referenceChanged(this, reference); // Transfer subscribers upwards
 				UnsubscribeReference();
+			}
 		}
 
 		public void SubscribeReference(ReferenceChangedHandler handler)
