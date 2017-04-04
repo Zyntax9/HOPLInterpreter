@@ -1,6 +1,0 @@
-﻿// Should implicitly be imported in testscript
-namespace someNamespace {
-	bool function2(){
-		return true;
-	}
-}

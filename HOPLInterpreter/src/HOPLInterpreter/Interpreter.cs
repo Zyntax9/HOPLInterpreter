@@ -208,9 +208,9 @@ namespace HOPLInterpreter
 			return tokenStream;
 		}
 
-		public static Parser.CompileUnitContext GetParseTree(string file, out List<ParsingError> parserErrorss)
+		public static Parser.CompileUnitContext GetParseTree(string file, out List<ParsingError> parserErrors)
 		{
-			parserErrorss = new List<ParsingError>();
+			parserErrors = new List<ParsingError>();
 
 			using (FileStream fs = File.Open(file, FileMode.Open))
 			{
@@ -227,7 +227,7 @@ namespace HOPLInterpreter
 
 				Parser.CompileUnitContext compileUnit = parser.compileUnit();
 
-				parserErrorss = errorListener.Errors;
+				parserErrors = errorListener.Errors;
 
 				return compileUnit;
 			}

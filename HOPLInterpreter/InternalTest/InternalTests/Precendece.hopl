@@ -2,7 +2,7 @@
 
 namespace Precedence
 {
-	int tests = 4;
+	int tests = 6;
 
 	handle UTest.BeforeTests()
 	{
@@ -27,5 +27,15 @@ namespace Precedence
 	handle UTest.RunTests() // Parenthesis 2
 	{
 		UTest.AssertIntEqual(7 * (5 + 3), 56, "Parenthesis 2");
+	}
+
+	handle UTest.RunTests() // Negation precedence 1
+	{
+		UTest.AssertIntEqual(-7 - 3, -10, "Negation precedence 1");
+	}
+
+	handle UTest.RunTests() // Negation precedence 2
+	{
+		UTest.AssertIntEqual(7 - -3, 10, "Negation precedence 1");
 	}
 }

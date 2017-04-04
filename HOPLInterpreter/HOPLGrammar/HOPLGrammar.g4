@@ -68,18 +68,18 @@ stat
 
 expr
 	:	PARAN_OPEN expr PARAN_CLOSE							#paranExpr
+	|	expr BOX_OPEN expr BOX_CLOSE						#indexExpr
+	|	call												#callExpr
+	|	await												#awaitExpr
+	|	MINUS expr											#negExpr
+	|	NOT_KW expr											#notExpr
 	|	expr op=(MULT | DIV) expr							#multExpr
 	|	expr op=(PLUS | MINUS) expr							#addiExpr
 	|	expr op=(EQ | NEQ | LEQ | GEQ | LESS | GRT) expr	#compExpr
 	|	expr AND_KW expr									#andExpr
 	|	expr OR_KW expr										#orExpr
 	|	expr CONCAT expr									#concatExpr
-	|	MINUS expr											#negExpr
-	|	NOT_KW expr											#notExpr
-	|	expr BOX_OPEN expr BOX_CLOSE						#indexExpr
 	|	typeVal												#valExpr
-	|	call												#callExpr
-	|	await												#awaitExpr
 	|	identifier											#varExpr
 	|	BOX_OPEN (expr (COMMA expr)*)? BOX_CLOSE			#listExpr
 	|	CURLY_OPEN expr (COMMA expr)* CURLY_CLOSE			#tupleExpr
@@ -242,3 +242,4 @@ ML_COMMENT	:	'/*' .*? '*/'	-> channel(HIDDEN);
 ID		:	'_'?[a-zA-Z][_a-zA-Z0-9]*;
 WS		:	[ \t\n\r]+ -> channel(HIDDEN);
 TERM	:	';';
+ERR		:	.;
