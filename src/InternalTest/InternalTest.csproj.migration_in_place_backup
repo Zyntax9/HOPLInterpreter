@@ -13,8 +13,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\HOPL.Interpreter\HOPL.Interpreter.csproj" />
-    <ProjectReference Include="..\HOPL.Interpreter.Api\HOPL.Interpreter.Api.csproj" />
+    <ProjectReference Include="..\src\HOPLInterpreter\HOPLInterpreter.csproj" />
+    <ProjectReference Include="..\src\HOPLInterpreterInterface\HOPLInterpreterInterface.csproj" />
   </ItemGroup>
 
 </Project>
