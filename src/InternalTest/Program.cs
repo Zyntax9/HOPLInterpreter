@@ -47,8 +47,6 @@ namespace InternalTest
 			}
 
 			Console.WriteLine("Completed internal tests! Successful tests {0}/{1}.", success, files.Length);
-
-			Console.ReadKey();
 		}
 
 		private static void WriteStat(int tests, int success, string file)
