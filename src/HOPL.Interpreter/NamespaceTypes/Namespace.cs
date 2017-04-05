@@ -129,18 +129,19 @@ namespace HOPL.Interpreter.NamespaceTypes
 			return GetNamespace(SplitNamespaceParts(namespaceDecContext));
 		}
 
-		public void AddGlobalEntity(Parser.GlobalDecContext globalDecContext)
+		public IGlobalEntity AddGlobalEntity(Parser.GlobalDecContext globalDecContext)
 		{
-			GlobalEntity gv = new GlobalEntity(globalDecContext);
-			AddGlobalEntity(gv);
+            IGlobalEntity gv = new GlobalEntity(globalDecContext);
+			return AddGlobalEntity(gv);
 		}
 
-		public void AddGlobalEntity(IGlobalEntity globalEntity)
+		public IGlobalEntity AddGlobalEntity(IGlobalEntity globalEntity)
 		{
 			if (globalEntities.ContainsKey(globalEntity.Name))
 				throw new DuplicateGlobalEntityException(globalEntity.Name);
 
 			globalEntities.Add(globalEntity.Name, globalEntity);
+            return globalEntity;
 		}
 
 		public bool TryAddGlobalEntity(Parser.GlobalDecContext globalDecContext)
@@ -198,12 +199,13 @@ namespace HOPL.Interpreter.NamespaceTypes
 			return true;
 		}
 
-		public void AddFunction(IFunction function)
+		public IFunction AddFunction(IFunction function)
 		{
 			if (functions.ContainsKey(function.Name))
 				throw new DuplicateFunctionException(function.Name);
 
 			functions.Add(function.Name, function);
+            return function;
 		}
 
 		public bool TryAddFunction(Parser.FunctionDecContext functionDecContext, Namespace @namespace, string file)

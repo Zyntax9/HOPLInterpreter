@@ -12,13 +12,15 @@ namespace HOPL.Interpreter.Interpretation
 		public NamespaceSet Namespaces { get; protected set; }
 		public ImportAccessTable AccessTable { get; protected set; }
 		public List<Handler> Handlers { get; protected set; }
-		public Queue<Dependency> EvaluationOrder { get; protected set; }
+        public Dictionary<string, InterpreterType> Required { get; set; }
+        public Queue<Dependency> EvaluationOrder { get; protected set; }
 
-		public InterpretationContext(Explorer explorer, Queue<Dependency> evalOrder)
+        public InterpretationContext(Explorer explorer, Queue<Dependency> evalOrder)
 		{
 			Namespaces = explorer.Namespaces;
 			AccessTable = explorer.ImportTable;
 			Handlers = explorer.Handlers;
+            Required = explorer.Required;
 			EvaluationOrder = evalOrder;
 		}
 	}

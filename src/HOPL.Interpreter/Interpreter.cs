@@ -81,8 +81,7 @@ namespace HOPL.Interpreter
 			}
 		}
 		
-		public static InterpretationContext PrepareFile(string file, ISet<string> importPaths, 
-			NamespaceSet namespaces)
+		public static InterpretationContext PrepareFile(string file, ISet<string> importPaths, NamespaceSet namespaces)
 		{
 			List<ParsingError> parserErrors;
 			Parser.CompileUnitContext cUnit = GetParseTree(file, out parserErrors);
@@ -127,22 +126,26 @@ namespace HOPL.Interpreter
 			if (typeCheck.Errors.Count > 0)
 				throw new TypeErrorsException(typeCheck.Errors);
 
-			Queue<Dependency> evalOrder = null;
-			try
-			{
-				evalOrder = explorer.DepencencyEvaluationOrder();
-			}
-			catch (RecursiveVariableDependencyException e)
-			{
-				throw new PrepareErrorException(PrepareErrorMessage.DEP_REC, e.Message);
-			}
-			catch (DependencyContainsAwaitException e)
-			{
-				throw new PrepareErrorException(PrepareErrorMessage.DEP_AWAIT, e.Message);
-			}
+			Queue<Dependency> evalOrder = GetEvalOrder(explorer);
 
 			return new InterpretationContext(explorer, evalOrder);
 		}
+
+        private static Queue<Dependency> GetEvalOrder(Explorer explorer)
+        {
+            try
+            {
+                return explorer.DepencencyEvaluationOrder();
+            }
+            catch (RecursiveVariableDependencyException e)
+            {
+                throw new PrepareErrorException(PrepareErrorMessage.DEP_REC, e.Message);
+            }
+            catch (DependencyContainsAwaitException e)
+            {
+                throw new PrepareErrorException(PrepareErrorMessage.DEP_AWAIT, e.Message);
+            }
+        }
 
 		private static void PrepareImport(string file,
 		   ISet<string> importPaths,

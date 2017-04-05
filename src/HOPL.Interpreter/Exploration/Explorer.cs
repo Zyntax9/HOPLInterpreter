@@ -16,6 +16,7 @@ namespace HOPL.Interpreter.Exploration
 		public ImportAccessTable ImportTable { get; protected set; } = new ImportAccessTable();
 		public ExploreErrorCollection Errors { get; protected set; } = new ExploreErrorCollection();
 		public List<Handler> Handlers { get; protected set; } = new List<Handler>();
+        public Dictionary<string, InterpreterType> Required { get; protected set; } = new Dictionary<string, InterpreterType>();
 
 		public bool ContainedRequired { get; protected set; } = false;
 		private string currentFile;
@@ -149,20 +150,24 @@ namespace HOPL.Interpreter.Exploration
 			string gvName = globalVarDec.varDec().ID().GetText();
 			VariableDependencyExplorer vde = new VariableDependencyExplorer(ImportTable, currentFile, completeNamespace);
 			HashSet<Dependency> dependencies = vde.EvaluateDependencies(globalVarDec);
-			Dependency gv = new Dependency(gvName, completeNamespace, currentFile, DependencyType.VARIABLE, 
+			Dependency dep = new Dependency(gvName, completeNamespace, currentFile, DependencyType.VARIABLE, 
 				globalVarDec, vde.ContainsAwait);
 
-			if (!dependencyMap.ContainsKey(gv))
-				dependencyMap.Add(gv, dependencies);
+			if (!dependencyMap.ContainsKey(dep))
+				dependencyMap.Add(dep, dependencies);
 
-			try
+            IGlobalEntity gv = null;
+            try
 			{
-				currentNamespace.AddGlobalEntity(globalVarDec);
+				gv = currentNamespace.AddGlobalEntity(globalVarDec);
 			}
 			catch (DuplicateGlobalEntityException)
 			{
 				Errors.Add(ExploreErrorMessage.GV_DUPL, context, currentFile);
 			}
+
+            if (gv.Required)
+                Required.Add(gv.Name, gv.Type);
 		}
 	}
 }

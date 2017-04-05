@@ -54,8 +54,7 @@ namespace InternalTest
 			Console.WriteLine("Test for {0} complete: {1}/{2} successful.", file, success, tests);
 		}
 
-		private static bool Prepare(string file, UnitTestNamespace unitTestNamespace, 
-			out InterpretationContext context)
+		private static bool Prepare(string file, UnitTestNamespace unitTestNamespace, out InterpretationContext context)
 		{
 			context = null;
 
