@@ -108,11 +108,11 @@ namespace HOPL.Interpreter
 				{
 					foreach (string importFile in importFiles)
 					{
-						if (!exploredFiles.Contains(importFile))
-						{
-							PrepareImport(importFile, importPaths, namespaces,
-								exploredFiles, explorer, namespaceFileMap);
-						}
+                        if (exploredFiles.Contains(importFile))
+                            continue;
+
+						PrepareImport(importFile, importPaths, namespaces,
+							exploredFiles, explorer, namespaceFileMap);
 					}
 				}
 
@@ -128,7 +128,7 @@ namespace HOPL.Interpreter
 
 			Queue<Dependency> evalOrder = GetEvalOrder(explorer);
 
-			return new InterpretationContext(explorer, evalOrder);
+			return new InterpretationContext(file, explorer, evalOrder);
 		}
 
         private static Queue<Dependency> GetEvalOrder(Explorer explorer)
