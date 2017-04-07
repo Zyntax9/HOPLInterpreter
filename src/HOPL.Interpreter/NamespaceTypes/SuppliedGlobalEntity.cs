@@ -26,17 +26,8 @@ namespace HOPL.Interpreter.NamespaceTypes
 		private SuppliedFunction function;
 		public InterpreterValue Value
 		{
-			get
-			{
-				if (function != null)
-					return new InterpreterFunction(function);
-				object suppVal = Property.GetValue(Supplier);
-				return InterpreterValue.FromNative(suppVal);
-			}
-			set
-			{
-				throw new InvalidOperationException();
-			}
+			get { return GetValue(); }
+			set { throw new InvalidOperationException(); }
 		}
 
 		public SuppliedGlobalEntity(PropertyInfo pi, object suppNamespace, InterpreterGlobalVariableAttribute attr)
@@ -55,5 +46,13 @@ namespace HOPL.Interpreter.NamespaceTypes
 			Type = new InterpreterType(suppFunc.Signature);
 			function = suppFunc;
 		}
+
+        private InterpreterValue GetValue()
+        {
+            if (function != null)
+                return new InterpreterFunction(function);
+            object suppVal = Property.GetValue(Supplier);
+            return InterpreterValue.FromNative(suppVal);
+        }
 	}
 }

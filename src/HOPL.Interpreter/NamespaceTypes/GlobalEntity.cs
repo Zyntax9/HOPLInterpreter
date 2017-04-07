@@ -1,4 +1,5 @@
-﻿using HOPL.Interpreter.NamespaceTypes.Values;
+﻿using HOPL.Interpreter.Api;
+using HOPL.Interpreter.NamespaceTypes.Values;
 using HOPL.Interpreter.TypeCheck;
 using System;
 using System.Collections.Generic;
@@ -79,5 +80,15 @@ namespace HOPL.Interpreter.NamespaceTypes
 
 			Constant = true;
 		}
+
+        public GlobalEntity(string name, SuppliedTrigger trigger)
+        {
+            // Supplied trigger, though not by property but collection
+            Name = name;
+            Type = InterpreterType.FromNative(trigger.GetType());
+            Value = new InterpreterTrigger(trigger);
+
+            Constant = true;
+        }
 	}
 }

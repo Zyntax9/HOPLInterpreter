@@ -25,42 +25,70 @@ namespace HOPL.Interpreter.NamespaceTypes
 
 		public NamespaceSet(IEnumerable<ISuppliedNamespace> suppliedNamespaces)
 		{
-			foreach (ISuppliedNamespace sn in suppliedNamespaces)
-			{
-				TypeInfo t = sn.GetType().GetTypeInfo();
-
-				string nsname = sn.Name ?? t.FullName;
-
-				Namespace ns = Add(nsname);
-
-				foreach (PropertyInfo pi in t.GetProperties())
-				{
-					InterpreterGlobalVariableAttribute ge =
-						pi.GetCustomAttribute<InterpreterGlobalVariableAttribute>();
-
-					if (ge != null)
-					{
-						SuppliedGlobalEntity sge = new SuppliedGlobalEntity(pi, sn, ge);
-						ns.AddGlobalEntity(sge);
-					}
-				}
-
-				foreach (MethodInfo mi in t.GetMethods())
-				{
-					InterpreterFunctionAttribute fun = mi.GetCustomAttribute<InterpreterFunctionAttribute>();
-
-					if (fun != null)
-					{
-						SuppliedFunction sfun = new SuppliedFunction(mi, sn, fun);
-						SuppliedGlobalEntity sfge = new SuppliedGlobalEntity(sfun);
-						ns.AddFunction(sfun);
-						ns.AddGlobalEntity(sfge);
-					}
-				}
-			}
+            foreach (ISuppliedNamespace sn in suppliedNamespaces)
+                Add(sn);
 		}
 
-		public Namespace Add(IEnumerable<string> namespaceParts)
+        public Namespace Add(ISuppliedNamespace suppliedNamespace)
+        {
+            TypeInfo t = suppliedNamespace.GetType().GetTypeInfo();
+
+            string nsname = suppliedNamespace.Name ?? t.FullName;
+
+            Namespace ns = Add(nsname);
+
+            foreach (PropertyInfo pi in t.GetProperties())
+                TryAddToNamespace(pi, suppliedNamespace, ns);
+
+            foreach (MethodInfo mi in t.GetMethods())
+                TryAddToNamespace(mi, suppliedNamespace, ns);
+
+            return ns;
+        }
+
+        private bool TryAddToNamespace(PropertyInfo property, ISuppliedNamespace suppliedNamespace, Namespace ns)
+        {
+            if (property.PropertyType == typeof(ReferenceCollection))
+                return TryAddToNamespace((ReferenceCollection)property.GetValue(suppliedNamespace), ns);
+
+            InterpreterGlobalVariableAttribute ge =
+                property.GetCustomAttribute<InterpreterGlobalVariableAttribute>();
+
+            if (ge != null)
+            {
+                SuppliedGlobalEntity sge = new SuppliedGlobalEntity(property, suppliedNamespace, ge);
+                ns.AddGlobalEntity(sge);
+                return true;
+            }
+            return false;
+        }
+
+        private bool TryAddToNamespace(ReferenceCollection referenceCollection, Namespace ns)
+        {
+            foreach(KeyValuePair<string, ReferenceObject> trigger in referenceCollection)
+            {
+                IGlobalEntity ge = new ReferenceGlobalEntity(trigger.Key, trigger.Value);
+                ns.AddGlobalEntity(ge);
+            }
+            return false;
+        }
+
+        private bool TryAddToNamespace(MethodInfo method, ISuppliedNamespace suppliedNamespace, Namespace ns)
+        {
+            InterpreterFunctionAttribute fun = method.GetCustomAttribute<InterpreterFunctionAttribute>();
+
+            if (fun != null)
+            {
+                SuppliedFunction sfun = new SuppliedFunction(method, suppliedNamespace, fun);
+                SuppliedGlobalEntity sfge = new SuppliedGlobalEntity(sfun);
+                ns.AddFunction(sfun);
+                ns.AddGlobalEntity(sfge);
+                return true;
+            }
+            return false;
+        }
+
+        public Namespace Add(IEnumerable<string> namespaceParts)
 		{
 			string topNamespace = namespaceParts.ElementAt(0);
 
