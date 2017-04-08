@@ -17,7 +17,6 @@
 
   <ItemGroup>
     <PackageReference Include="Antlr4" Version="4.6.1-beta002" />
-    <PackageReference Include="System.Reflection.TypeExtensions" Version="4.4.0-beta-24913-01" />
     <PackageReference Include="HOPL.Grammar" Version="1.0.0-build10004" />
   </ItemGroup>
 
