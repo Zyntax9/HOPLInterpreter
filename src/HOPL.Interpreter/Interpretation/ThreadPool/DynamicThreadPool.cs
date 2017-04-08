@@ -1,27 +1,35 @@
 ﻿using HOPL.Interpreter.Errors.Runtime;
 using HOPL.Interpreter.Exceptions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using Api = HOPL.Interpreter.Api;
 
 namespace HOPL.Interpreter.Interpretation.ThreadPool
 {
 	public class DynamicThreadPool : IThreadPool
-	{
-		public BooleanRef Running { get; protected set; } = new BooleanRef();
+    {
+        private CancellationTokenSource cancelSource;
+        private CancellationToken cancelToken;
+        public bool Running { get { return cancelToken.IsCancellationRequested; } }
 
-		private LinkedList<Thread> pool = new LinkedList<Thread>();
+        private LinkedList<Task> pool = new LinkedList<Task>();
 
 		public event RuntimeErrorEventHandler RuntimeErrorEvent;
 
-		public DynamicThreadPool() { }
+		public DynamicThreadPool()
+        {
+            cancelSource = new CancellationTokenSource();
+            cancelToken = cancelSource.Token;
+        }
 
 		public void ThreadRuntime(object context)
 		{
 			ThreadContext tcontext = (ThreadContext)context;
 			
-			Executor executor = new Executor(tcontext.Handler, this, Running);
+			Executor executor = new Executor(tcontext.Handler, cancelToken, this);
 			try
 			{
 				executor.ExecuteHandler(tcontext.Handler.Handler.Context);
@@ -37,16 +45,16 @@ namespace HOPL.Interpreter.Interpretation.ThreadPool
 		}
 
 		public void QueueHandler(HandlerContext context)
-		{
-			Thread t = new Thread(new ParameterizedThreadStart(ThreadRuntime));
-
-			ThreadContext tcontext = new ThreadContext();
+		{                
+            ThreadContext tcontext = new ThreadContext();
 			tcontext.Handler = context;
 
-			lock (pool)
+            Task t = new Task(() => ThreadRuntime(tcontext));
+
+            lock (pool)
 				tcontext.ThreadNode = pool.AddLast(t);
 
-			t.Start(tcontext);
+            t.Start();
 		}
 
 		public int GetQueuedCount()
@@ -56,20 +64,32 @@ namespace HOPL.Interpreter.Interpretation.ThreadPool
 
 		public void Stop()
 		{
-			Running.Value = false;
+            cancelSource.Cancel();
 		}
 
 		public void StopAndJoin()
 		{
 			Stop();
 			lock (pool)
-				foreach (Thread t in pool)
-					t.Join();
+            {
+                foreach (Task t in pool)
+                {
+                    try
+                    {
+                        t.Wait();
+                    }
+                    catch (AggregateException) { }
+                }
+            }
 		}
 
 		public object[] Await(Api.SuppliedTrigger trigger)
 		{
-			Thread current = Thread.CurrentThread;
+			int currentId = Task.CurrentId.Value;
+            Task current = null;
+            foreach (Task t in pool)
+                if (t.Id == currentId)
+                    current = t;
 			AwaitingThread currentAwait = new AwaitingThread(current, trigger);
 			currentAwait.Ready += ResumeAwaiting;
 			currentAwait.Wait();
@@ -83,7 +103,7 @@ namespace HOPL.Interpreter.Interpretation.ThreadPool
 
 		private struct ThreadContext
 		{
-			public LinkedListNode<Thread> ThreadNode { get; set; }
+			public LinkedListNode<Task> ThreadNode { get; set; }
 			public HandlerContext Handler { get; set; }
 		}
 	}

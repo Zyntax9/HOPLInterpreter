@@ -21,19 +21,14 @@ namespace HOPL.Interpreter.NamespaceTypes
 		public bool HasDefaultValue { get { return DefaultValue != null; } }
 
 		private InterpreterValue value;
-		private ReadWriteLock rwlock = new ReadWriteLock();
 		public InterpreterValue Value
 		{
 			get
 			{
-				rwlock.Read();
-				InterpreterValue retval = value;
-				rwlock.ReadRelease();
-				return retval;
+				return value;
 			}
 			set
 			{
-				rwlock.Write();
 				if (!ReferenceEquals(this.value, null) && 
 					this.value.GetType() == typeof(InterpreterTrigger))
 				{
@@ -42,7 +37,6 @@ namespace HOPL.Interpreter.NamespaceTypes
 					trigger.ReferenceChanging((InterpreterTrigger)value);
 				}
 				this.value = value;
-				rwlock.WriteRelease();
 			}
 		}
 

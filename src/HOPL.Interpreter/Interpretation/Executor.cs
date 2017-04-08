@@ -14,6 +14,7 @@ using Antlr4.Runtime;
 using HOPL.Interpreter.Interpretation.ThreadPool;
 using Api = HOPL.Interpreter.Api;
 using System.Globalization;
+using System.Threading;
 
 namespace HOPL.Interpreter.Interpretation
 {
@@ -32,13 +33,17 @@ namespace HOPL.Interpreter.Interpretation
 		Stack<StackEntry> scopeStack = new Stack<StackEntry>();
 		ValueScope currentScope { get { return scopeStack.Peek().scope; } }
 		string currentFile { get { return scopeStack.Peek().file; } }
-		BooleanRef running;
+		CancellationToken cancelToken;
 
-		public Executor(HandlerContext handler, IThreadPool pool = null, BooleanRef running = null)
+        public Executor(HandlerContext handler, IThreadPool pool = null) 
+            : this(handler, new CancellationToken(false), pool)
+        { }
+
+        public Executor(HandlerContext handler, CancellationToken cancelToken, IThreadPool pool = null)
 		{
 			this.pool = pool;
-			this.accessTable = handler.Handler.AccessTable;
-			this.running = running ?? new BooleanRef();
+            this.cancelToken = cancelToken;
+            this.accessTable = handler.Handler.AccessTable;
 
 			namespaces = handler.Handler.Namespaces;
 
@@ -57,13 +62,19 @@ namespace HOPL.Interpreter.Interpretation
 			}
 		}
 
-		public Executor(Namespace @namespace, NamespaceSet namespaces, string file, 
-			ImportAccessTable accessTable, IThreadPool pool = null, BooleanRef running = null)
+        public Executor(Namespace @namespace, NamespaceSet namespaces, string file,
+            ImportAccessTable accessTable,  IThreadPool pool = null) 
+            : this(@namespace, namespaces, file, accessTable, new CancellationToken(false), pool)
+        { }
+
+
+        public Executor(Namespace @namespace, NamespaceSet namespaces, string file, 
+			ImportAccessTable accessTable, CancellationToken cancelToken, IThreadPool pool = null)
 		{
 			this.pool = pool;
 			this.namespaces = namespaces;
 			this.accessTable = accessTable;
-			this.running = running ?? new BooleanRef();
+			this.cancelToken = cancelToken;
 
 			StackEntry se = new StackEntry()
 			{
@@ -298,7 +309,7 @@ namespace HOPL.Interpreter.Interpretation
 
 		public InterpreterValue VisitAwait([NotNull] Parser.AwaitContext context)
 		{
-			if (!running.Value)
+			if (cancelToken.IsCancellationRequested)
 				throw new ExecutorInterruptException();
 
 			InterpreterValue trigger = VisitExpr(context.expr());
@@ -339,7 +350,7 @@ namespace HOPL.Interpreter.Interpretation
 
 		public InterpreterValue VisitCall([NotNull] Parser.CallContext context)
 		{
-			if (!running.Value)
+			if (cancelToken.IsCancellationRequested)
 				throw new ExecutorInterruptException();
 
 			Parser.ExprContext[] exprs = context.expr();
@@ -542,7 +553,7 @@ namespace HOPL.Interpreter.Interpretation
 			VisitVarDec(context.declare);
 			while ((bool)VisitExpr(context.predicate).Value)
 			{
-				if (!running.Value)
+				if (cancelToken.IsCancellationRequested)
 					throw new ExecutorInterruptException();
 
 				InterpreterValue bodyValue = VisitBody(context.body());
@@ -567,7 +578,7 @@ namespace HOPL.Interpreter.Interpretation
 			
 			foreach (InterpreterValue value in list)
 			{
-				if (!running.Value)
+				if (cancelToken.IsCancellationRequested)
 					throw new ExecutorInterruptException();
 
 				currentScope.PushDepth();
@@ -948,7 +959,7 @@ namespace HOPL.Interpreter.Interpretation
 			Parser.ExprContext expr = context.expr();
 			while ((bool)VisitExpr(expr).Value)
 			{
-				if (!running.Value)
+				if (cancelToken.IsCancellationRequested)
 					throw new ExecutorInterruptException();
 
 				InterpreterValue bodyValue = VisitBody(context.body());

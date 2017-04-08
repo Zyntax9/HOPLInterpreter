@@ -1,20 +1,22 @@
-﻿using Api = HOPL.Interpreter.Api;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using HOPL.Interpreter.Exceptions;
 using HOPL.Interpreter.Errors.Runtime;
+using System.Threading.Tasks;
+using System.Threading;
 
 namespace HOPL.Interpreter.Interpretation.ThreadPool
 {
-	public class StaticThreadPool : IThreadPool
+    public class StaticThreadPool : IThreadPool
 	{
 		private Semaphore queueSemaphore = new Semaphore(0, int.MaxValue);
 		private Queue<HandlerContext> queue = new Queue<HandlerContext>();
-		public BooleanRef Running { get; protected set; } = new BooleanRef(true);
+        private CancellationTokenSource cancelSource;
+        private CancellationToken cancelToken;
+		public bool Running { get { return cancelToken.IsCancellationRequested; } }
 
-		private Thread[] pool;
+		private Task[] pool;
 		private LinkedList<AwaitingThread> awaiting = new LinkedList<AwaitingThread>();
 		private Queue<AwaitingThread> ready = new Queue<AwaitingThread>();
 
@@ -22,25 +24,22 @@ namespace HOPL.Interpreter.Interpretation.ThreadPool
 
 		public StaticThreadPool(int poolSize)
 		{
-			pool = new Thread[poolSize];
+			pool = new Task[poolSize];
+            cancelSource = new CancellationTokenSource();
+            cancelToken = cancelSource.Token;
 
 			lock (pool)
-			{
 				for (int i = 0; i < poolSize; i++)
-				{
-					pool[i] = new Thread(new ThreadStart(ThreadRuntime));
-					pool[i].Start();
-				}
-			}
+                    pool[i] = Task.Run((Action)ThreadRuntime);
 		}
 
 		private void ThreadRuntime()
 		{
-			while (Running.Value)
+			while (Running)
 			{
 				queueSemaphore.WaitOne();
 
-				if (!Running.Value)
+				if (!Running)
 					break; // Finish if we stopped after wait
 
 				AwaitingThread readyThread = null;
@@ -50,10 +49,10 @@ namespace HOPL.Interpreter.Interpretation.ThreadPool
 
 				if(readyThread != null)
 				{
-					Thread current = Thread.CurrentThread;
+                    int current = Task.CurrentId.Value;
 					lock (pool)
 					{
-						int index = Array.FindIndex(pool, x => ReferenceEquals(x, current));
+						int index = Array.FindIndex(pool, x => x.Id == current);
 						pool[index] = readyThread.Thread;
 						readyThread.Resume();
 						return;
@@ -64,7 +63,7 @@ namespace HOPL.Interpreter.Interpretation.ThreadPool
 				lock (queue)
 					handler = queue.Dequeue();
 
-				Executor executor = new Executor(handler, this, Running);
+				Executor executor = new Executor(handler, cancelToken, this);
 				try
 				{
 					executor.ExecuteHandler(handler.Handler.Context);
@@ -94,21 +93,30 @@ namespace HOPL.Interpreter.Interpretation.ThreadPool
 
 		public void Stop()
 		{
-			Running.Value = false;
+            cancelSource.Cancel();
 		}
 
 		public void StopAndJoin()
 		{
 			Stop();
+
 			for (int i = 0; i < pool.Length; i++)
 				queueSemaphore.Release(); // Wake up all waiting threads
-			foreach (Thread t in pool)
-				t.Join();
+
+			foreach (Task t in pool)
+            {
+                try
+                {
+                    t.Wait();
+                }
+                catch (AggregateException) { }
+            }
 		}
 
 		public object[] Await(Api.SuppliedTrigger trigger)
 		{
-			Thread current = Thread.CurrentThread;
+            int index = Array.FindIndex(pool, x => x.Id == Task.CurrentId.Value);
+            Task current = pool[index];
 			AwaitingThread currentAwait = new AwaitingThread(current, trigger);
 
 			lock (awaiting)
@@ -117,11 +125,7 @@ namespace HOPL.Interpreter.Interpretation.ThreadPool
 			currentAwait.Ready += SetReady;
 
 			lock (pool)
-			{
-				int index = Array.FindIndex(pool, x => ReferenceEquals(x, current));
-				pool[index] = new Thread(new ThreadStart(ThreadRuntime));
-				pool[index].Start();
-			}
+                pool[index] = Task.Run((Action)ThreadRuntime);
 
 			currentAwait.Wait();
 

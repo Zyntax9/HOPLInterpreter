@@ -11,7 +11,7 @@ namespace HOPL.Interpreter.Interpretation.ThreadPool
 
     public class AwaitingThread
     {
-		public Thread Thread { get; protected set; }
+		public Task Thread { get; protected set; }
 		public LinkedListNode<AwaitingThread> LinkNode { get; protected set; }
 		public event ReadyEventHandler Ready;
 
@@ -31,7 +31,7 @@ namespace HOPL.Interpreter.Interpretation.ThreadPool
 		private Api.SuppliedTrigger trigger;
 		private Semaphore waitsem = new Semaphore(0, 1);
 
-		public AwaitingThread(Thread thread, Api.SuppliedTrigger trigger)
+		public AwaitingThread(Task thread, Api.SuppliedTrigger trigger)
 		{
 			Thread = thread;
 			this.trigger = trigger;

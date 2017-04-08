@@ -7,7 +7,7 @@ namespace HOPL.Interpreter.Interpretation.ThreadPool
 
 	public interface IThreadPool
 	{
-		BooleanRef Running { get; }
+		bool Running { get; }
 
 		event RuntimeErrorEventHandler RuntimeErrorEvent;
 
