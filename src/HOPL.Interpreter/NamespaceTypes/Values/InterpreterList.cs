@@ -19,7 +19,7 @@ namespace HOPL.Interpreter.NamespaceTypes.Values
 		{
 			foreach(InterpreterValue val in value)
 			{
-				if(typeof(IInterpreterTriggerable).IsAssignableFrom(val.GetType()))
+				if(typeof(IInterpreterTriggerable).GetTypeInfo().IsAssignableFrom(val.GetType()))
 				{
 					IInterpreterTriggerable triggerable = (IInterpreterTriggerable)val;
 					triggerable.Subscribe(AnyFired);
@@ -79,7 +79,7 @@ namespace HOPL.Interpreter.NamespaceTypes.Values
 				generator = listGenericType.MakeGenericType(nativeList.First().GetType());
 			}
 
-			ConstructorInfo ci = generator.GetConstructor(new Type[] { });
+			ConstructorInfo ci = generator.GetTypeInfo().GetConstructor(new Type[] { });
 
 			IList result = (IList)ci.Invoke(new object[] { });
 

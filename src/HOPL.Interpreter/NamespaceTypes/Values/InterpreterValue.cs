@@ -176,7 +176,7 @@ namespace HOPL.Interpreter.NamespaceTypes.Values
 		{
 			Type t = obj.GetType();
 
-			if (typeof(InterpreterValue).IsAssignableFrom(t))
+			if (typeof(InterpreterValue).GetTypeInfo().IsAssignableFrom(t))
 			{
 				return ((InterpreterValue)obj).Clone();
 			}
@@ -197,19 +197,19 @@ namespace HOPL.Interpreter.NamespaceTypes.Values
 			{
 				return new InterpreterBool((bool)obj);
 			}
-			if (typeof(IList).IsAssignableFrom(t))
+			if (typeof(IList).GetTypeInfo().IsAssignableFrom(t))
 			{
 				return new InterpreterList((IList)obj);
 			}
-			if (typeof(Api.ISuppliedTuple).IsAssignableFrom(t))
+			if (typeof(Api.ISuppliedTuple).GetTypeInfo().IsAssignableFrom(t))
 			{
 				return new InterpreterTuple((Api.ISuppliedTuple)obj);
 			}
-			if (typeof(Api.SuppliedTrigger).IsAssignableFrom(t))
+			if (typeof(Api.SuppliedTrigger).GetTypeInfo().IsAssignableFrom(t))
 			{
 				return new InterpreterTrigger((Api.SuppliedTrigger)obj);
 			}
-			if (typeof(Delegate).IsAssignableFrom(t))
+			if (typeof(Delegate).GetTypeInfo().IsAssignableFrom(t))
 			{
 				return new InterpreterFunction((Delegate)obj);
 			}

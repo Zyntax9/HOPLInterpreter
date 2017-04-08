@@ -11,8 +11,4 @@
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
   </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="System.Reflection.TypeExtensions" Version="4.4.0-beta-24913-01" />
-  </ItemGroup>
-
 </Project>

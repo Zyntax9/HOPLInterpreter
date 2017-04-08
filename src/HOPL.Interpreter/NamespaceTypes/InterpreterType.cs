@@ -166,14 +166,14 @@ namespace HOPL.Interpreter.NamespaceTypes
 			}
 
 			TypeInfo ti = t.GetTypeInfo();
-			if (typeof(IList).IsAssignableFrom(t))
+			if (typeof(IList).GetTypeInfo().IsAssignableFrom(t))
 			{
 				Type[] args = ti.GetGenericArguments();
 				if (args.Count() > 1)
 					throw new InvalidNativeTypeException(t);
 				return new InterpreterType(Types.LIST, new InterpreterType[] { FromNative(args[0]) });
 			}
-			if (typeof(Api.ISuppliedTuple).IsAssignableFrom(t))
+			if (typeof(Api.ISuppliedTuple).GetTypeInfo().IsAssignableFrom(t))
 			{
 				Type[] args = ti.GetGenericArguments();
 				InterpreterType[] its = new InterpreterType[args.Length];
@@ -181,7 +181,7 @@ namespace HOPL.Interpreter.NamespaceTypes
 					its[i] = FromNative(args[i]);
 				return new InterpreterType(Types.TUPLE, its);
 			}
-			if (typeof(Api.SuppliedTrigger).IsAssignableFrom(t))
+			if (typeof(Api.SuppliedTrigger).GetTypeInfo().IsAssignableFrom(t))
 			{
 				Type[] args = ti.GetGenericArguments();
 				InterpreterType[] its = new InterpreterType[args.Length];
@@ -189,9 +189,9 @@ namespace HOPL.Interpreter.NamespaceTypes
 					its[i] = FromNative(args[i]);
 				return new InterpreterType(Types.TRIGGER, its);
 			}
-			if (typeof(Delegate).IsAssignableFrom(t))
+			if (typeof(Delegate).GetTypeInfo().IsAssignableFrom(t))
 			{
-				MethodInfo mi = t.GetMethod("Invoke");
+				MethodInfo mi = t.GetTypeInfo().GetMethod("Invoke");
 				InterpreterType ret = FromNative(mi.ReturnType);
 				ParameterInfo[] args = mi.GetParameters();
 				InterpreterType[] its = new InterpreterType[args.Length];
