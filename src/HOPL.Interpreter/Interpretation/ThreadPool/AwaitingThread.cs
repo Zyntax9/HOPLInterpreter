@@ -53,7 +53,7 @@ namespace HOPL.Interpreter.Interpretation.ThreadPool
 			LinkNode = list.AddLast(this);
 		}
 
-		private void TriggerFired(object sender, object[] arguments)
+		private void TriggerFired(object sender, object[] arguments, bool triggeredInternal)
 		{
 			lock(argumentLock)
 			{

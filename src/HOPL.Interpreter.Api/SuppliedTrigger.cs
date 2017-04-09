@@ -6,7 +6,7 @@ using System.Reflection;
 
 namespace HOPL.Interpreter.Api
 {
-	public delegate void TriggerEventHandler(object sender, object[] arguments);
+	public delegate void TriggerEventHandler(object sender, object[] arguments, bool triggeredInternal);
 
 	public class SuppliedTrigger
 	{
@@ -15,14 +15,14 @@ namespace HOPL.Interpreter.Api
 		private event TriggerEventHandler OnFire;
 		private Lock eventLock = new Lock();
 
-		public void Fire(object[] arguments)
+		public void Fire(object[] arguments, bool triggeredInternal = true)
 		{
-			OnFire?.Invoke(this, arguments);
+			OnFire?.Invoke(this, arguments, triggeredInternal);
 		}
 
-		public void Fire(object sender, object[] arguments)
+		public void Fire(object sender, object[] arguments, bool triggeredInternal = true)
 		{
-			OnFire?.Invoke(sender, arguments);
+			OnFire?.Invoke(sender, arguments, triggeredInternal);
 		}
 
 		public void Subscribe(TriggerEventHandler handler)

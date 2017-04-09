@@ -45,9 +45,9 @@ namespace HOPL.Interpreter.NamespaceTypes.Values
 			return new InterpreterTrigger(this);
 		}
 
-		private void Fire(object sender, object[] arguments)
+		private void Fire(object sender, object[] arguments, bool triggeredInternal)
 		{
-			onFire?.Invoke(sender, arguments);
+			onFire?.Invoke(sender, arguments, triggeredInternal);
 		}
 
 		private void SubscribeToReference(InterpreterTrigger trigger)

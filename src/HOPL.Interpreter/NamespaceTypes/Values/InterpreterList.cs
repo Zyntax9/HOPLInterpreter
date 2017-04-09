@@ -29,9 +29,9 @@ namespace HOPL.Interpreter.NamespaceTypes.Values
 
 		public override int Count { get { return value.Count; } }
 
-		private void AnyFired(object sender, object[] arguments)
+		private void AnyFired(object sender, object[] arguments, bool triggeredInternal)
 		{
-			triggerFire?.Invoke(sender, arguments);
+			triggerFire?.Invoke(sender, arguments, triggeredInternal);
 		}
 
 		private static List<InterpreterValue> FromNativeList(IList native)

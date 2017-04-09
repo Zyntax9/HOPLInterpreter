@@ -26,7 +26,7 @@ namespace HOPL.Interpreter.NamespaceTypes
 			AccessTable = accessTable;
 		}
 
-		public void OnTrigger(object sender, object[] arguments)
+		public void OnTrigger(object sender, object[] arguments, bool triggeredInternal)
 		{
 			HandlerContext context = new HandlerContext(this, arguments);
 			HandlerTriggered(context);
