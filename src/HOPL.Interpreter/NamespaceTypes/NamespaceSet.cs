@@ -7,10 +7,11 @@ using System.Reflection;
 using Parser = HOPL.Grammar.HOPLGrammarParser;
 using HOPL.Interpreter.Api.Attributes;
 using HOPL.Interpreter.Api;
+using System.Collections;
 
 namespace HOPL.Interpreter.NamespaceTypes
 {
-	public class NamespaceSet
+	public class NamespaceSet : IEnumerable<KeyValuePair<string, Namespace>>
 	{
 		private Dictionary<string, Namespace> namespaces = new Dictionary<string, Namespace>();
 		public Namespace this[string namespaceID] { get { return Get(namespaceID); } }
@@ -199,5 +200,15 @@ namespace HOPL.Interpreter.NamespaceTypes
 		{
 			return ContainsNamespace(Namespace.SplitNamespaceParts(namespaceDecContext));
 		}
-	}
+
+        public IEnumerator<KeyValuePair<string, Namespace>> GetEnumerator()
+        {
+            return namespaces.GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return namespaces.GetEnumerator();
+        }
+    }
 }

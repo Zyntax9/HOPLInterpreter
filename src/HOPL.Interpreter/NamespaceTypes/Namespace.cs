@@ -7,10 +7,11 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Parser = HOPL.Grammar.HOPLGrammarParser;
+using System.Collections;
 
 namespace HOPL.Interpreter.NamespaceTypes
 {
-	public class Namespace
+	public class Namespace : IEnumerable<KeyValuePair<string, IGlobalEntity>>
 	{
 		private const char SEPERATOR = '.';
 
@@ -304,5 +305,15 @@ namespace HOPL.Interpreter.NamespaceTypes
 		{
 			return string.Join(SEPERATOR.ToString(), SplitNamespaceParts(namespaceDecContext));
 		}
-	}
+
+        public IEnumerator<KeyValuePair<string, IGlobalEntity>> GetEnumerator()
+        {
+            return globalEntities.GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return globalEntities.GetEnumerator();
+        }
+    }
 }
