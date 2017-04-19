@@ -22,7 +22,7 @@ namespace HOPL.Interpreter.Interpretation
 			foreach(string varName in scopeLayout[Depth])
 			{
 				InterpreterValue val = variables[varName];
-				if(val.GetType() == typeof(InterpreterTrigger))
+				if(val is InterpreterTrigger)
 					((InterpreterTrigger)val).DropReference(); // Drop any references
 			}
 			base.PopDepth();
@@ -32,7 +32,7 @@ namespace HOPL.Interpreter.Interpretation
 		{
 			if (variables.ContainsKey(name))
 			{
-				if (variables[name].GetType() == typeof(InterpreterTrigger))
+				if (variables[name] is InterpreterTrigger)
 				{
 					// Change reference of all referencing triggers
 					InterpreterTrigger trigger = (InterpreterTrigger)variables[name];
@@ -52,5 +52,15 @@ namespace HOPL.Interpreter.Interpretation
 
 			variables[name] = value;
 		}
+
+        public bool IsLocalEntity(string name)
+        {
+            return variables.ContainsKey(name);
+        }
+
+        public bool IsGlobalEntity(string name)
+        {
+            return !IsLocalEntity(name) && TopNamespace.ContainsGlobalEntity(name);
+        }
 	}
 }

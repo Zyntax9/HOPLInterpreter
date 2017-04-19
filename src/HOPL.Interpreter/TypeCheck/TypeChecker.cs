@@ -382,35 +382,35 @@ namespace HOPL.Interpreter.TypeCheck
 		public InterpreterType VisitExpr([NotNull] Parser.ExprContext context)
 		{
 			Type t = context.GetType();
-			if (t == typeof(Parser.ParanExprContext))
+			if (context is Parser.ParanExprContext)
 				return VisitParanExpr((Parser.ParanExprContext)context);
-			if (t == typeof(Parser.MultExprContext))
+			if (context is Parser.MultExprContext)
 				return VisitMultExpr((Parser.MultExprContext)context);
-			if (t == typeof(Parser.AddiExprContext))
+			if (context is Parser.AddiExprContext)
 				return VisitAddiExpr((Parser.AddiExprContext)context);
-			if (t == typeof(Parser.AndExprContext))
+			if (context is Parser.AndExprContext)
 				return VisitAndExpr((Parser.AndExprContext)context);
-			if (t == typeof(Parser.OrExprContext))
+			if (context is Parser.OrExprContext)
 				return VisitOrExpr((Parser.OrExprContext)context);
-			if (t == typeof(Parser.CompExprContext))
+			if (context is Parser.CompExprContext)
 				return VisitCompExpr((Parser.CompExprContext)context);
-			if (t == typeof(Parser.NegExprContext))
+			if (context is Parser.NegExprContext)
 				return VisitNegExpr((Parser.NegExprContext)context);
-			if (t == typeof(Parser.NotExprContext))
+			if (context is Parser.NotExprContext)
 				return VisitNotExpr((Parser.NotExprContext)context);
-			if (t == typeof(Parser.ValExprContext))
+			if (context is Parser.ValExprContext)
 				return VisitValExpr((Parser.ValExprContext)context);
-			if (t == typeof(Parser.VarExprContext))
+			if (context is Parser.VarExprContext)
 				return VisitVarExpr((Parser.VarExprContext)context);
-			if (t == typeof(Parser.CallExprContext))
+			if (context is Parser.CallExprContext)
 				return VisitCallExpr((Parser.CallExprContext)context);
-			if (t == typeof(Parser.AwaitExprContext))
+			if (context is Parser.AwaitExprContext)
 				return VisitAwaitExpr((Parser.AwaitExprContext)context);
-			if (t == typeof(Parser.ListExprContext))
+			if (context is Parser.ListExprContext)
 				return VisitListExpr((Parser.ListExprContext)context);
-			if (t == typeof(Parser.TupleExprContext))
+			if (context is Parser.TupleExprContext)
 				return VisitTupleExpr((Parser.TupleExprContext)context);
-			if (t == typeof(Parser.IndexExprContext))
+			if (context is Parser.IndexExprContext)
 				return VisitIndexExpr((Parser.IndexExprContext)context);
 			throw new InternalTypeCheckerException("expr alias not recognized.");
 		}
@@ -632,23 +632,25 @@ namespace HOPL.Interpreter.TypeCheck
 
 		public InterpreterType VisitStat([NotNull] Parser.StatContext context)
 		{
-			if (context.GetType() == typeof(Parser.AssignStatContext))
+			if (context is Parser.AssignStatContext)
 				return VisitAssignStat((Parser.AssignStatContext)context);
-			if (context.GetType() == typeof(Parser.DecStatContext))
+			if (context is Parser.DecStatContext)
 				return VisitDecStat((Parser.DecStatContext)context);
-			if (context.GetType() == typeof(Parser.ReturnStatContext))
+			if (context is Parser.ReturnStatContext)
 				return VisitReturnStat((Parser.ReturnStatContext)context);
-			if (context.GetType() == typeof(Parser.ExprStatContext))
+			if (context is Parser.ExprStatContext)
 				return VisitExprStat((Parser.ExprStatContext)context);
-			if (context.GetType() == typeof(Parser.UnpackStatContext))
+			if (context is Parser.UnpackStatContext)
 				return VisitUnpackStat((Parser.UnpackStatContext)context);
-			if (context.GetType() == typeof(Parser.IfStatContext))
+            if (context is Parser.LockStatContext)
+                return VisitLockStat((Parser.LockStatContext)context);
+			if (context is Parser.IfStatContext)
 				return VisitIfStat((Parser.IfStatContext)context);
-			if (context.GetType() == typeof(Parser.WhileStatContext))
+			if (context is Parser.WhileStatContext)
 				return VisitWhileStat((Parser.WhileStatContext)context);
-			if (context.GetType() == typeof(Parser.ForStatContext))
+			if (context is Parser.ForStatContext)
 				return VisitForStat((Parser.ForStatContext)context);
-			if (context.GetType() == typeof(Parser.ForeachStatContext))
+			if (context is Parser.ForeachStatContext)
 				return VisitForeachStat((Parser.ForeachStatContext)context);
 			throw new InternalTypeCheckerException("stat not recognized.");
 		}
@@ -670,34 +672,34 @@ namespace HOPL.Interpreter.TypeCheck
 
 		public InterpreterType VisitTypeName([NotNull] Parser.TypeNameContext context)
 		{
-			if (context.GetType() == typeof(Parser.IntTypeContext))
+			if (context is Parser.IntTypeContext)
 				return VisitIntType((Parser.IntTypeContext)context);
-			if (context.GetType() == typeof(Parser.FloatTypeContext))
+			if (context is Parser.FloatTypeContext)
 				return VisitFloatType((Parser.FloatTypeContext)context);
-			if (context.GetType() == typeof(Parser.BoolTypeContext))
+			if (context is Parser.BoolTypeContext)
 				return VisitBoolType((Parser.BoolTypeContext)context);
-			if (context.GetType() == typeof(Parser.StringTypeContext))
+			if (context is Parser.StringTypeContext)
 				return VisitStringType((Parser.StringTypeContext)context);
-			if (context.GetType() == typeof(Parser.ListTypeContext))
+			if (context is Parser.ListTypeContext)
 				return VisitListType((Parser.ListTypeContext)context);
-			if (context.GetType() == typeof(Parser.TupleTypeContext))
+			if (context is Parser.TupleTypeContext)
 				return VisitTupleType((Parser.TupleTypeContext)context);
-			if (context.GetType() == typeof(Parser.TriggerTypeContext))
+			if (context is Parser.TriggerTypeContext)
 				return VisitTriggerType((Parser.TriggerTypeContext)context);
-			if (context.GetType() == typeof(Parser.FunctionTypeContext))
+			if (context is Parser.FunctionTypeContext)
 				return VisitFunctionType((Parser.FunctionTypeContext)context);
 			throw new InternalTypeCheckerException("typename not recognized.");
 		}
 
 		public InterpreterType VisitTypeVal([NotNull] Parser.TypeValContext context)
 		{
-			if (context.GetType() == typeof(Parser.IntValContext))
+			if (context is Parser.IntValContext)
 				return VisitIntVal((Parser.IntValContext)context);
-			if (context.GetType() == typeof(Parser.FloatValContext))
+			if (context is Parser.FloatValContext)
 				return VisitFloatVal((Parser.FloatValContext)context);
-			if (context.GetType() == typeof(Parser.BoolValContext))
+			if (context is Parser.BoolValContext)
 				return VisitBoolVal((Parser.BoolValContext)context);
-			if (context.GetType() == typeof(Parser.StringValContext))
+			if (context is Parser.StringValContext)
 				return VisitStringVal((Parser.StringValContext)context);
 			throw new InternalTypeCheckerException("typeval not recognized.");
 		}
@@ -737,11 +739,11 @@ namespace HOPL.Interpreter.TypeCheck
 
 		public InterpreterType VisitNamespacePart([NotNull] Parser.NamespacePartContext context)
 		{
-			if (context.GetType() == typeof(Parser.FunctionDecNamespaceContext))
+			if (context is Parser.FunctionDecNamespaceContext)
 				return VisitFunctionDecNamespace((Parser.FunctionDecNamespaceContext)context);
-			if (context.GetType() == typeof(Parser.GlobalDecNamespaceContext))
+			if (context is Parser.GlobalDecNamespaceContext)
 				return VisitGlobalDecNamespace((Parser.GlobalDecNamespaceContext)context);
-			if (context.GetType() == typeof(Parser.HandlerDecNamespaceContext))
+			if (context is Parser.HandlerDecNamespaceContext)
 				return VisitHandlerDecNamespace((Parser.HandlerDecNamespaceContext)context);
 			throw new InternalTypeCheckerException("namespacepart not recognized.");
 		}
@@ -1088,11 +1090,11 @@ namespace HOPL.Interpreter.TypeCheck
 		public InterpreterType VisitUnpacked([NotNull] Parser.UnpackedContext context)
 		{
 			Type t = context.GetType();
-			if (t == typeof(Parser.IdUnpackedContext))
+			if (context is Parser.IdUnpackedContext)
 				return VisitIdUnpacked((Parser.IdUnpackedContext)context);
-			if (t == typeof(Parser.DecUnpackedContext))
+			if (context is Parser.DecUnpackedContext)
 				return VisitDecUnpacked((Parser.DecUnpackedContext)context);
-			if (t == typeof(Parser.IgnoreUnpackedContext))
+			if (context is Parser.IgnoreUnpackedContext)
 				return VisitIgnoreUnpacked((Parser.IgnoreUnpackedContext)context);
 			throw new InternalTypeCheckerException("unpacked alias not recognized.");
 		}
@@ -1118,6 +1120,19 @@ namespace HOPL.Interpreter.TypeCheck
 			return InterpreterType.IGNORE; // Ignore assignment
 		}
 
-		#endregion
-	}
+        public InterpreterType VisitLockStat([NotNull] Parser.LockStatContext context)
+        {
+            return VisitLock(context.@lock());
+        }
+
+        public InterpreterType VisitLock([NotNull] Parser.LockContext context)
+        {
+            InterpreterType type = ResolveIdentifier(context.identifier());
+            if (type == InterpreterType.ERROR)
+                return InterpreterType.ERROR;
+            return VisitBody(context.body());
+        }
+
+        #endregion
+    }
 }

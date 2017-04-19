@@ -29,5 +29,10 @@ namespace HOPL.Interpreter.NamespaceTypes
             Name = name;
             Type = InterpreterType.FromNative(obj.Value.GetType());
         }
+
+        public void LockRead() { }
+        public void LockWrite() { }
+        public void ReleaseRead() { }
+        public void ReleaseWrite() { }
     }
 }

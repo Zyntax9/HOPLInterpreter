@@ -34,7 +34,7 @@ namespace HOPL.Interpreter.Exploration
 
 		public override bool Equals(object obj)
 		{
-			if (obj.GetType() == typeof(Dependency))
+			if (obj is Dependency)
 			{
 				Dependency d = (Dependency)obj;
 				return ID == d.ID && Namespace == d.Namespace;

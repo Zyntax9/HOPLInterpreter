@@ -21,11 +21,10 @@ namespace HOPL.Interpreter.Exploration
 
 			foreach (Parser.StatContext stat in stats)
 			{
-				if (stat.GetType() == typeof(Parser.ReturnStatContext))
+				if (stat is Parser.ReturnStatContext)
 					return true;
 
-				if (stat.GetType() == typeof(Parser.IfStatContext) &&
-					VisitIfStat((Parser.IfStatContext)stat))
+				if (stat is Parser.IfStatContext && VisitIfStat((Parser.IfStatContext)stat))
 					return true;
 			}
 

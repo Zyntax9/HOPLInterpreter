@@ -174,26 +174,26 @@ namespace HOPL.Interpreter.NamespaceTypes.Values
 
 		public static InterpreterValue FromNative(object obj)
 		{
-			Type t = obj.GetType();
+            Type t = obj.GetType();
 
 			if (typeof(InterpreterValue).GetTypeInfo().IsAssignableFrom(t))
 			{
 				return ((InterpreterValue)obj).Clone();
 			}
 
-			if (t == typeof(int))
+			if (obj is int)
 			{
 				return new InterpreterInt((int)obj);
 			}
-			if (t == typeof(float))
+			if (obj is float)
 			{
 				return new InterpreterFloat((float)obj);
 			}
-			if (t == typeof(string))
+			if (obj is string)
 			{
 				return new InterpreterString((string)obj);
 			}
-			if (t == typeof(bool))
+			if (obj is bool)
 			{
 				return new InterpreterBool((bool)obj);
 			}
@@ -219,21 +219,21 @@ namespace HOPL.Interpreter.NamespaceTypes.Values
 
 		public static InterpreterValue GetDefault(Parser.TypeNameContext context)
 		{
-			if (context.GetType() == typeof(Parser.IntTypeContext))
+			if (context is Parser.IntTypeContext)
 				return new InterpreterInt();
-			if (context.GetType() == typeof(Parser.FloatTypeContext))
+			if (context is Parser.FloatTypeContext)
 				return new InterpreterFloat();
-			if (context.GetType() == typeof(Parser.BoolTypeContext))
+			if (context is Parser.BoolTypeContext)
 				return new InterpreterBool();
-			if (context.GetType() == typeof(Parser.StringTypeContext))
+			if (context is Parser.StringTypeContext)
 				return new InterpreterString();
-			if (context.GetType() == typeof(Parser.ListTypeContext))
+			if (context is Parser.ListTypeContext)
 				return new InterpreterList();
-			if (context.GetType() == typeof(Parser.TupleTypeContext))
+			if (context is Parser.TupleTypeContext)
 				return GetDefault((Parser.TupleTypeContext)context);
-			if (context.GetType() == typeof(Parser.TriggerTypeContext))
+			if (context is Parser.TriggerTypeContext)
 				return new InterpreterTrigger();
-			if (context.GetType() == typeof(Parser.FunctionTypeContext))
+			if (context is Parser.FunctionTypeContext)
 				return new InterpreterFunction();
 			throw new InvalidOperationException();
 		}

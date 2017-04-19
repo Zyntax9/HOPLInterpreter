@@ -2,10 +2,7 @@
 using HOPL.Interpreter.NamespaceTypes.Values;
 using HOPL.Interpreter.TypeCheck;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
-using System.Threading.Tasks;
 using Parser = HOPL.Grammar.HOPLGrammarParser;
 
 namespace HOPL.Interpreter.NamespaceTypes
@@ -29,8 +26,7 @@ namespace HOPL.Interpreter.NamespaceTypes
 			}
 			set
 			{
-				if (!ReferenceEquals(this.value, null) && 
-					this.value.GetType() == typeof(InterpreterTrigger))
+				if (!ReferenceEquals(this.value, null) && this.value is InterpreterTrigger)
 				{
 					// Change reference of all referencing triggers
 					InterpreterTrigger trigger = (InterpreterTrigger)this.value;
@@ -39,6 +35,8 @@ namespace HOPL.Interpreter.NamespaceTypes
 				this.value = value;
 			}
 		}
+
+        private ReaderWriterLockSlim rwlock = new ReaderWriterLockSlim();
 
 		public GlobalEntity(Parser.GlobalDecContext globalDecContext)
 		{
@@ -84,5 +82,25 @@ namespace HOPL.Interpreter.NamespaceTypes
 
             Constant = true;
         }
-	}
+
+        public void LockRead()
+        {
+            rwlock.EnterReadLock();
+        }
+
+        public void LockWrite()
+        {
+            rwlock.EnterWriteLock();
+        }
+
+        public void ReleaseRead()
+        {
+            rwlock.ExitReadLock();
+        }
+
+        public void ReleaseWrite()
+        {
+            rwlock.ExitWriteLock();
+        }
+    }
 }

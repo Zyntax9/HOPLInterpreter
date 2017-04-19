@@ -12,13 +12,12 @@ using HOPL.Interpreter.Exceptions;
 using HOPL.Interpreter.Errors.Runtime;
 using Antlr4.Runtime;
 using HOPL.Interpreter.Interpretation.ThreadPool;
-using Api = HOPL.Interpreter.Api;
 using System.Globalization;
 using System.Threading;
 
 namespace HOPL.Interpreter.Interpretation
 {
-	public class Executor : IHOPLGrammarVisitor<InterpreterValue>
+    public class Executor : IHOPLGrammarVisitor<InterpreterValue>
 	{
 		private struct StackEntry
 		{
@@ -30,9 +29,12 @@ namespace HOPL.Interpreter.Interpretation
 		ImportAccessTable accessTable;
 		IThreadPool pool;
 
+        HashSet<string> lockTable = new HashSet<string>();
+
 		Stack<StackEntry> scopeStack = new Stack<StackEntry>();
 		ValueScope currentScope { get { return scopeStack.Peek().scope; } }
 		string currentFile { get { return scopeStack.Peek().file; } }
+
 		CancellationToken cancelToken;
 
         public Executor(HandlerContext handler, IThreadPool pool = null) 
@@ -101,7 +103,44 @@ namespace HOPL.Interpreter.Interpretation
 			return ns;
 		}
 
-		private InterpreterValue ResolveIdentifier(Parser.IdentifierContext context)
+        private string EntityFullName(Namespace ns, string name)
+        {
+            return ns.CompleteName + "." + name;
+        }
+
+        private void LockRead(Namespace ns, string name)
+        {
+            string fullName = EntityFullName(ns, name);
+            if (lockTable.Contains(fullName))
+                return;
+            ns.GetGlobalEntity(name).LockRead();
+        }
+
+        private void LockWrite(Namespace ns, string name)
+        {
+            string fullName = EntityFullName(ns, name);
+            if (lockTable.Contains(fullName))
+                return;
+            ns.GetGlobalEntity(name).LockWrite();
+        }
+
+        private void ReleaseRead(Namespace ns, string name)
+        {
+            string fullName = EntityFullName(ns, name);
+            if (lockTable.Contains(fullName))
+                return;
+            ns.GetGlobalEntity(name).ReleaseRead();
+        }
+
+        private void ReleaseWrite(Namespace ns, string name)
+        {
+            string fullName = EntityFullName(ns, name);
+            if (lockTable.Contains(fullName))
+                return;
+            ns.GetGlobalEntity(name).ReleaseWrite();
+        }
+
+        private InterpreterValue ResolveIdentifier(Parser.IdentifierContext context)
 		{
 			Parser.NamespaceContext nscontext = context.@namespace();
 			string idName = context.ID().GetText();
@@ -110,12 +149,24 @@ namespace HOPL.Interpreter.Interpretation
 			if (nscontext != null)
 			{
 				Namespace ns = ResolveNamespace(nscontext);
-				val = ns.GetGlobalEntity(idName).Value;
-			}
+                IGlobalEntity globalEntity = ns.GetGlobalEntity(idName);
+                LockRead(ns, idName);
+                val = globalEntity.Value;
+                ReleaseRead(ns, idName);
+            }
 			else
 			{
-				val = currentScope.GetVariable(idName);
-			}
+                if(currentScope.IsGlobalEntity(idName))
+                {
+                    LockRead(currentScope.TopNamespace, idName);
+                    val = currentScope.GetVariable(idName);
+                    ReleaseRead(currentScope.TopNamespace, idName);
+                }
+                else
+                {
+                    val = currentScope.GetVariable(idName);
+                }
+            }
 
 			foreach (Parser.ExprContext expr in context.expr())
 			{
@@ -145,14 +196,14 @@ namespace HOPL.Interpreter.Interpretation
 		{
 			InterpreterValue newValue = value;
 
-			Parser.NamespaceContext nsctx = idContext.@namespace();
+			Parser.NamespaceContext nsContext = idContext.@namespace();
 			Parser.ExprContext[] indecies = idContext.expr();
 
-			string varName = idContext.ID().GetText();
-			if (nsctx != null)
+			string idName = idContext.ID().GetText();
+			if (nsContext != null)
 			{
-				Namespace ns = ResolveNamespace(nsctx);
-				IGlobalEntity ge = ns.GetGlobalEntity(varName);
+				Namespace ns = ResolveNamespace(nsContext);
+				IGlobalEntity ge = ns.GetGlobalEntity(idName);
 
 				if (indecies != null && indecies.Length > 0)
 				{
@@ -162,20 +213,31 @@ namespace HOPL.Interpreter.Interpretation
 					newValue = SetIndex(ge.Value, intIndecies, value, context);
 				}
 
+                LockWrite(ns, idName);
 				ge.Value = newValue;
+                ReleaseWrite(ns, idName);
 			}
 			else
 			{
 				if (indecies != null && indecies.Length > 0)
 				{
-					InterpreterValue currentValue = currentScope.GetVariable(varName);
+					InterpreterValue currentValue = currentScope.GetVariable(idName);
 					int[] intIndecies = new int[indecies.Length];
 					for (int i = 0; i < indecies.Length; i++)
 						intIndecies[i] = (int)VisitExpr(indecies[i]).Value;
 					newValue = SetIndex(currentValue, intIndecies, value, context);
 				}
 
-				currentScope.SetVariable(varName, newValue);
+                if(currentScope.IsGlobalEntity(idName))
+                {
+                    LockWrite(currentScope.TopNamespace, idName);
+                    currentScope.SetVariable(idName, newValue);
+                    ReleaseWrite(currentScope.TopNamespace, idName);
+                }
+                else
+                {
+                    currentScope.SetVariable(idName, newValue);
+                }
 			}
 		}
 
@@ -199,7 +261,7 @@ namespace HOPL.Interpreter.Interpretation
 
 		private InterpreterValue CallFunction(IFunction ifunction, InterpreterValue[] arguments)
 		{
-			if (ifunction.GetType() == typeof(Function))
+			if (ifunction is Function)
 			{
 				Function function = (Function)ifunction;
 				ValueScope fscope = new ValueScope(function.Namespace);
@@ -218,7 +280,7 @@ namespace HOPL.Interpreter.Interpretation
 
 				return retval;
 			}
-			if(ifunction.GetType() == typeof(SuppliedFunction))
+			if(ifunction is SuppliedFunction)
 			{
 				SuppliedFunction function = (SuppliedFunction)ifunction;
 				Argument[] fArgs = ifunction.Arguments;
@@ -359,7 +421,7 @@ namespace HOPL.Interpreter.Interpretation
 				arguments[i] = VisitExpr(exprs[i]);
 
 			InterpreterValue callable = VisitIdentifier(context.identifier());
-			if(callable.GetType() == typeof(InterpreterFunction))
+			if(callable is InterpreterFunction)
 			{
 				IFunction function = (IFunction)callable.Value;
 
@@ -371,7 +433,7 @@ namespace HOPL.Interpreter.Interpretation
 
 				return CallFunction(function, arguments);
 			}
-			if(callable.GetType() == typeof(InterpreterTrigger))
+			if(callable is InterpreterTrigger)
 			{
 				Api.SuppliedTrigger trigger = (Api.SuppliedTrigger)callable.Value;
 				trigger.Fire(arguments);
@@ -431,7 +493,7 @@ namespace HOPL.Interpreter.Interpretation
 			}
 
 			// Append
-			if (left.GetType() == typeof(InterpreterList))
+			if (left is InterpreterList)
 			{
 				List<InterpreterValue> rightBuffer = new List<InterpreterValue>();
 				rightBuffer.Add(right);
@@ -446,7 +508,7 @@ namespace HOPL.Interpreter.Interpretation
 			}
 
 			// Prepend
-			if (right.GetType() == typeof(InterpreterList))
+			if (right is InterpreterList)
 			{
 				List<InterpreterValue> leftBuffer = new List<InterpreterValue>();
 				leftBuffer.Add(left);
@@ -495,36 +557,35 @@ namespace HOPL.Interpreter.Interpretation
 
 		public InterpreterValue VisitExpr([NotNull] Parser.ExprContext context)
 		{
-			Type t = context.GetType();
-			if (t == typeof(Parser.ParanExprContext))
+			if (context is Parser.ParanExprContext)
 				return VisitParanExpr((Parser.ParanExprContext)context);
-			if (t == typeof(Parser.MultExprContext))
+			if (context is Parser.MultExprContext)
 				return VisitMultExpr((Parser.MultExprContext)context);
-			if (t == typeof(Parser.AddiExprContext))
+			if (context is Parser.AddiExprContext)
 				return VisitAddiExpr((Parser.AddiExprContext)context);
-			if (t == typeof(Parser.AndExprContext))
+			if (context is Parser.AndExprContext)
 				return VisitAndExpr((Parser.AndExprContext)context);
-			if (t == typeof(Parser.OrExprContext))
+			if (context is Parser.OrExprContext)
 				return VisitOrExpr((Parser.OrExprContext)context);
-			if (t == typeof(Parser.CompExprContext))
+			if (context is Parser.CompExprContext)
 				return VisitCompExpr((Parser.CompExprContext)context);
-			if (t == typeof(Parser.NegExprContext))
+			if (context is Parser.NegExprContext)
 				return VisitNegExpr((Parser.NegExprContext)context);
-			if (t == typeof(Parser.NotExprContext))
+			if (context is Parser.NotExprContext)
 				return VisitNotExpr((Parser.NotExprContext)context);
-			if (t == typeof(Parser.ValExprContext))
+			if (context is Parser.ValExprContext)
 				return VisitValExpr((Parser.ValExprContext)context);
-			if (t == typeof(Parser.VarExprContext))
+			if (context is Parser.VarExprContext)
 				return VisitVarExpr((Parser.VarExprContext)context);
-			if (t == typeof(Parser.CallExprContext))
+			if (context is Parser.CallExprContext)
 				return VisitCallExpr((Parser.CallExprContext)context);
-			if (t == typeof(Parser.AwaitExprContext))
+			if (context is Parser.AwaitExprContext)
 				return VisitAwaitExpr((Parser.AwaitExprContext)context);
-			if (t == typeof(Parser.ListExprContext))
+			if (context is Parser.ListExprContext)
 				return VisitListExpr((Parser.ListExprContext)context);
-			if (t == typeof(Parser.TupleExprContext))
+			if (context is Parser.TupleExprContext)
 				return VisitTupleExpr((Parser.TupleExprContext)context);
-			if (t == typeof(Parser.IndexExprContext))
+			if (context is Parser.IndexExprContext)
 				return VisitIndexExpr((Parser.IndexExprContext)context);
 			throw new InternalExecutorException("expr alias not recognized.");
 		}
@@ -822,26 +883,28 @@ namespace HOPL.Interpreter.Interpretation
 
 		public InterpreterValue VisitStat([NotNull] Parser.StatContext context)
 		{
-			if (context.GetType() == typeof(Parser.AssignStatContext))
-				VisitAssignStat((Parser.AssignStatContext)context);
-			else if (context.GetType() == typeof(Parser.DecStatContext))
-				VisitDecStat((Parser.DecStatContext)context);
-			else if (context.GetType() == typeof(Parser.ExprStatContext))
-				VisitExprStat((Parser.ExprStatContext)context);
-			else if (context.GetType() == typeof(Parser.UnpackStatContext))
-				VisitUnpackStat((Parser.UnpackStatContext)context);
-			else if (context.GetType() == typeof(Parser.ReturnStatContext))
-				return VisitReturnStat((Parser.ReturnStatContext)context);
-			else if (context.GetType() == typeof(Parser.IfStatContext))
-				return VisitIfStat((Parser.IfStatContext)context);
-			else if (context.GetType() == typeof(Parser.WhileStatContext))
-				return VisitWhileStat((Parser.WhileStatContext)context);
-			else if (context.GetType() == typeof(Parser.ForStatContext))
-				return VisitForStat((Parser.ForStatContext)context);
-			else if (context.GetType() == typeof(Parser.ForeachStatContext))
-				return VisitForeachStat((Parser.ForeachStatContext)context);
-			else
-				throw new InternalExecutorException("stat not recognized.");
+            if (context is Parser.AssignStatContext)
+                VisitAssignStat((Parser.AssignStatContext)context);
+            else if (context is Parser.DecStatContext)
+                VisitDecStat((Parser.DecStatContext)context);
+            else if (context is Parser.ExprStatContext)
+                VisitExprStat((Parser.ExprStatContext)context);
+            else if (context is Parser.UnpackStatContext)
+                VisitUnpackStat((Parser.UnpackStatContext)context);
+            else if (context is Parser.ReturnStatContext)
+                return VisitReturnStat((Parser.ReturnStatContext)context);
+            else if (context is Parser.LockStatContext)
+                return VisitLockStat((Parser.LockStatContext)context);
+            else if (context is Parser.IfStatContext)
+                return VisitIfStat((Parser.IfStatContext)context);
+            else if (context is Parser.WhileStatContext)
+                return VisitWhileStat((Parser.WhileStatContext)context);
+            else if (context is Parser.ForStatContext)
+                return VisitForStat((Parser.ForStatContext)context);
+            else if (context is Parser.ForeachStatContext)
+                return VisitForeachStat((Parser.ForeachStatContext)context);
+            else
+                throw new InternalExecutorException("stat not recognized.");
 			return null;
 		}
 
@@ -882,13 +945,13 @@ namespace HOPL.Interpreter.Interpretation
 
 		public InterpreterValue VisitTypeVal([NotNull] Parser.TypeValContext context)
 		{
-			if (context.GetType() == typeof(Parser.IntValContext))
+			if (context is Parser.IntValContext)
 				return VisitIntVal((Parser.IntValContext)context);
-			if (context.GetType() == typeof(Parser.FloatValContext))
+			if (context is Parser.FloatValContext)
 				return VisitFloatVal((Parser.FloatValContext)context);
-			if (context.GetType() == typeof(Parser.BoolValContext))
+			if (context is Parser.BoolValContext)
 				return VisitBoolVal((Parser.BoolValContext)context);
-			if (context.GetType() == typeof(Parser.StringValContext))
+			if (context is Parser.StringValContext)
 				return VisitStringVal((Parser.StringValContext)context);
 			throw new InternalExecutorException("typeval not recognized.");
 		}
@@ -901,10 +964,10 @@ namespace HOPL.Interpreter.Interpretation
 			Parser.UnpackedContext[] upkd = context.unpacked();
 			for(int i = 0; i < upkd.Length; i++)
 			{
-				if (upkd[i].GetType() == typeof(Parser.IgnoreUnpackedContext))
+				if (upkd[i] is Parser.IgnoreUnpackedContext)
 					continue;
 				
-				if (upkd[i].GetType() == typeof(Parser.DecUnpackedContext))
+				if (upkd[i] is Parser.DecUnpackedContext)
 				{
 					Parser.DecUnpackedContext dec = (Parser.DecUnpackedContext)upkd[i];
 					string varName = dec.ID().GetText();
@@ -974,5 +1037,35 @@ namespace HOPL.Interpreter.Interpretation
 		{
 			return VisitWhile(context.@while());
 		}
-	}
+
+        public InterpreterValue VisitLockStat([NotNull] Parser.LockStatContext context)
+        {
+            return VisitLock(context.@lock());
+        }
+
+        public InterpreterValue VisitLock([NotNull] Parser.LockContext context)
+        {
+            Parser.NamespaceContext nscontext = context.identifier().@namespace();
+            string idName = context.identifier().ID().GetText();
+
+            Namespace ns = null;
+            if (nscontext != null)
+                ns = ResolveNamespace(nscontext);
+            else
+                ns = currentScope.TopNamespace;
+            IGlobalEntity globalEntity = ns.GetGlobalEntity(idName);
+
+            string fullName = EntityFullName(ns, idName);
+
+            globalEntity.LockWrite();
+            lockTable.Add(fullName);
+
+            InterpreterValue result = VisitBody(context.body());
+
+            lockTable.Remove(fullName);
+            globalEntity.ReleaseWrite();
+
+            return result;
+        }
+    }
 }

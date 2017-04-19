@@ -19,7 +19,7 @@
 
 		public override bool Equals(object obj)
 		{
-			if (obj.GetType() == typeof(Import))
+			if (obj is Import)
 				return ((Import)obj).Alias.Equals(Alias);
 			else
 				return base.Equals(obj);

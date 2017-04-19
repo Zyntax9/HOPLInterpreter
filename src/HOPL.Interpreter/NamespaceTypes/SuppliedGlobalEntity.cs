@@ -54,5 +54,10 @@ namespace HOPL.Interpreter.NamespaceTypes
             object suppVal = Property.GetValue(Supplier);
             return InterpreterValue.FromNative(suppVal);
         }
-	}
+
+        public void LockRead() { }
+        public void LockWrite() { }
+        public void ReleaseRead() { }
+        public void ReleaseWrite() { }
+    }
 }

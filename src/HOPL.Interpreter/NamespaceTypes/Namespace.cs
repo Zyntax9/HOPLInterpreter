@@ -255,7 +255,17 @@ namespace HOPL.Interpreter.NamespaceTypes
 			return Name;
 		}
 
-		public void MergeInto(Namespace @namespace)
+        public bool ContainsGlobalEntity(string name)
+        {
+            return globalEntities.ContainsKey(name);
+        }
+
+        public bool ContainsFunction(string name)
+        {
+            return functions.ContainsKey(name);
+        }
+
+        public void MergeInto(Namespace @namespace)
 		{
 			foreach (IFunction func in @namespace.Functions)
 				AddFunction(func);
