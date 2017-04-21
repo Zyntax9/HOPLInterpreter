@@ -167,7 +167,7 @@ namespace HOPL.Interpreter.Exploration
 			}
 
             if (gv.Required)
-                Required.Add(gv.Name, gv.Type);
+                Required.Add(completeNamespace + "." + gvName, gv.Type);
 		}
 	}
 }
