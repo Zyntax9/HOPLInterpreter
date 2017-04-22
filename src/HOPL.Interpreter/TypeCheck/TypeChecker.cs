@@ -998,9 +998,13 @@ namespace HOPL.Interpreter.TypeCheck
 
 		public InterpreterType VisitImportNamespace([NotNull] Parser.ImportNamespaceContext context)
 		{
-            Namespace ns = ResolveNamespace(context.@namespace()[0]);
+            Parser.NamespaceContext[] namespaceContexts = context.@namespace();
+
+            // Check if namespace really exists by the alias
+            Namespace ns = ResolveNamespace(namespaceContexts[namespaceContexts.Length - 1]);
             if (ns == null)
                 return RaiseError(TypeErrorMessage.NS_MISSING, context);
+
 			return InterpreterType.NONE;
 		}
 
