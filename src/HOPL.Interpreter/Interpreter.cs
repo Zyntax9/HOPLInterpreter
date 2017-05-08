@@ -92,7 +92,7 @@ namespace HOPL.Interpreter
 			HashSet<string> exploredFiles = new HashSet<string>();
 			Explorer explorer = new Explorer(ref namespaces);
 			explorer.CurrentFile = file;
-			Dictionary<string, ISet<string>> namespaceFileMap = NamespaceMapper.MapNamespaces(importPaths);
+			NamespaceFileMap namespaceFileMap = NamespaceMapper.MapNamespaces(importPaths);
 
 			explorer.EnterCompileUnit(cUnit);
 			exploredFiles.Add(file);
@@ -103,21 +103,20 @@ namespace HOPL.Interpreter
 			HashSet<Import> topImports = explorer.ImportTable[file];
 			foreach (Import import in topImports)
 			{
-				ISet<string> importFiles;
-				if (namespaceFileMap.TryGetValue(import.NamespaceName, out importFiles))
-				{
-					foreach (string importFile in importFiles)
-					{
-                        if (exploredFiles.Contains(importFile))
-                            continue;
+				ISet<string> importFiles = namespaceFileMap.GetFilesUnderNamespace(import.NamespaceName);
 
-						PrepareImport(importFile, importPaths, namespaces,
-							exploredFiles, explorer, namespaceFileMap);
-					}
+				foreach (string importFile in importFiles)
+				{
+                    if (exploredFiles.Contains(importFile))
+                        continue;
+
+					PrepareImport(importFile, importPaths, namespaces,
+						exploredFiles, explorer, namespaceFileMap);
 				}
 
+
 				if (!namespaces.ContainsNamespace(import.NamespaceName))
-					throw new PrepareErrorException(PrepareErrorMessage.NS_NOTFOUND, import.NamespaceName);
+					throw new PrepareErrorException(PrepareErrorMessage.NS_NOTFOUND, import.NamespaceName.Name);
 			}
 
 			TypeChecker typeCheck = new TypeChecker(file, namespaces, explorer.ImportTable);
@@ -152,7 +151,7 @@ namespace HOPL.Interpreter
 		   NamespaceSet namespaces,
 		   HashSet<string> exploredFiles,
 		   Explorer explorer,
-		   Dictionary<string, ISet<string>> namespaceFileMap)
+		   NamespaceFileMap namespaceFileMap)
 		{
 			List<ParsingError> parserErrors;
 			Parser.CompileUnitContext cUnit = GetParseTree(file, out parserErrors);
@@ -173,21 +172,19 @@ namespace HOPL.Interpreter
 			HashSet<Import> topImports = explorer.ImportTable[file];
 			foreach (Import import in topImports)
 			{
-				ISet<string> importFiles;
-				if (namespaceFileMap.TryGetValue(import.NamespaceName, out importFiles))
+				ISet<string> importFiles = namespaceFileMap.GetFilesUnderNamespace(import.NamespaceName);
+
+				foreach (string importFile in importFiles)
 				{
-					foreach (string importFile in importFiles)
+					if (!exploredFiles.Contains(importFile))
 					{
-						if (!exploredFiles.Contains(importFile))
-						{
-							PrepareImport(importFile, importPaths, namespaces,
-								exploredFiles, explorer, namespaceFileMap);
-						}
+						PrepareImport(importFile, importPaths, namespaces,
+							exploredFiles, explorer, namespaceFileMap);
 					}
 				}
 
 				if (!namespaces.ContainsNamespace(import.NamespaceName))
-					throw new PrepareErrorException(PrepareErrorMessage.NS_NOTFOUND, import.NamespaceName);
+					throw new PrepareErrorException(PrepareErrorMessage.NS_NOTFOUND, import.NamespaceName.Name);
 			}
 
 			TypeChecker typeCheck = new TypeChecker(file, namespaces, explorer.ImportTable);

@@ -8,16 +8,19 @@ namespace HOPL.Interpreter.Exploration
 	{
 		public ImportAccessTable() : base() { }
 
-		public bool TryGetImport(string file, string importName, out Import accessImport)
+		public bool TryGetImport(string file, NamespaceString importName, out Import accessImport, 
+            out NamespaceString remainingSub)
 		{
 			accessImport = null;
+            remainingSub = null;
+
 			HashSet<Import> access;
 			if (!TryGetValue(file, out access))
 				return false;
 
 			foreach (Import import in access)
 			{
-				if (import.Alias == importName)
+				if (importName.HasSub(import.Alias, out remainingSub))
 				{
 					accessImport = import;
 					return true;

@@ -7,13 +7,12 @@ using HOPL.Interpreter.Interpretation;
 using HOPL.Interpreter.NamespaceTypes;
 using System.Threading;
 using HOPL.Interpreter.Exceptions;
-using HOPL.Interpreter.Errors;
 using HOPL.Interpreter.Api;
 using Xunit;
 
 namespace InternalTest
 {
-	public class HoplScriptTests
+    public class HoplScriptTests
 	{
 		private static readonly TimeSpan Timeout = TimeSpan.FromSeconds(50);
 		
@@ -42,9 +41,7 @@ namespace InternalTest
 				Assert.True(false, $"Timeout on {file}");
 			
 			if (unitTestNamespace.TestCount != unitTestNamespace.SuccessCount)
-			{
 				Assert.True(false);
-			}
 		}
 
 		private static bool Prepare(string file, ISuppliedNamespace unitTestNamespace, out InterpretationContext context)
@@ -69,7 +66,7 @@ namespace InternalTest
 			}
 			catch (Exception e)
 			{
-				Assert.True(false, "Failed due to exception: " + e.Message);
+				Assert.True(false, "Failed due to exception: " + e.Message + e.StackTrace);
 				return false;
 			}
 			return true;

@@ -3,6 +3,7 @@ using Parser = HOPL.Grammar.HOPLGrammarParser;
 using HOPL.Grammar;
 using Antlr4.Runtime.Misc;
 using Antlr4.Runtime;
+using HOPL.Interpreter.NamespaceTypes;
 
 namespace HOPL.Interpreter.Exploration
 {
@@ -15,13 +16,13 @@ namespace HOPL.Interpreter.Exploration
 	public class Dependency
 	{
 		public string ID { get; set; }
-		public string Namespace { get; set; }
+		public NamespaceString Namespace { get; set; }
 		public string File { get; set; }
 		public DependencyType Type { get; set; }
 		public ParserRuleContext Context { get; set; }
 		public bool ContainsAwait { get; set; }
 
-		public Dependency(string id, string @namespace, string file, DependencyType type,
+		public Dependency(string id, NamespaceString @namespace, string file, DependencyType type,
 			ParserRuleContext context, bool containsAwait = false)
 		{
 			ID = id;
@@ -67,13 +68,13 @@ namespace HOPL.Interpreter.Exploration
 	{
 		protected ImportAccessTable access;
 		protected string file;
-		protected string @namespace;
+		protected NamespaceString @namespace;
 
 		public bool ContainsAwait { get; set; } = false;
 
 		public HashSet<Dependency> Dependencies { get; protected set; } = new HashSet<Dependency>();
 
-		public DependencyExplorer(ImportAccessTable accessTable, string filename, string namespaceName)
+		public DependencyExplorer(ImportAccessTable accessTable, string filename, NamespaceString namespaceName)
 		{
 			access = accessTable;
 			file = filename;

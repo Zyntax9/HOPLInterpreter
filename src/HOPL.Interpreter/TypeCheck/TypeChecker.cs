@@ -61,8 +61,11 @@ namespace HOPL.Interpreter.TypeCheck
 
 		private Namespace ResolveNamespace(Parser.NamespaceContext context)
 		{
+            NamespaceString @namespace = new NamespaceString(context.GetText());
+
 			Import import;
-			if (!accessTable.TryGetImport(filename, context.GetText(), out import))
+            NamespaceString remaining;
+			if (!accessTable.TryGetImport(filename, @namespace, out import, out remaining))
 				return null;
 			Namespace ns = currentNamespace;
 			if (context != null && !namespaceSet.TryGet(import.NamespaceName, out ns))

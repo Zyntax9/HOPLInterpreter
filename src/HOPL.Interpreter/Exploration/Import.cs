@@ -1,18 +1,28 @@
-﻿namespace HOPL.Interpreter.Exploration
+﻿using HOPL.Interpreter.NamespaceTypes;
+
+namespace HOPL.Interpreter.Exploration
 {
 	public class Import
 	{
-		public string NamespaceName;
-		private string alias;
-		public string Alias { get { return alias ?? NamespaceName; } }
+		public NamespaceString NamespaceName;
+		private NamespaceString alias;
+		public NamespaceString Alias { get { return alias ?? NamespaceName; } }
 
 		public Import(string @namespace, string alias = null)
 		{
-			NamespaceName = @namespace;
-			this.alias = alias;
-		}
+			NamespaceName = new NamespaceString(@namespace);
 
-		public override int GetHashCode()
+            if(alias != null)
+			    this.alias = new NamespaceString(alias);
+        }
+
+        public Import(NamespaceString @namespace, NamespaceString alias = null)
+        {
+            NamespaceName = @namespace;
+            this.alias = alias;
+        }
+
+        public override int GetHashCode()
 		{
 			return Alias.GetHashCode();
 		}

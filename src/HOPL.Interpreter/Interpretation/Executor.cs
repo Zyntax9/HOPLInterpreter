@@ -94,11 +94,14 @@ namespace HOPL.Interpreter.Interpretation
 		#region Auxiliary
 		private Namespace ResolveNamespace(Parser.NamespaceContext context)
 		{
+            NamespaceString @namespace = new NamespaceString(context.GetText());
+
 			Import import;
-			if (!accessTable.TryGetImport(currentFile, context.GetText(), out import))
+            NamespaceString remaining;
+			if (!accessTable.TryGetImport(currentFile, @namespace, out import, out remaining))
 				return null;
 			Namespace ns = currentScope.TopNamespace;
-			if (context != null && !namespaces.TryGet(import.NamespaceName, out ns))
+			if (context != null && !namespaces.TryGet(import.NamespaceName + remaining, out ns))
 				return null;
 			return ns;
 		}

@@ -109,7 +109,7 @@ namespace HOPL.Interpreter.Exploration
 			Parser.FunctionDecContext functionDec = context.functionDec();
 
 			string fName = functionDec.ID().GetText();
-			string completeNamespace = currentNamespace.CompleteName;
+			NamespaceString completeNamespace = new NamespaceString(currentNamespace.CompleteName);
 			FunctionDependencyExplorer fde = new FunctionDependencyExplorer(ImportTable, currentFile, 
 				completeNamespace);
 			HashSet<Dependency> dependencies = fde.EvaluateDependencies(functionDec);
@@ -146,7 +146,7 @@ namespace HOPL.Interpreter.Exploration
 			if (globalVarDec.REQUIRED_KW() != null)
 				ContainedRequired = true;
 
-			string completeNamespace = currentNamespace.CompleteName;
+            NamespaceString completeNamespace = new NamespaceString(currentNamespace.CompleteName);
 			string gvName = globalVarDec.varDec().ID().GetText();
 			VariableDependencyExplorer vde = new VariableDependencyExplorer(ImportTable, currentFile, completeNamespace);
 			HashSet<Dependency> dependencies = vde.EvaluateDependencies(globalVarDec);

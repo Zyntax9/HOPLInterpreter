@@ -155,9 +155,14 @@ namespace HOPL.Interpreter.NamespaceTypes
 		public Namespace Get(Parser.NamespaceDecContext namespaceDecContext)
 		{
 			return Get(Namespace.SplitNamespaceParts(namespaceDecContext));
-		}
+        }
 
-		public bool TryGet(IEnumerable<string> namespaceParts, out Namespace namespaced)
+        public Namespace Get(NamespaceString namespaceString)
+        {
+            return Get(namespaceString.Name);
+        }
+
+        public bool TryGet(IEnumerable<string> namespaceParts, out Namespace namespaced)
 		{
 			Namespace topNamespace;
 			if (!namespaces.TryGetValue(namespaceParts.ElementAt(0), out topNamespace))
@@ -174,9 +179,14 @@ namespace HOPL.Interpreter.NamespaceTypes
 		public bool TryGet(Parser.NamespaceContext namespaceContext, out Namespace namespaced)
 		{
 			return TryGet(Namespace.SplitNamespaceParts(namespaceContext), out namespaced);
-		}
+        }
 
-		public bool TryGet(Parser.NamespaceDecContext namespaceDecContext, out Namespace namespaced)
+        public bool TryGet(NamespaceString namespaceString, out Namespace namespaced)
+        {
+            return TryGet(namespaceString.Parts, out namespaced);
+        }
+
+        public bool TryGet(Parser.NamespaceDecContext namespaceDecContext, out Namespace namespaced)
 		{
 			return TryGet(Namespace.SplitNamespaceParts(namespaceDecContext), out namespaced);
 		}
@@ -199,7 +209,12 @@ namespace HOPL.Interpreter.NamespaceTypes
 		public bool ContainsNamespace(Parser.NamespaceDecContext namespaceDecContext)
 		{
 			return ContainsNamespace(Namespace.SplitNamespaceParts(namespaceDecContext));
-		}
+        }
+
+        public bool ContainsNamespace(NamespaceString namespaceString)
+        {
+            return ContainsNamespace(namespaceString.Parts);
+        }
 
         public IEnumerator<KeyValuePair<string, Namespace>> GetEnumerator()
         {

@@ -13,17 +13,18 @@ namespace HOPL.Interpreter.Exploration
 
 		public string FunctionName { get; protected set; }
 
-		public FunctionDependencyExplorer(ImportAccessTable accessTable, string filename, string namespaceName)
-			: base(accessTable, filename, namespaceName)
+		public FunctionDependencyExplorer(ImportAccessTable accessTable, string filename, NamespaceString @namespace)
+			: base(accessTable, filename, @namespace)
 		{ }
 		
-		protected void AddDependency(string id, string @namespace, ParserRuleContext context)
+		protected void AddDependency(string id, NamespaceString @namespace, ParserRuleContext context)
 		{
-			string actNs = @namespace;
+			NamespaceString actNs = @namespace;
 
 			Import import;
-			if (access.TryGetImport(file, @namespace, out import))
-				actNs = import.NamespaceName;
+            NamespaceString remaining;
+			if (access.TryGetImport(file, @namespace, out import, out remaining))
+				actNs = import.NamespaceName + remaining;
 
 			Dependency dep = new Dependency(id, actNs, file, DependencyType.FUNCTION, context);
 			if (!Dependencies.Contains(dep))
@@ -59,10 +60,11 @@ namespace HOPL.Interpreter.Exploration
 		{
 			Parser.NamespaceContext ns = context.@namespace();
 			string id = context.ID().GetText();
+
 			if (ns != null)
-				AddDependency(id, ns.GetText(), context);
+                AddDependency(id, new NamespaceString(ns.GetText()), context);
 			else if (!IsInScope(id))
-				AddDependency(id, @namespace, context);
+                AddDependency(id, @namespace, context);
 		}
 
 		public override void EnterBody([NotNull] Parser.BodyContext context)

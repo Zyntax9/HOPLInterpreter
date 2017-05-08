@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Parser = HOPL.Grammar.HOPLGrammarParser;
 using Lexer = HOPL.Grammar.HOPLGrammarLexer;
 using Antlr4.Runtime;
+using HOPL.Interpreter.NamespaceTypes;
 
 namespace HOPL.Interpreter.NamespaceMapping
 {
@@ -10,9 +11,9 @@ namespace HOPL.Interpreter.NamespaceMapping
 	{
 		const string extension = ".txt";
 
-		public static Dictionary<string, ISet<string>> MapNamespaces(ISet<string> importPaths)
+		public static NamespaceFileMap MapNamespaces(ISet<string> importPaths)
 		{
-			Dictionary<string, ISet<string>> map = new Dictionary<string, ISet<string>>();
+			NamespaceFileMap map = new NamespaceFileMap();
 
 			List<string> files = new List<string>();
 			foreach (string path in importPaths)
@@ -33,11 +34,9 @@ namespace HOPL.Interpreter.NamespaceMapping
 					continue; // Ignore if read failed.
 				}
 
-				foreach (string namespaceName in ExtractAllNamespaces(lexer))
+				foreach (NamespaceString namespaceName in ExtractAllNamespaces(lexer))
 				{
-					if (!map.ContainsKey(namespaceName))
-						map.Add(namespaceName, new HashSet<string>());
-					map[namespaceName].Add(file);
+                    map.AddFile(namespaceName, file);
 				}
 			}
 
@@ -52,9 +51,9 @@ namespace HOPL.Interpreter.NamespaceMapping
 			return new Lexer(ais);
 		}
 
-		private static List<string> ExtractAllNamespaces(Lexer lexer)
+		private static List<NamespaceString> ExtractAllNamespaces(Lexer lexer)
 		{
-			List<string> namespaces = new List<string>();
+			List<NamespaceString> namespaces = new List<NamespaceString>();
 
 			for (IToken token = lexer.NextToken(); token.Type != Parser.Eof; token = lexer.NextToken())
 				if (token.Type == Parser.NAMESPACE_KW)
@@ -63,7 +62,7 @@ namespace HOPL.Interpreter.NamespaceMapping
 			return namespaces;
 		}
 
-		private static string ExtractNextNamespace(Lexer lexer)
+		private static NamespaceString ExtractNextNamespace(Lexer lexer)
 		{
 			string namespaceName = "";
 
@@ -76,7 +75,7 @@ namespace HOPL.Interpreter.NamespaceMapping
 				namespaceName += token.Text;
 			}
 
-			return namespaceName;
+			return new NamespaceString(namespaceName);
 		}
 	}
 }
