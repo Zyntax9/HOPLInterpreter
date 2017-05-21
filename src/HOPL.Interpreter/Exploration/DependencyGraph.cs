@@ -74,8 +74,10 @@ namespace HOPL.Interpreter.Exploration
 			return order;
 		}
 
-		private void DepthFirstVisit(GraphNode node, Queue<Dependency> order)
+		private void DepthFirstVisit(GraphNode node, Queue<Dependency> order, bool passedVariable = false)
 		{
+            passedVariable = passedVariable || node.Node.Type == DependencyType.VARIABLE;
+
 			node.Color = Color.GRAY;
 
 			if (node.Node.Type == DependencyType.VARIABLE && node.Node.ContainsAwait)
@@ -83,11 +85,11 @@ namespace HOPL.Interpreter.Exploration
 
 			foreach (GraphNode child in node.Dependencies)
 			{
-				if (node.Node.Type == DependencyType.VARIABLE && child.Node.ContainsAwait)
+				if (passedVariable && child.Node.ContainsAwait)
 					throw new DependencyContainsAwaitException(child.ToString());
 
 				if (child.Color == Color.WHITE)
-					DepthFirstVisit(child, order);
+					DepthFirstVisit(child, order, passedVariable);
 				else if (child.Color == Color.GRAY && child.Node.Type == DependencyType.VARIABLE)
 					throw new RecursiveVariableDependencyException(child.ToString());
 			}
