@@ -55,12 +55,12 @@ namespace HOPL.Interpreter.Interpretation
 				file = handler.Handler.File
 			};
 			scopeStack.Push(se);
-
-			ITerminalNode[] ids = handler.Handler.Context.ID();
-			for (int i = 0; i < ids.Length; i++)
+            
+			Parser.ArgContext[] args = handler.Handler.Context.args().arg();
+			for (int i = 0; i < args.Length; i++)
 			{
 				InterpreterValue argument = InterpreterValue.FromNative(handler.Arguments[i]);
-				currentScope.AddVariable(ids[i].GetText(), argument);
+				currentScope.AddVariable(args[i].ID().GetText(), argument);
 			}
 		}
 

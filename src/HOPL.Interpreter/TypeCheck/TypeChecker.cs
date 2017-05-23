@@ -468,37 +468,36 @@ namespace HOPL.Interpreter.TypeCheck
 			}
 			
 			currentCallable = callableType;
-
-			ITerminalNode[] ids = context.ID();
-			Parser.TypeNameContext[] tncontexts = context.typeName();
+            
+			Parser.ArgContext[] args = context.args().arg();
 			InterpreterType[] domain = currentCallable.GetTriggerableDomain();
-			if (ids.Length != domain.Length)
+			if (args.Length != domain.Length)
 			{
 				currentCallable = null;
 				return RaiseError(TypeErrorMessage.ARGCOUNT_MISMATCH, context);
 			}
 
-			InterpreterType[] tns = new InterpreterType[tncontexts.Length];
-			for (int i = 0; i < tncontexts.Length; i++)
+			InterpreterType[] typeNames = new InterpreterType[args.Length];
+			for (int i = 0; i < args.Length; i++)
 			{
-				tns[i] = VisitTypeName(tncontexts[i]);
+				typeNames[i] = VisitTypeName(args[i].typeName());
 
-				if (tns[i] == InterpreterType.ERROR)
+				if (typeNames[i] == InterpreterType.ERROR)
 				{
 					currentCallable = null;
 					return InterpreterType.ERROR;
 				}
 
-				if (tns[i] != domain[i])
+				if (typeNames[i] != domain[i])
 				{
 					currentCallable = null;
 					return RaiseError(TypeErrorMessage.HANDLERDEC_ARGMISMATCH, context);
 				}
 			}
 
-			Argument[] handlerArgs = new Argument[ids.Length];
-			for (int i = 0; i < ids.Length; i++)
-				handlerArgs[i] = new Argument(ids[i].GetText(), domain[i]);
+			Argument[] handlerArgs = new Argument[args.Length];
+			for (int i = 0; i < args.Length; i++)
+				handlerArgs[i] = new Argument(args[i].ID().GetText(), domain[i]);
 
 			VisitBody(context.body(), handlerArgs);
 
