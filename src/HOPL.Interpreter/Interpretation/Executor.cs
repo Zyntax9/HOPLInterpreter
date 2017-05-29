@@ -487,7 +487,7 @@ namespace HOPL.Interpreter.Interpretation
 			InterpreterValue right = VisitExpr(exprs[1]);
 
 			// Concat
-			if (left.TypeEqual(right))
+			if (left is InterpreterList && right is InterpreterList)
 			{
 				List<InterpreterValue> leftValues = (List<InterpreterValue>)left.Value;
 				List<InterpreterValue> rightValues = (List<InterpreterValue>)right.Value;
@@ -498,31 +498,17 @@ namespace HOPL.Interpreter.Interpretation
 			// Append
 			if (left is InterpreterList)
 			{
-				List<InterpreterValue> rightBuffer = new List<InterpreterValue>();
-				rightBuffer.Add(right);
-				InterpreterList rightList = new InterpreterList(rightBuffer);
-
-				if (left.TypeEqual(rightList))
-				{
-					List<InterpreterValue> leftValues = (List<InterpreterValue>)left.Value;
-					List<InterpreterValue> newValues = leftValues.Append(right).ToList();
-					return new InterpreterList(newValues);
-				}
+				List<InterpreterValue> leftValues = (List<InterpreterValue>)left.Value;
+				List<InterpreterValue> newValues = leftValues.Append(right).ToList();
+				return new InterpreterList(newValues);
 			}
 
 			// Prepend
 			if (right is InterpreterList)
 			{
-				List<InterpreterValue> leftBuffer = new List<InterpreterValue>();
-				leftBuffer.Add(left);
-				InterpreterList leftList = new InterpreterList(leftBuffer);
-
-				if (left.TypeEqual(leftList))
-				{
-					List<InterpreterValue> rightValues = (List<InterpreterValue>)right.Value;
-					List<InterpreterValue> newValues = rightValues.Prepend(left).ToList();
-					return new InterpreterList(newValues);
-				}
+				List<InterpreterValue> rightValues = (List<InterpreterValue>)right.Value;
+				List<InterpreterValue> newValues = rightValues.Prepend(left).ToList();
+				return new InterpreterList(newValues);
 			}
 
 			throw new InvalidOperationException();
@@ -590,7 +576,9 @@ namespace HOPL.Interpreter.Interpretation
 				return VisitTupleExpr((Parser.TupleExprContext)context);
 			if (context is Parser.IndexExprContext)
 				return VisitIndexExpr((Parser.IndexExprContext)context);
-			throw new InternalExecutorException("expr alias not recognized.");
+            if (context is Parser.ConcatExprContext)
+                return VisitConcatExpr((Parser.ConcatExprContext)context);
+            throw new InternalExecutorException("expr alias not recognized.");
 		}
 
 		public InterpreterValue VisitExprStat([NotNull] Parser.ExprStatContext context)

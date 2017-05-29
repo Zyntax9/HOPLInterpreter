@@ -65,8 +65,17 @@ namespace HOPL.Interpreter.NamespaceTypes.Values
 			InterpreterType subexpect = expected?.TypeArray[0];
 
 			List<object> nativeList = new List<object>();
-			foreach (InterpreterValue value in value)
-				nativeList.Add(value.ToNative(subexpect));
+            Type listContentType = null;
+			foreach (InterpreterValue val in value)
+            {
+                object nativeValue = val.ToNative(subexpect);
+                if (listContentType == null)
+                    listContentType = nativeValue.GetType();
+                else if (listContentType == typeof(int) && 
+                         nativeValue.GetType() == typeof(float))
+                    listContentType = nativeValue.GetType();
+                nativeList.Add(nativeValue);
+            }
 
 			Type generator;
 			if(value.Count <= 0)
@@ -76,15 +85,20 @@ namespace HOPL.Interpreter.NamespaceTypes.Values
 			else
 			{
 				Type listGenericType = typeof(List<>);
-				generator = listGenericType.MakeGenericType(nativeList.First().GetType());
+                generator = listGenericType.MakeGenericType(listContentType);
 			}
 
 			ConstructorInfo ci = generator.GetTypeInfo().GetConstructor(new Type[] { });
 
 			IList result = (IList)ci.Invoke(new object[] { });
 
-			foreach (object native in nativeList)
-				result.Add(native);
+            foreach (object native in nativeList)
+            {
+                object nativeValue = native;
+                if (native.GetType() != listContentType)
+                    nativeValue = Convert.ChangeType(native, listContentType);
+                result.Add(nativeValue);
+            }
 
 			return result;
 		}

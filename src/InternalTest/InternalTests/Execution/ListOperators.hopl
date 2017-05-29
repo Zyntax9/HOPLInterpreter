@@ -1,0 +1,888 @@
+﻿import UTest;
+
+namespace ListOperators
+{
+	int tests = 124;
+
+	handle UTest.BeforeTests()
+	{
+		UTest.SetTestCount(tests);
+	}
+
+	//***************************************************
+	// Special cases (4 tests)
+	//***************************************************
+
+	handle UTest.RunTests() // Concat empty lists
+	{
+		UTest.AssertIntListEqual([]::[], [], "Concat empty lists. (int test)");
+		UTest.AssertFloatListEqual([]::[], [], "Concat empty lists. (float test)");
+		UTest.AssertStringListEqual([]::[], [], "Concat empty lists. (string test)");
+		UTest.AssertBoolListEqual([]::[], [], "Concat empty lists. (bool test)");
+	}
+
+	//***************************************************
+	// Integer prepend (12 tests)
+	//***************************************************
+	
+	handle UTest.RunTests() // Prepend int list 1 (value :: list value)
+	{
+		list<int> a = 942 :: [];
+		UTest.AssertIntListEqual(a, [942], "Prepend int list 1 (value :: list value)");
+	}
+	
+	handle UTest.RunTests() // Prepend int list 2 (value :: list value)
+	{
+		list<int> a = -7 :: [55];
+		UTest.AssertIntListEqual(a, [-7, 55], "Prepend int list 2 (value :: list value)");
+	}
+	
+	handle UTest.RunTests() // Prepend int list 3 (value :: list value)
+	{
+		list<int> a = 62334 :: [9, -092];
+		UTest.AssertIntListEqual(a, [62334, 9, -92], "Prepend int list 3 (value :: list value)");
+	}
+	
+	handle UTest.RunTests() // Prepend int list 1 (value :: list variable)
+	{
+		list<int> li = [];
+		list<int> a = -82 :: li;
+		UTest.AssertIntListEqual(a, [-82], "Prepend int list 1 (value :: list variable)");
+	}
+	
+	handle UTest.RunTests() // Prepend int list 2 (value :: list variable)
+	{
+		list<int> li = [-2];
+		list<int> a = 993 :: li;
+		UTest.AssertIntListEqual(a, [993, -2], "Prepend int list 2 (value :: list variable)");
+	}
+	
+	handle UTest.RunTests() // Prepend int list 3 (value :: list variable)
+	{
+		list<int> li = [-66, -821];
+		list<int> a = -592 :: li;
+		UTest.AssertIntListEqual(a, [-592, -66, -821], "Prepend int list 3 (value :: list variable)");
+	}
+	
+	handle UTest.RunTests() // Prepend int list 1 (variable :: list value)
+	{
+		int i = -24;
+		list<int> a = i :: [];
+		UTest.AssertIntListEqual(a, [-24], "Prepend int list 1 (variable :: list value)");
+	}
+	
+	handle UTest.RunTests() // Prepend int list 2 (variable :: list value)
+	{
+		int i = -85;
+		list<int> a = i :: [-9922];
+		UTest.AssertIntListEqual(a, [-85, -9922], "Prepend int list 2 (variable :: list value)");
+	}
+	
+	handle UTest.RunTests() // Prepend int list 3 (variable :: list value)
+	{
+		int i = 72;
+		list<int> a = i :: [0, 95];
+		UTest.AssertIntListEqual(a, [72, 0, 95], "Prepend int list 3 (variable :: list value)");
+	}
+	
+	handle UTest.RunTests() // Prepend int list 1 (variable :: list variable)
+	{
+		int i = 324;
+		list<int> li = [];
+		list<int> a = i :: li;
+		UTest.AssertIntListEqual(a, [324], "Prepend int list 1 (variable :: list variable)");
+	}
+	
+	handle UTest.RunTests() // Prepend int list 2 (variable :: list variable)
+	{
+		int i = -99;
+		list<int> li = [4];
+		list<int> a = i :: li;
+		UTest.AssertIntListEqual(a, [-99, 4], "Prepend int list 2 (variable :: list variable)");
+	}
+	
+	handle UTest.RunTests() // Prepend int list 3 (variable :: list variable)
+	{
+		int i = 22;
+		list<int> li = [18, -44];
+		list<int> a = i :: li;
+		UTest.AssertIntListEqual(a, [22, 18, -44], "Prepend int list 3 (variable :: list variable)");
+	}
+
+	//***************************************************
+	// Integer append (12 tests)
+	//***************************************************
+	
+	handle UTest.RunTests() // Append int list 1 (list value :: value)
+	{
+		list<int> a = [] :: 942;
+		UTest.AssertIntListEqual(a, [942], "Append int list 1 (list value :: value)");
+	}
+	
+	handle UTest.RunTests() // Append int list 2 (list value :: value)
+	{
+		list<int> a = [55] :: -7;
+		UTest.AssertIntListEqual(a, [55, -7], "Append int list 2 (list value :: value)");
+	}
+	
+	handle UTest.RunTests() // Append int list 3 (list value :: value)
+	{
+		list<int> a = [9, -092] :: 62334;
+		UTest.AssertIntListEqual(a, [9, -92, 62334], "Append int list 3 (list value :: value)");
+	}
+	
+	handle UTest.RunTests() // Append int list 1 (list variable :: value)
+	{
+		list<int> li = [];
+		list<int> a = li :: -82;
+		UTest.AssertIntListEqual(a, [-82], "Append int list 1 (list variable :: value)");
+	}
+	
+	handle UTest.RunTests() // Append int list 2 (list variable :: value)
+	{
+		list<int> li = [-2];
+		list<int> a = li :: 993;
+		UTest.AssertIntListEqual(a, [-2, 993], "Append int list 2 (list variable :: value)");
+	}
+	
+	handle UTest.RunTests() // Append int list 3 (list variable :: value)
+	{
+		list<int> li = [-66, -821];
+		list<int> a = li :: -592;
+		UTest.AssertIntListEqual(a, [-66, -821, -592], "Append int list 3 (list variable :: value)");
+	}
+	
+	handle UTest.RunTests() // Append int list 1 (list value :: variable)
+	{
+		int i = -24;
+		list<int> a = [] :: i;
+		UTest.AssertIntListEqual(a, [-24], "Append int list 1 (list value :: variable)");
+	}
+	
+	handle UTest.RunTests() // Append int list 2 (list value :: variable)
+	{
+		int i = -85;
+		list<int> a = [-9922] :: i;
+		UTest.AssertIntListEqual(a, [-9922, -85], "Append int list 2 (list value :: variable)");
+	}
+	
+	handle UTest.RunTests() // Append int list 3 (list value :: variable)
+	{
+		int i = 72;
+		list<int> a = [0, 95] :: i;
+		UTest.AssertIntListEqual(a, [0, 95, 72], "Append int list 3 (list value :: variable)");
+	}
+	
+	handle UTest.RunTests() // Append int list 1 (list variable :: variable)
+	{
+		int i = 324;
+		list<int> li = [];
+		list<int> a = li :: i;
+		UTest.AssertIntListEqual(a, [324], "Append int list 1 (list variable :: variable)");
+	}
+	
+	handle UTest.RunTests() // Append int list 2 (list variable :: variable)
+	{
+		int i = -99;
+		list<int> li = [4];
+		list<int> a = li :: i;
+		UTest.AssertIntListEqual(a, [4, -99], "Append int list 2 (list variable :: variable)");
+	}
+	
+	handle UTest.RunTests() // Append int list 3 (list variable :: variable)
+	{
+		int i = 22;
+		list<int> li = [18, -44];
+		list<int> a = li :: i;
+		UTest.AssertIntListEqual(a, [18, -44, 22], "Append int list 3 (list variable :: variable)");
+	}
+
+	//***************************************************
+	// Integer concat (36 tests)
+	//***************************************************
+	
+	handle UTest.RunTests() // Concat int list 1 (list value :: list value)
+	{
+		list<int> a = [23] :: [];
+		UTest.AssertIntListEqual(a, [23], "Concat int list 1 (list value :: list value)");
+	}
+	
+	handle UTest.RunTests() // Concat int list 2 (list value :: list value)
+	{
+		list<int> a = [] :: [92];
+		UTest.AssertIntListEqual(a, [92], "Concat int list 2 (list value :: list value)");
+	}
+	
+	handle UTest.RunTests() // Concat int list 3 (list value :: list value)
+	{
+		list<int> a = [44] :: [9992];
+		UTest.AssertIntListEqual(a, [44, 9992], "Concat int list 3 (list value :: list value)");
+	}
+	
+	handle UTest.RunTests() // Concat int list 4 (list value :: list value)
+	{
+		list<int> a = [9512, -921] :: [8];
+		UTest.AssertIntListEqual(a, [9512, -921, 8], "Concat int list 4 (list value :: list value)");
+	}
+	
+	handle UTest.RunTests() // Concat int list 5 (list value :: list value)
+	{
+		list<int> a = [-2] :: [44, 929];
+		UTest.AssertIntListEqual(a, [-2, 44, 929], "Concat int list 5 (list value :: list value)");
+	}
+	
+	handle UTest.RunTests() // Concat int list 6 (list value :: list value)
+	{
+		list<int> a = [-277, -92] :: [-442122, -3];
+		UTest.AssertIntListEqual(a, [-277, -92, -442122, -3], "Concat int list 6 (list value :: list value)");
+	}
+	
+	handle UTest.RunTests() // Concat int list 7 (list value :: list value)
+	{
+		list<int> a = [2143, -2, 745] :: [-9222, 0];
+		UTest.AssertIntListEqual(a, [2143, -2, 745, -9222, 0], "Concat int list 7 (list value :: list value)");
+	}
+	
+	handle UTest.RunTests() // Concat int list 8 (list value :: list value)
+	{
+		list<int> a = [-482, 22] :: [0, 4002, 712];
+		UTest.AssertIntListEqual(a, [-482, 22, 0, 4002, 712], "Concat int list 8 (list value :: list value)");
+	}
+	
+	handle UTest.RunTests() // Concat int list 9 (list value :: list value)
+	{
+		list<int> a = [902, -1, 52] :: [-11, -32, -912];
+		UTest.AssertIntListEqual(a, [902, -1, 52, -11, -32, -912], "Concat int list 9 (list value :: list value)");
+	}
+	
+	handle UTest.RunTests() // Concat int list 1 (list variable :: list value)
+	{
+		list<int> li = [23];
+		list<int> a = li :: [];
+		UTest.AssertIntListEqual(a, [23], "Concat int list 1 (list variable :: list value)");
+	}
+	
+	handle UTest.RunTests() // Concat int list 2 (list variable :: list value)
+	{
+		list<int> li = [];
+		list<int> a = li :: [92];
+		UTest.AssertIntListEqual(a, [92], "Concat int list 2 (list variable :: list value)");
+	}
+	
+	handle UTest.RunTests() // Concat int list 3 (list variable :: list value)
+	{
+		list<int> li = [44];
+		list<int> a = li :: [9992];
+		UTest.AssertIntListEqual(a, [44, 9992], "Concat int list 3 (list variable :: list value)");
+	}
+	
+	handle UTest.RunTests() // Concat int list 4 (list variable :: list value)
+	{
+		list<int> li = [9512, -921];
+		list<int> a = li :: [8];
+		UTest.AssertIntListEqual(a, [9512, -921, 8], "Concat int list 4 (list variable :: list value)");
+	}
+	
+	handle UTest.RunTests() // Concat int list 5 (list variable :: list value)
+	{
+		list<int> li = [-2];
+		list<int> a = li :: [44, 929];
+		UTest.AssertIntListEqual(a, [-2, 44, 929], "Concat int list 5 (list variable :: list value)");
+	}
+	
+	handle UTest.RunTests() // Concat int list 6 (list variable :: list value)
+	{
+		list<int> li = [-277, -92];
+		list<int> a = li :: [-442122, -3];
+		UTest.AssertIntListEqual(a, [-277, -92, -442122, -3], "Concat int list 6 (list variable :: list value)");
+	}
+	
+	handle UTest.RunTests() // Concat int list 7 (list variable :: list value)
+	{
+		list<int> li = [2143, -2, 745];
+		list<int> a = li :: [-9222, 0];
+		UTest.AssertIntListEqual(a, [2143, -2, 745, -9222, 0], "Concat int list 7 (list variable :: list value)");
+	}
+	
+	handle UTest.RunTests() // Concat int list 8 (list variable :: list value)
+	{
+		list<int> li = [-482, 22];
+		list<int> a = li :: [0, 4002, 712];
+		UTest.AssertIntListEqual(a, [-482, 22, 0, 4002, 712], "Concat int list 8 (list variable :: list value)");
+	}
+	
+	handle UTest.RunTests() // Concat int list 9 (list variable :: list value)
+	{
+		list<int> li = [902, -1, 52];
+		list<int> a = li :: [-11, -32, -912];
+		UTest.AssertIntListEqual(a, [902, -1, 52, -11, -32, -912], "Concat int list 9 (list variable :: list value)");
+	}
+	
+	handle UTest.RunTests() // Concat int list 1 (list value :: list variable)
+	{
+		list<int> li = [];
+		list<int> a = [23] :: li;
+		UTest.AssertIntListEqual(a, [23], "Concat int list 1 (list value :: list variable)");
+	}
+	
+	handle UTest.RunTests() // Concat int list 2 (list value :: list variable)
+	{
+		list<int> li = [92];
+		list<int> a = [] :: li;
+		UTest.AssertIntListEqual(a, [92], "Concat int list 2 (list value :: list variable)");
+	}
+	
+	handle UTest.RunTests() // Concat int list 3 (list value :: list variable)
+	{
+		list<int> li = [9992];
+		list<int> a = [44] :: li;
+		UTest.AssertIntListEqual(a, [44, 9992], "Concat int list 3 (list value :: list variable)");
+	}
+	
+	handle UTest.RunTests() // Concat int list 4 (list value :: list variable)
+	{
+		list<int> li = [8];
+		list<int> a = [9512, -921] :: li;
+		UTest.AssertIntListEqual(a, [9512, -921, 8], "Concat int list 4 (list value :: list variable)");
+	}
+	
+	handle UTest.RunTests() // Concat int list 5 (list value :: list variable)
+	{
+		list<int> li = [44, 929];
+		list<int> a = [-2] :: li;
+		UTest.AssertIntListEqual(a, [-2, 44, 929], "Concat int list 5 (list value :: list variable)");
+	}
+	
+	handle UTest.RunTests() // Concat int list 6 (list value :: list variable)
+	{
+		list<int> li = [-442122, -3];
+		list<int> a = [-277, -92] :: li;
+		UTest.AssertIntListEqual(a, [-277, -92, -442122, -3], "Concat int list 6 (list value :: list variable)");
+	}
+	
+	handle UTest.RunTests() // Concat int list 7 (list value :: list variable)
+	{
+		list<int> li = [-9222, 0];
+		list<int> a = [2143, -2, 745] :: li;
+		UTest.AssertIntListEqual(a, [2143, -2, 745, -9222, 0], "Concat int list 7 (list value :: list variable)");
+	}
+	
+	handle UTest.RunTests() // Concat int list 8 (list value :: list variable)
+	{
+		list<int> li = [0, 4002, 712];
+		list<int> a = [-482, 22] :: li;
+		UTest.AssertIntListEqual(a, [-482, 22, 0, 4002, 712], "Concat int list 8 (list value :: list variable)");
+	}
+	
+	handle UTest.RunTests() // Concat int list 9 (list value :: list variable)
+	{
+		list<int> li = [-11, -32, -912];
+		list<int> a = [902, -1, 52] :: li;
+		UTest.AssertIntListEqual(a, [902, -1, 52, -11, -32, -912], "Concat int list 9 (list value :: list variable)");
+	}
+	
+	handle UTest.RunTests() // Concat int list 1 (list variable :: list variable)
+	{
+		list<int> li1 = [23];
+		list<int> li2 = [];
+		list<int> a = li1 :: li2;
+		UTest.AssertIntListEqual(a, [23], "Concat int list 1 (list variable :: list variable)");
+	}
+	
+	handle UTest.RunTests() // Concat int list 2 (list variable :: list variable)
+	{
+		list<int> li1 = [];
+		list<int> li2 = [92];
+		list<int> a = li1 :: li2;
+		UTest.AssertIntListEqual(a, [92], "Concat int list 2 (list variable :: list variable)");
+	}
+	
+	handle UTest.RunTests() // Concat int list 3 (list variable :: list variable)
+	{
+		list<int> li1 = [44];
+		list<int> li2 = [9992];
+		list<int> a = li1 :: li2;
+		UTest.AssertIntListEqual(a, [44, 9992], "Concat int list 3 (list variable :: list variable)");
+	}
+	
+	handle UTest.RunTests() // Concat int list 4 (list variable :: list variable)
+	{
+		list<int> li1 = [9512, -921];
+		list<int> li2 = [8];
+		list<int> a = li1 :: li2;
+		UTest.AssertIntListEqual(a, [9512, -921, 8], "Concat int list 4 (list variable :: list variable)");
+	}
+	
+	handle UTest.RunTests() // Concat int list 5 (list variable :: list variable)
+	{
+		list<int> li1 = [-2];
+		list<int> li2 = [44, 929];
+		list<int> a = li1 :: li2;
+		UTest.AssertIntListEqual(a, [-2, 44, 929], "Concat int list 5 (list variable :: list variable)");
+	}
+	
+	handle UTest.RunTests() // Concat int list 6 (list variable :: list variable)
+	{
+		list<int> li1 = [-277, -92];
+		list<int> li2 = [-442122, -3];
+		list<int> a = li1 :: li2;
+		UTest.AssertIntListEqual(a, [-277, -92, -442122, -3], "Concat int list 6 (list variable :: list variable)");
+	}
+	
+	handle UTest.RunTests() // Concat int list 7 (list variable :: list variable)
+	{
+		list<int> li1 = [2143, -2, 745];
+		list<int> li2 = [-9222, 0];
+		list<int> a = li1 :: li2;
+		UTest.AssertIntListEqual(a, [2143, -2, 745, -9222, 0], "Concat int list 7 (list variable :: list variable)");
+	}
+	
+	handle UTest.RunTests() // Concat int list 8 (list variable :: list variable)
+	{
+		list<int> li1 = [-482, 22];
+		list<int> li2 = [0, 4002, 712];
+		list<int> a = li1 :: li2;
+		UTest.AssertIntListEqual(a, [-482, 22, 0, 4002, 712], "Concat int list 8 (list variable :: list variable)");
+	}
+	
+	handle UTest.RunTests() // Concat int list 9 (list variable :: list variable)
+	{
+		list<int> li1 = [902, -1, 52];
+		list<int> li2 = [-11, -32, -912];
+		list<int> a = li1 :: li2;
+		UTest.AssertIntListEqual(a, [902, -1, 52, -11, -32, -912], "Concat int list 9 (list variable :: list variable)");
+	}
+	
+
+	//***************************************************
+	// Float prepend (12 tests)
+	//***************************************************
+	
+	handle UTest.RunTests() // Prepend float list 1 (value :: list value)
+	{
+		list<float> a = 82.11 :: [];
+		UTest.AssertFloatListEqual(a, [82.11], "Prepend float list 1 (value :: list value)");
+	}
+	
+	handle UTest.RunTests() // Prepend float list 2 (value :: list value)
+	{
+		list<float> a = 942 :: [82.12];
+		UTest.AssertFloatListEqual(a, [942.0, 82.12], "Prepend float list 2 (value :: list value)");
+	}
+	
+	handle UTest.RunTests() // Prepend float list 3 (value :: list value)
+	{
+		list<float> a = 8.123 :: [0.112, 8123.44];
+		UTest.AssertFloatListEqual(a, [8.123, 0.112, 8123.44], "Prepend float list 3 (value :: list value)");
+	}
+	
+	handle UTest.RunTests() // Prepend float list 1 (value :: list variable)
+	{
+		list<float> li = [];
+		list<float> a = -432.2 :: li;
+		UTest.AssertFloatListEqual(a, [-432.2], "Prepend float list 1 (value :: list variable)");
+	}
+	
+	handle UTest.RunTests() // Prepend float list 2 (value :: list variable)
+	{
+		list<float> li = [99.01];
+		list<float> a = 0.00021 :: li;
+		UTest.AssertFloatListEqual(a, [0.00021, 99.01], "Prepend float list 2 (value :: list variable)");
+	}
+	
+	handle UTest.RunTests() // Prepend float list 3 (value :: list variable)
+	{
+		list<float> li = [-66, -12.2];
+		list<float> a = 0224.2 :: li;
+		UTest.AssertFloatListEqual(a, [224.2, -66, -12.2], "Prepend float list 3 (value :: list variable)");
+	}
+	
+	handle UTest.RunTests() // Prepend float list 1 (variable :: list value)
+	{
+		float i = 123.44;
+		list<float> a = i :: [];
+		UTest.AssertFloatListEqual(a, [123.44], "Prepend float list 1 (variable :: list value)");
+	}
+	
+	handle UTest.RunTests() // Prepend float list 2 (variable :: list value)
+	{
+		float i = 442.22;
+		list<float> a = i :: [0.2231];
+		UTest.AssertFloatListEqual(a, [442.22, 0.2231], "Prepend float list 2 (variable :: list value)");
+	}
+	
+	handle UTest.RunTests() // Prepend float list 3 (variable :: list value)
+	{
+		float i = -0.412;
+		list<float> a = i :: [0, 22.41];
+		UTest.AssertFloatListEqual(a, [-0.412, 0, 22.41], "Prepend float list 3 (variable :: list value)");
+	}
+	
+	handle UTest.RunTests() // Prepend float list 1 (variable :: list variable)
+	{
+		float i = 123.456;
+		list<float> li = [];
+		list<float> a = i :: li;
+		UTest.AssertFloatListEqual(a, [123.456], "Prepend float list 1 (variable :: list variable)");
+	}
+	
+	handle UTest.RunTests() // Prepend float list 2 (variable :: list variable)
+	{
+		float i = -123;
+		list<float> li = [-4.2];
+		list<float> a = i :: li;
+		UTest.AssertFloatListEqual(a, [-123, -4.2], "Prepend float list 2 (variable :: list variable)");
+	}
+	
+	handle UTest.RunTests() // Prepend float list 3 (variable :: list variable)
+	{
+		float i = 24.1222;
+		list<float> li = [44.22, -44.44];
+		list<float> a = i :: li;
+		UTest.AssertFloatListEqual(a, [24.1222, 44.22, -44.44], "Prepend float list 3 (variable :: list variable)");
+	}
+
+	//***************************************************
+	// Float append (12 tests)
+	//***************************************************
+	
+	handle UTest.RunTests() // Append float list 1 (list value :: value)
+	{
+		list<float> a = [] :: 0.2;
+		UTest.AssertFloatListEqual(a, [0.2], "Append float list 1 (list value :: value)");
+	}
+	
+	handle UTest.RunTests() // Append float list 2 (list value :: value)
+	{
+		list<float> a = [292.222] :: -7.2;
+		UTest.AssertFloatListEqual(a, [292.222, -7.2], "Append float list 2 (list value :: value)");
+	}
+	
+	handle UTest.RunTests() // Append float list 3 (list value :: value)
+	{
+		list<float> a = [0.299, 0] :: 221.2;
+		UTest.AssertFloatListEqual(a, [0.299, 0, 221.2], "Append float list 3 (list value :: value)");
+	}
+	
+	handle UTest.RunTests() // Append float list 1 (list variable :: value)
+	{
+		list<float> li = [];
+		list<float> a = li :: -82.0;
+		UTest.AssertFloatListEqual(a, [-82.0], "Append float list 1 (list variable :: value)");
+	}
+	
+	handle UTest.RunTests() // Append float list 2 (list variable :: value)
+	{
+		list<float> li = [299.2];
+		list<float> a = li :: -12.5;
+		UTest.AssertFloatListEqual(a, [299.2, -12.5], "Append float list 2 (list variable :: value)");
+	}
+	
+	handle UTest.RunTests() // Append float list 3 (list variable :: value)
+	{
+		list<float> li = [125.22, 5];
+		list<float> a = li :: 33.12;
+		UTest.AssertFloatListEqual(a, [125.22, 5, 33.12], "Append float list 3 (list variable :: value)");
+	}
+	
+	handle UTest.RunTests() // Append float list 1 (list value :: variable)
+	{
+		float i = -24.2;
+		list<float> a = [] :: i;
+		UTest.AssertFloatListEqual(a, [-24.2], "Append float list 1 (list value :: variable)");
+	}
+	
+	handle UTest.RunTests() // Append float list 2 (list value :: variable)
+	{
+		float i = 992.1;
+		list<float> a = [-0.2] :: i;
+		UTest.AssertFloatListEqual(a, [-0.2, 992.1], "Append float list 2 (list value :: variable)");
+	}
+	
+	handle UTest.RunTests() // Append float list 3 (list value :: variable)
+	{
+		float i = 12.11;
+		list<float> a = [0, 5.5] :: i;
+		UTest.AssertFloatListEqual(a, [0, 5.5, 12.11], "Append float list 3 (list value :: variable)");
+	}
+	
+	handle UTest.RunTests() // Append float list 1 (list variable :: variable)
+	{
+		float i = 324.2;
+		list<float> li = [];
+		list<float> a = li :: i;
+		UTest.AssertFloatListEqual(a, [324.2], "Append float list 1 (list variable :: variable)");
+	}
+	
+	handle UTest.RunTests() // Append float list 2 (list variable :: variable)
+	{
+		float i = 12.2;
+		list<float> li = [99423.244];
+		list<float> a = li :: i;
+		UTest.AssertFloatListEqual(a, [99423.244, 12.2], "Append float list 2 (list variable :: variable)");
+	}
+	
+	handle UTest.RunTests() // Append float list 3 (list variable :: variable)
+	{
+		float i = 0.122;
+		list<float> li = [922.3, 11];
+		list<float> a = li :: i;
+		UTest.AssertFloatListEqual(a, [922.3, 11, 0.122], "Append float list 3 (list variable :: variable)");
+	}
+
+	//***************************************************
+	// Float concat (36 tests)
+	//***************************************************
+	
+	handle UTest.RunTests() // Concat float list 1 (list value :: list value)
+	{
+		list<float> a = [2.1] :: [];
+		UTest.AssertFloatListEqual(a, [2.1], "Concat float list 1 (list value :: list value)");
+	}
+	
+	handle UTest.RunTests() // Concat float list 2 (list value :: list value)
+	{
+		list<float> a = [] :: [992.11];
+		UTest.AssertFloatListEqual(a, [992.11], "Concat float list 2 (list value :: list value)");
+	}
+	
+	handle UTest.RunTests() // Concat float list 3 (list value :: list value)
+	{
+		list<float> a = [-92.44] :: [5.88];
+		UTest.AssertFloatListEqual(a, [-92.44, 5.88], "Concat float list 3 (list value :: list value)");
+	}
+	
+	handle UTest.RunTests() // Concat float list 4 (list value :: list value)
+	{
+		list<float> a = [9.99] :: [8.2];
+		UTest.AssertFloatListEqual(a, [9.99, 8.2], "Concat float list 4 (list value :: list value)");
+	}
+	
+	handle UTest.RunTests() // Concat float list 5 (list value :: list value)
+	{
+		list<float> a = [-2.0] :: [41.22, 5.8];
+		UTest.AssertFloatListEqual(a, [-2, 41.22, 5.8], "Concat float list 5 (list value :: list value)");
+	}
+	
+	handle UTest.RunTests() // Concat float list 6 (list value :: list value)
+	{
+		list<float> a = [-22.2, -92] :: [-11222.12, -0.12234];
+		UTest.AssertFloatListEqual(a, [-22.2, -92.0, -11222.12, -0.12234], "Concat float list 6 (list value :: list value)");
+	}
+	
+	handle UTest.RunTests() // Concat float list 7 (list value :: list value)
+	{
+		list<float> a = [44.0000, -111.4, 9.44] :: [-22.2, 0];
+		UTest.AssertFloatListEqual(a, [44, -111.4, 9.44, -22.2, 0], "Concat float list 7 (list value :: list value)");
+	}
+	
+	handle UTest.RunTests() // Concat float list 8 (list value :: list value)
+	{
+		list<float> a = [0.22, 11] :: [8.22, 192.4, 992.3];
+		UTest.AssertFloatListEqual(a, [0.22, 11, 8.22, 192.4, 992.3], "Concat float list 8 (list value :: list value)");
+	}
+	
+	handle UTest.RunTests() // Concat float list 9 (list value :: list value)
+	{
+		list<float> a = [9.6, 64.29, 8.87] :: [-772.4, -8.654, 0.554];
+		UTest.AssertFloatListEqual(a, [9.6, 64.29, 8.87, -772.4, -8.654, 0.554], "Concat float list 9 (list value :: list value)");
+	}
+	
+	handle UTest.RunTests() // Concat float list 1 (list variable :: list value)
+	{
+		list<float> li = [0.2232];
+		list<float> a = li :: [];
+		UTest.AssertFloatListEqual(a, [0.2232], "Concat float list 1 (list variable :: list value)");
+	}
+	
+	handle UTest.RunTests() // Concat float list 2 (list variable :: list value)
+	{
+		list<float> li = [];
+		list<float> a = li :: [-834.34];
+		UTest.AssertFloatListEqual(a, [-834.34], "Concat float list 2 (list variable :: list value)");
+	}
+	
+	handle UTest.RunTests() // Concat float list 3 (list variable :: list value)
+	{
+		list<float> li = [44.0022];
+		list<float> a = li :: [0.343];
+		UTest.AssertFloatListEqual(a, [44.0022, 0.343], "Concat float list 3 (list variable :: list value)");
+	}
+	
+	handle UTest.RunTests() // Concat float list 4 (list variable :: list value)
+	{
+		list<float> li = [0.211, -0.211];
+		list<float> a = li :: [8.2];
+		UTest.AssertFloatListEqual(a, [0.211, -0.211, 8.2], "Concat float list 4 (list variable :: list value)");
+	}
+	
+	handle UTest.RunTests() // Concat float list 5 (list variable :: list value)
+	{
+		list<float> li = [-0.222];
+		list<float> a = li :: [9952.23, 995];
+		UTest.AssertFloatListEqual(a, [-0.222, 9952.23, 995], "Concat float list 5 (list variable :: list value)");
+	}
+	
+	handle UTest.RunTests() // Concat float list 6 (list variable :: list value)
+	{
+		list<float> li = [042.22, -9.2213];
+		list<float> a = li :: [-887.5, -0.21];
+		UTest.AssertFloatListEqual(a, [42.22, -9.2213, -887.5, -0.21], "Concat float list 6 (list variable :: list value)");
+	}
+	
+	handle UTest.RunTests() // Concat float list 7 (list variable :: list value)
+	{
+		list<float> li = [0.2, -0.6334, 745.3333];
+		list<float> a = li :: [-6.522, 0];
+		UTest.AssertFloatListEqual(a, [0.2, -0.6334, 745.3333, -6.522, 0], "Concat float list 7 (list variable :: list value)");
+	}
+	
+	handle UTest.RunTests() // Concat float list 8 (list variable :: list value)
+	{
+		list<float> li = [942.356, 996533.4433];
+		list<float> a = li :: [0, 95.3356644, 0.334833];
+		UTest.AssertFloatListEqual(a, [942.356, 996533.4433, 0, 95.3356644, 0.334833], "Concat float list 8 (list variable :: list value)");
+	}
+	
+	handle UTest.RunTests() // Concat float list 9 (list variable :: list value)
+	{
+		list<float> li = [9233.66, -1, 9.3];
+		list<float> a = li :: [-0.2, -93.34, -912];
+		UTest.AssertFloatListEqual(a, [9233.66, -1, 9.3, -0.2, -93.34, -912], "Concat float list 9 (list variable :: list value)");
+	}
+	
+	handle UTest.RunTests() // Concat float list 1 (list value :: list variable)
+	{
+		list<float> li = [];
+		list<float> a = [23.2883] :: li;
+		UTest.AssertFloatListEqual(a, [23.2883], "Concat float list 1 (list value :: list variable)");
+	}
+	
+	handle UTest.RunTests() // Concat float list 2 (list value :: list variable)
+	{
+		list<float> li = [9.2];
+		list<float> a = [] :: li;
+		UTest.AssertFloatListEqual(a, [9.2], "Concat float list 2 (list value :: list variable)");
+	}
+	
+	handle UTest.RunTests() // Concat float list 3 (list value :: list variable)
+	{
+		list<float> li = [99.92];
+		list<float> a = [4.4] :: li;
+		UTest.AssertFloatListEqual(a, [4.4, 99.92], "Concat float list 3 (list value :: list variable)");
+	}
+	
+	handle UTest.RunTests() // Concat float list 4 (list value :: list variable)
+	{
+		list<float> li = [8.5];
+		list<float> a = [9.512, -92.1] :: li;
+		UTest.AssertFloatListEqual(a, [9.512, -92.1, 8.5], "Concat float list 4 (list value :: list variable)");
+	}
+	
+	handle UTest.RunTests() // Concat float list 5 (list value :: list variable)
+	{
+		list<float> li = [44.23, 953.46];
+		list<float> a = [-2.2] :: li;
+		UTest.AssertFloatListEqual(a, [-2.2, 44.23, 953.46], "Concat float list 5 (list value :: list variable)");
+	}
+	
+	handle UTest.RunTests() // Concat float list 6 (list value :: list variable)
+	{
+		list<float> li = [-442.122, -3.65];
+		list<float> a = [-27.7, -9.2] :: li;
+		UTest.AssertFloatListEqual(a, [-27.7, -9.2, -442.122, -3.65], "Concat float list 6 (list value :: list variable)");
+	}
+	
+	handle UTest.RunTests() // Concat float list 7 (list value :: list variable)
+	{
+		list<float> li = [-9.222, 0];
+		list<float> a = [214.3, -2.02, 74.5] :: li;
+		UTest.AssertFloatListEqual(a, [214.3, -2.02, 74.5, -9.222, 0], "Concat float list 7 (list value :: list variable)");
+	}
+	
+	handle UTest.RunTests() // Concat float list 8 (list value :: list variable)
+	{
+		list<float> li = [0, 4.002, 7.12];
+		list<float> a = [-48.2, 2.2] :: li;
+		UTest.AssertFloatListEqual(a, [-48.2, 2.2, 0, 4.002, 7.12], "Concat float list 8 (list value :: list variable)");
+	}
+	
+	handle UTest.RunTests() // Concat float list 9 (list value :: list variable)
+	{
+		list<float> li = [-1.1, -32.02, -6.54];
+		list<float> a = [90.2, -1, 885.2] :: li;
+		UTest.AssertFloatListEqual(a, [90.2, -1, 885.2, -1.1, -32.02, -6.54], "Concat float list 9 (list value :: list variable)");
+	}
+	
+	handle UTest.RunTests() // Concat float list 1 (list variable :: list variable)
+	{
+		list<float> li1 = [-2.3];
+		list<float> li2 = [];
+		list<float> a = li1 :: li2;
+		UTest.AssertFloatListEqual(a, [-2.3], "Concat float list 1 (list variable :: list variable)");
+	}
+	
+	handle UTest.RunTests() // Concat float list 2 (list variable :: list variable)
+	{
+		list<float> li1 = [];
+		list<float> li2 = [9.2];
+		list<float> a = li1 :: li2;
+		UTest.AssertFloatListEqual(a, [9.2], "Concat float list 2 (list variable :: list variable)");
+	}
+	
+	handle UTest.RunTests() // Concat float list 3 (list variable :: list variable)
+	{
+		list<float> li1 = [4.4];
+		list<float> li2 = [99.92];
+		list<float> a = li1 :: li2;
+		UTest.AssertFloatListEqual(a, [4.4, 99.92], "Concat float list 3 (list variable :: list variable)");
+	}
+	
+	handle UTest.RunTests() // Concat float list 4 (list variable :: list variable)
+	{
+		list<float> li1 = [95.12, -9.21];
+		list<float> li2 = [8.123];
+		list<float> a = li1 :: li2;
+		UTest.AssertFloatListEqual(a, [95.12, -9.21, 8.123], "Concat float list 4 (list variable :: list variable)");
+	}
+	
+	handle UTest.RunTests() // Concat float list 5 (list variable :: list variable)
+	{
+		list<float> li1 = [-2.0001];
+		list<float> li2 = [5.2, 92.9];
+		list<float> a = li1 :: li2;
+		UTest.AssertFloatListEqual(a, [-2.0001, 5.2, 92.9], "Concat float list 5 (list variable :: list variable)");
+	}
+	
+	handle UTest.RunTests() // Concat float list 6 (list variable :: list variable)
+	{
+		list<float> li1 = [-2.77, -9.2];
+		list<float> li2 = [-4.42122, -3];
+		list<float> a = li1 :: li2;
+		UTest.AssertFloatListEqual(a, [-2.77, -9.2, -4.42122, -3], "Concat float list 6 (list variable :: list variable)");
+	}
+	
+	handle UTest.RunTests() // Concat float list 7 (list variable :: list variable)
+	{
+		list<float> li1 = [935.34, -2, 74.5];
+		list<float> li2 = [-9.222, 0];
+		list<float> a = li1 :: li2;
+		UTest.AssertFloatListEqual(a, [935.34, -2, 74.5, -9.222, 0], "Concat float list 7 (list variable :: list variable)");
+	}
+	
+	handle UTest.RunTests() // Concat float list 8 (list variable :: list variable)
+	{
+		list<float> li1 = [-4.82, 2.2];
+		list<float> li2 = [0, 400.2, 7.12];
+		list<float> a = li1 :: li2;
+		UTest.AssertFloatListEqual(a, [-4.82, 2.2, 0, 400.2, 7.12], "Concat float list 8 (list variable :: list variable)");
+	}
+	
+	handle UTest.RunTests() // Concat float list 9 (list variable :: list variable)
+	{
+		list<float> li1 = [992.3, -1.2, 84.4];
+		list<float> li2 = [-1.1, -32.5, -91.2];
+		list<float> a = li1 :: li2;
+		UTest.AssertFloatListEqual(a, [992.3, -1.2, 84.4, -1.1, -32.5, -91.2], "Concat float list 9 (list variable :: list variable)");
+	}
+}

@@ -6,22 +6,26 @@ using System.IO;
 using HOPL.Interpreter.Api.Attributes;
 using HOPL.Interpreter.Api;
 using System.Threading;
+using System.Diagnostics;
+using Xunit.Abstractions;
 
 namespace InternalTest
 {
     public class UnitTestNamespace : ISuppliedNamespace
     {
-		public string Name { get { return "UTest"; } }
+		public string Name => "UTest"; 
 
 		private class Lock { }
 		private Lock consoleLock = new Lock();
 
-		private Lock countLock = new Lock();
+        private Lock countLock = new Lock();
 		public int TestCount { get; private set; } = 0;
 		public int FailCount { get; private set; } = 0;
 		public int SuccessCount { get; private set; } = 0;
 
-		private string file;
+        private ITestOutputHelper output;
+
+        private string file;
 		public string File
 		{
 			get
@@ -37,9 +41,10 @@ namespace InternalTest
 			}
 		}
 
-		public UnitTestNamespace(string testFile)
+		public UnitTestNamespace(string testFile, ITestOutputHelper output)
 		{
 			File = testFile;
+            this.output = output;
 		}
 
 		private bool Assertion(bool assert, string location)
@@ -62,7 +67,7 @@ namespace InternalTest
 		private void AssertionFailed(string location)
 		{
 			lock (consoleLock)
-				Console.WriteLine("Assertion failed at: {0} ({1})", location, Path.GetFileName(File));
+				output.WriteLine($"Assertion failed at: {location} ({Path.GetFileName(File)})");
 		}
 
 		public void Run()
@@ -105,11 +110,17 @@ namespace InternalTest
 		public bool AssertBoolFalse(bool b, string location)
 		{
 			return Assertion(!b, location);
-		}
-		#endregion
+        }
 
-		#region Integer assertions
-		[InterpreterFunction]
+        [InterpreterFunction]
+        public bool AssertBoolEqual(bool a, bool b, string location)
+        {
+            return Assertion(a == b, location);
+        }
+        #endregion
+
+        #region Integer assertions
+        [InterpreterFunction]
 		public bool AssertIntEqual(int a, int b, string location)
 		{
 			return Assertion(a == b, location);

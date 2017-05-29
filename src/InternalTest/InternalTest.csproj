@@ -19,22 +19,28 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <None Update="InternalTests\ArithmeticOperators.hopl">
+	  <None Update="InternalTests\Execution\ArithmeticOperators.hopl">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </None>
-	  <None Update="InternalTests\ComparisonOperators.hopl">
+	  <None Update="InternalTests\Execution\ComparisonOperators.hopl">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </None>
-	  <None Update="InternalTests\LogicalOperators.hopl">
+	  <None Update="InternalTests\Execution\ListOperators.hopl">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </None>
-	  <None Update="InternalTests\Precendece.hopl">
+	  <None Update="InternalTests\Execution\LogicalOperators.hopl">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </None>
-	  <None Update="InternalTests\TriggerReference.hopl">
+	  <None Update="InternalTests\Execution\Precendece.hopl">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </None>
-	  <None Update="InternalTests\Triggers.hopl">
+	  <None Update="InternalTests\Execution\TriggerReference.hopl">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	  <None Update="InternalTests\Execution\Triggers.hopl">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	  <None Update="InternalTests\Execution\Unpacking.hopl">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </None>
 	</ItemGroup>

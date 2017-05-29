@@ -415,6 +415,8 @@ namespace HOPL.Interpreter.TypeCheck
 				return VisitTupleExpr((Parser.TupleExprContext)context);
 			if (context is Parser.IndexExprContext)
 				return VisitIndexExpr((Parser.IndexExprContext)context);
+            if (context is Parser.ConcatExprContext)
+                return VisitConcatExpr((Parser.ConcatExprContext)context);
 			throw new InternalTypeCheckerException("expr alias not recognized.");
 		}
 
@@ -819,10 +821,16 @@ namespace HOPL.Interpreter.TypeCheck
 			InterpreterType type = VisitExpr(exprContexts[0]);
 
 			for (int i = 1; i < exprContexts.Length; i++)
-			{
-				if (type != VisitExpr(exprContexts[i]))
-					return RaiseError(TypeErrorMessage.LISTEXPR_ALL, context);
-			}
+            {
+                InterpreterType nextType = VisitExpr(exprContexts[i]);
+                if (!AssignmentAllowed(type, nextType))
+                {
+                    if (AssignmentAllowed(nextType, type))
+                        type = nextType; // nextType is dominant
+                    else
+                        return RaiseError(TypeErrorMessage.LISTEXPR_ALL, context);
+                }
+            }
 
 			return new InterpreterType(InterpreterType.Types.LIST, type);
 		}
@@ -1021,6 +1029,11 @@ namespace HOPL.Interpreter.TypeCheck
 
 			if (left.TypeOf == InterpreterType.Types.LIST && right.TypeOf == InterpreterType.Types.LIST)
 			{
+                if (left.IsEmptyList)
+                    return right;
+                if (right.IsEmptyList)
+                    return left;
+
 				if (left != right)
 				{
 					if (left == right.TypeArray[0])
@@ -1034,15 +1047,19 @@ namespace HOPL.Interpreter.TypeCheck
 			}
 			else if (left.TypeOf == InterpreterType.Types.LIST)
 			{
-				if (right != left.TypeArray[0])
+				if (!left.IsEmptyList && !AssignmentAllowed(left.TypeArray[0], right))
 					return RaiseError(TypeErrorMessage.CONCAT_RIGHTM, context);
+                if (left.IsEmptyList)
+                    return new InterpreterType(InterpreterType.Types.LIST, right);
 				return left;
 			}
 			else if (right.TypeOf == InterpreterType.Types.LIST)
 			{
-				if (left != right.TypeArray[0])
+				if (!right.IsEmptyList && !AssignmentAllowed(right.TypeArray[0], left))
 					return RaiseError(TypeErrorMessage.CONCAT_LEFTM, context);
-				return right;
+                if (right.IsEmptyList)
+                    return new InterpreterType(InterpreterType.Types.LIST, left);
+                return right;
 			}
 			else
 			{

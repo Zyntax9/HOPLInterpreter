@@ -82,5 +82,12 @@ namespace HOPL.Interpreter.NamespaceTypes.Values
 				return new InterpreterBool(value < Convert.ToSingle((int)other.Value));
 			return new InterpreterBool(value < (float)other.Value);
 		}
-	}
+
+        public override bool IsAssignableFrom(InterpreterValue assignTo)
+        {
+            if (assignTo.Value is int)
+                return true;
+            return base.IsAssignableFrom(assignTo);
+        }
+    }
 }

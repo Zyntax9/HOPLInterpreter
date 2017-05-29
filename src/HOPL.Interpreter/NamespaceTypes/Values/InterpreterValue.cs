@@ -35,6 +35,11 @@ namespace HOPL.Interpreter.NamespaceTypes.Values
 			return GetType() == other.GetType();
 		}
 
+        public virtual bool IsAssignableFrom(InterpreterValue assignTo)
+        {
+            return TypeEqual(assignTo);
+        }
+
 		public virtual object ToNative(InterpreterType expected = null)
 		{
 			return Value;

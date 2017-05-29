@@ -9,23 +9,32 @@ using System.Threading;
 using HOPL.Interpreter.Exceptions;
 using HOPL.Interpreter.Api;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace InternalTest
 {
     public class HoplScriptTests
 	{
 		private static readonly TimeSpan Timeout = TimeSpan.FromSeconds(50);
+        private readonly ITestOutputHelper output;
+
+        public HoplScriptTests(ITestOutputHelper output)
+        {
+            this.output = output;
+        }
 		
 		[Theory]
-		[InlineData("./InternalTests/ArithmeticOperators.hopl")]
-		[InlineData("./InternalTests/ComparisonOperators.hopl")]
-		[InlineData("./InternalTests/LogicalOperators.hopl")]
-		[InlineData("./InternalTests/Precendece.hopl")]
-		[InlineData("./InternalTests/TriggerReference.hopl")]
-		[InlineData("./InternalTests/Triggers.hopl")]
-		private void RunFile(string file)
+		[InlineData("./InternalTests/Execution/ArithmeticOperators.hopl")]
+		[InlineData("./InternalTests/Execution/ComparisonOperators.hopl")]
+		[InlineData("./InternalTests/Execution/LogicalOperators.hopl")]
+		[InlineData("./InternalTests/Execution/Precendece.hopl")]
+		[InlineData("./InternalTests/Execution/TriggerReference.hopl")]
+		[InlineData("./InternalTests/Execution/Triggers.hopl")]
+        [InlineData("./InternalTests/Execution/Unpacking.hopl")]
+        [InlineData("./InternalTests/Execution/ListOperators.hopl")]
+        private void RunFile(string file)
 		{
-			UnitTestNamespace unitTestNamespace = new UnitTestNamespace(file);
+			UnitTestNamespace unitTestNamespace = new UnitTestNamespace(file, output);
 			if (!Prepare(file, unitTestNamespace, out InterpretationContext context))
 				return;
 
@@ -41,8 +50,9 @@ namespace InternalTest
 				Assert.True(false, $"Timeout on {file}");
 			
 			if (unitTestNamespace.TestCount != unitTestNamespace.SuccessCount)
-				Assert.True(false);
-		}
+				Assert.True(false, $"Test/Success mismatch ({unitTestNamespace.TestCount}/{unitTestNamespace.SuccessCount})");
+
+        }
 
 		private static bool Prepare(string file, ISuppliedNamespace unitTestNamespace, out InterpretationContext context)
 		{

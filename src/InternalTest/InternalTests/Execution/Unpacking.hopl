@@ -1,0 +1,139 @@
+﻿import UTest;
+
+namespace Unpacking
+{
+	int tests = 42;
+
+	handle UTest.BeforeTests()
+	{
+		UTest.SetTestCount(tests);
+	}
+	
+	handle UTest.RunTests() // Unpack to new var by value 1
+	{
+		{int a, float b, bool c, string d, list<int> e} =
+			{82, 34.2, false, "test1", [2, 96]};
+
+		UTest.AssertIntEqual(a, 82, "Unpack to new var by value 1 (int)");
+		UTest.AssertFloatEqual(b, 34.2, "Unpack to new var by value 1 (float)");
+		UTest.AssertBoolFalse(c, "Unpack to new var by value 1 (bool)");
+		UTest.AssertStringEqual(d, "test1", "Unpack to new var by value 1 (string)");
+		UTest.AssertIntListEqual(e, [2, 96], "Unpack to new var by value 1 (list)");
+	}
+	
+	handle UTest.RunTests() // Unpack to new var by value 2
+	{
+		{string a, int b, list<string> c, bool d, float e} =
+			{"another", 75, ["first", "Second"], true, 2.89};
+		 
+		UTest.AssertStringEqual(a, "another", "Unpack to new var by value 2 (string)");
+		UTest.AssertIntEqual(b, 75, "Unpack to new var by value 2 (int)");
+		UTest.AssertStringListEqual(c, ["first", "Second"], "Unpack to new var by value 2 (list)");
+		UTest.AssertBoolTrue(d, "Unpack to new var by value 2 (bool)");
+		UTest.AssertFloatEqual(e, 2.89, "Unpack to new var by value 2 (float)");
+	}
+	
+	handle UTest.RunTests() // Unpack to new var by var 1
+	{
+		tuple<int, float, bool, string, list<int>> tup =
+			{82, 34.2, false, "test1", [2, 96]};
+
+		{int a, float b, bool c, string d, list<int> e} = tup;
+
+		UTest.AssertIntEqual(a, tup[0], "Unpack to new var by var 1 (int)");
+		UTest.AssertFloatEqual(b, tup[1], "Unpack to new var by var 1 (float)");
+		UTest.AssertBoolEqual(c, tup[2], "Unpack to new var by var 1 (bool)");
+		UTest.AssertStringEqual(d, tup[3], "Unpack to new var by var 1 (string)");
+		UTest.AssertIntListEqual(e, tup[4], "Unpack to new var by var 1 (list)");
+	}
+	
+	handle UTest.RunTests() // Unpack to new var by var 2
+	{
+		tuple<string, int, list<string>, bool, float> tup =
+			{"another", 75, ["first", "Second"], true, 2.89};
+
+		{string a, int b, list<string> c, bool d, float e} = tup;
+		 
+		UTest.AssertStringEqual(a, tup[0], "Unpack to new var by var 2 (string)");
+		UTest.AssertIntEqual(b, tup[1], "Unpack to new var by var 2 (int)");
+		UTest.AssertStringListEqual(c, tup[2], "Unpack to new var by var 2 (list)");
+		UTest.AssertBoolEqual(d, tup[3], "Unpack to new var by var 2 (bool)");
+		UTest.AssertFloatEqual(e, tup[4], "Unpack to new var by var 2 (float)");
+	}
+	
+	handle UTest.RunTests() // Unpack ignore int
+	{
+		tuple<int, float, bool, string, list<int>> tup =
+			{82, 34.2, false, "test1", [2, 96]};
+
+		{_, float b, bool c, string d, list<int> e} = tup;
+
+		UTest.AssertFloatEqual(b, tup[1], "Unpack ignore int (float)");
+		UTest.AssertBoolEqual(c, tup[2], "Unpack ignore int (bool)");
+		UTest.AssertStringEqual(d, tup[3], "Unpack ignore int (string)");
+		UTest.AssertIntListEqual(e, tup[4], "Unpack ignore int (list)");
+	}
+	
+	handle UTest.RunTests() // Unpack ignore float
+	{
+		tuple<int, float, bool, string, list<int>> tup =
+			{82, 34.2, false, "test1", [2, 96]};
+
+		{int a, _, bool c, string d, list<int> e} = tup;
+		
+		UTest.AssertIntEqual(a, tup[0], "Unpack ignore float (int)");
+		UTest.AssertBoolEqual(c, tup[2], "Unpack ignore float (bool)");
+		UTest.AssertStringEqual(d, tup[3], "Unpack ignore float (string)");
+		UTest.AssertIntListEqual(e, tup[4], "Unpack ignore float (list)");
+	}
+	
+	handle UTest.RunTests() // Unpack ignore bool
+	{
+		tuple<int, float, bool, string, list<int>> tup =
+			{82, 34.2, false, "test1", [2, 96]};
+
+		{int a, float b, _, string d, list<int> e} = tup;
+		
+		UTest.AssertIntEqual(a, tup[0], "Unpack ignore bool (int)");
+		UTest.AssertFloatEqual(b, tup[1], "Unpack ignore bool (float)");
+		UTest.AssertStringEqual(d, tup[3], "Unpack ignore bool (string)");
+		UTest.AssertIntListEqual(e, tup[4], "Unpack ignore bool (list)");
+	}
+	
+	handle UTest.RunTests() // Unpack ignore string
+	{
+		tuple<int, float, bool, string, list<int>> tup =
+			{82, 34.2, false, "test1", [2, 96]};
+
+		{int a, float b, bool c, _, list<int> e} = tup;
+		
+		UTest.AssertIntEqual(a, tup[0], "Unpack ignore string (int)");
+		UTest.AssertFloatEqual(b, tup[1], "Unpack ignore string (float)");
+		UTest.AssertBoolEqual(c, tup[2], "Unpack ignore string (bool)");
+		UTest.AssertIntListEqual(e, tup[4], "Unpack ignore string (list)");
+	}
+	
+	handle UTest.RunTests() // Unpack ignore list
+	{
+		tuple<int, float, bool, string, list<int>> tup =
+			{82, 34.2, false, "test1", [2, 96]};
+
+		{int a, float b, bool c, string d, _} = tup;
+		
+		UTest.AssertIntEqual(a, tup[0], "Unpack ignore list (int)");
+		UTest.AssertFloatEqual(b, tup[1], "Unpack ignore list (float)");
+		UTest.AssertBoolEqual(c, tup[2], "Unpack ignore list (bool)");
+		UTest.AssertStringEqual(d, tup[3], "Unpack ignore list (string)");
+	}
+	
+	handle UTest.RunTests() // Unpack ignore multiple
+	{
+		tuple<int, float, bool, string, list<int>> tup =
+			{82, 34.2, false, "test1", [2, 96]};
+
+		{int a, _, bool c, _, _} = tup;
+		
+		UTest.AssertIntEqual(a, tup[0], "Unpack ignore multiple (int)");
+		UTest.AssertBoolEqual(c, tup[2], "Unpack ignore multiple (bool)");
+	}
+}
