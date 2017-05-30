@@ -2,7 +2,7 @@
 
 namespace ListOperators
 {
-	int tests = 124;
+	int tests = 244;
 
 	handle UTest.BeforeTests()
 	{
@@ -884,5 +884,871 @@ namespace ListOperators
 		list<float> li2 = [-1.1, -32.5, -91.2];
 		list<float> a = li1 :: li2;
 		UTest.AssertFloatListEqual(a, [992.3, -1.2, 84.4, -1.1, -32.5, -91.2], "Concat float list 9 (list variable :: list variable)");
+	}
+
+
+	//***************************************************
+	// string prepend (12 tests)
+	//***************************************************
+	
+	handle UTest.RunTests() // Prepend string list 1 (value :: list value)
+	{
+		list<string> a = "dsa" :: [];
+		UTest.AssertStringListEqual(a, ["dsa"], "Prepend string list 1 (value :: list value)");
+	}
+	
+	handle UTest.RunTests() // Prepend string list 2 (value :: list value)
+	{
+		list<string> a = "lk9321" :: ["kk438sfvm"];
+		UTest.AssertStringListEqual(a, ["lk9321", "kk438sfvm"], "Prepend string list 2 (value :: list value)");
+	}
+	
+	handle UTest.RunTests() // Prepend string list 3 (value :: list value)
+	{
+		list<string> a = "JHfdushH8(" :: ["kfdsa", "hjfjdier"];
+		UTest.AssertStringListEqual(a, ["JHfdushH8(", "kfdsa", "hjfjdier"], "Prepend string list 3 (value :: list value)");
+	}
+	
+	handle UTest.RunTests() // Prepend string list 1 (value :: list variable)
+	{
+		list<string> li = [];
+		list<string> a = "JKFDJH#" :: li;
+		UTest.AssertStringListEqual(a, ["JKFDJH#"], "Prepend string list 1 (value :: list variable)");
+	}
+	
+	handle UTest.RunTests() // Prepend string list 2 (value :: list variable)
+	{
+		list<string> li = ["KFudfh7"];
+		list<string> a = "" :: li;
+		UTest.AssertStringListEqual(a, ["", "KFudfh7"], "Prepend string list 2 (value :: list variable)");
+	}
+	
+	handle UTest.RunTests() // Prepend string list 3 (value :: list variable)
+	{
+		list<string> li = ["9N", "A"];
+		list<string> a = "Jfsa743m" :: li;
+		UTest.AssertStringListEqual(a, ["Jfsa743m", "9N", "A"], "Prepend string list 3 (value :: list variable)");
+	}
+	
+	handle UTest.RunTests() // Prepend string list 1 (variable :: list value)
+	{
+		string i = "j";
+		list<string> a = i :: [];
+		UTest.AssertStringListEqual(a, ["j"], "Prepend string list 1 (variable :: list value)");
+	}
+	
+	handle UTest.RunTests() // Prepend string list 2 (variable :: list value)
+	{
+		string i = "Kjd";
+		list<string> a = i :: ["9ikj.fI"];
+		UTest.AssertStringListEqual(a, ["Kjd", "9ikj.fI"], "Prepend string list 2 (variable :: list value)");
+	}
+	
+	handle UTest.RunTests() // Prepend string list 3 (variable :: list value)
+	{
+		string i = "k";
+		list<string> a = i :: ["-sd", "32"];
+		UTest.AssertStringListEqual(a, ["k", "-sd", "32"], "Prepend string list 3 (variable :: list value)");
+	}
+	
+	handle UTest.RunTests() // Prepend string list 1 (variable :: list variable)
+	{
+		string i = "kAJs$";
+		list<string> li = [];
+		list<string> a = i :: li;
+		UTest.AssertStringListEqual(a, ["kAJs$"], "Prepend string list 1 (variable :: list variable)");
+	}
+	
+	handle UTest.RunTests() // Prepend string list 2 (variable :: list variable)
+	{
+		string i = "-23";
+		list<string> li = ["99a"];
+		list<string> a = i :: li;
+		UTest.AssertStringListEqual(a, ["-23", "99a"], "Prepend string list 2 (variable :: list variable)");
+	}
+	
+	handle UTest.RunTests() // Prepend string list 3 (variable :: list variable)
+	{
+		string i = "jijklj";
+		list<string> li = ["nmks", "KJN8sd"];
+		list<string> a = i :: li;
+		UTest.AssertStringListEqual(a, ["jijklj", "nmks", "KJN8sd"], "Prepend string list 3 (variable :: list variable)");
+	}
+
+	//***************************************************
+	// string append (12 tests)
+	//***************************************************
+	
+	handle UTest.RunTests() // Append string list 1 (list value :: value)
+	{
+		list<string> a = [] :: "8dfJ";
+		UTest.AssertStringListEqual(a, ["8dfJ"], "Append string list 1 (list value :: value)");
+	}
+	
+	handle UTest.RunTests() // Append string list 2 (list value :: value)
+	{
+		list<string> a = ["bbBu"] :: "8";
+		UTest.AssertStringListEqual(a, ["bbBu", "8"], "Append string list 2 (list value :: value)");
+	}
+	
+	handle UTest.RunTests() // Append string list 3 (list value :: value)
+	{
+		list<string> a = ["lorem", "0"] :: "war";
+		UTest.AssertStringListEqual(a, ["lorem", "0", "war"], "Append string list 3 (list value :: value)");
+	}
+	
+	handle UTest.RunTests() // Append string list 1 (list variable :: value)
+	{
+		list<string> li = [];
+		list<string> a = li :: "IPSUM";
+		UTest.AssertStringListEqual(a, ["IPSUM"], "Append string list 1 (list variable :: value)");
+	}
+	
+	handle UTest.RunTests() // Append string list 2 (list variable :: value)
+	{
+		list<string> li = ["Kfasif8JJusfas()"];
+		list<string> a = li :: "Moolu";
+		UTest.AssertStringListEqual(a, ["Kfasif8JJusfas()", "Moolu"], "Append string list 2 (list variable :: value)");
+	}
+	
+	handle UTest.RunTests() // Append string list 3 (list variable :: value)
+	{
+		list<string> li = ["Sit", "kjfsi8"];
+		list<string> a = li :: "amEt";
+		UTest.AssertStringListEqual(a, ["Sit", "kjfsi8", "amEt"], "Append string list 3 (list variable :: value)");
+	}
+	
+	handle UTest.RunTests() // Append string list 1 (list value :: variable)
+	{
+		string i = "yu7J";
+		list<string> a = [] :: i;
+		UTest.AssertStringListEqual(a, ["yu7J"], "Append string list 1 (list value :: variable)");
+	}
+	
+	handle UTest.RunTests() // Append string list 2 (list value :: variable)
+	{
+		string i = "99k";
+		list<string> a = ["ytal"] :: i;
+		UTest.AssertStringListEqual(a, ["ytal", "99k"], "Append string list 2 (list value :: variable)");
+	}
+	
+	handle UTest.RunTests() // Append string list 3 (list value :: variable)
+	{
+		string i = "hopl";
+		list<string> a = ["h", "0"] :: i;
+		UTest.AssertStringListEqual(a, ["h", "0", "hopl"], "Append string list 3 (list value :: variable)");
+	}
+	
+	handle UTest.RunTests() // Append string list 1 (list variable :: variable)
+	{
+		string i = "test";
+		list<string> li = [];
+		list<string> a = li :: i;
+		UTest.AssertStringListEqual(a, ["test"], "Append string list 1 (list variable :: variable)");
+	}
+	
+	handle UTest.RunTests() // Append string list 2 (list variable :: variable)
+	{
+		string i = "lkJ8";
+		list<string> li = ["Ingathel"];
+		list<string> a = li :: i;
+		UTest.AssertStringListEqual(a, ["Ingathel", "lkJ8"], "Append string list 2 (list variable :: variable)");
+	}
+	
+	handle UTest.RunTests() // Append string list 3 (list variable :: variable)
+	{
+		string i = "JKsau8sA";
+		list<string> li = ["kasl", "HELLO!"];
+		list<string> a = li :: i;
+		UTest.AssertStringListEqual(a, ["kasl", "HELLO!", "JKsau8sA"], "Append string list 3 (list variable :: variable)");
+	}
+
+	//***************************************************
+	// string concat (36 tests)
+	//***************************************************
+	
+	handle UTest.RunTests() // Concat string list 1 (list value :: list value)
+	{
+		list<string> a = ["first!"] :: [];
+		UTest.AssertStringListEqual(a, ["first!"], "Concat string list 1 (list value :: list value)");
+	}
+	
+	handle UTest.RunTests() // Concat string list 2 (list value :: list value)
+	{
+		list<string> a = [] :: ["2nd"];
+		UTest.AssertStringListEqual(a, ["2nd"], "Concat string list 2 (list value :: list value)");
+	}
+	
+	handle UTest.RunTests() // Concat string list 3 (list value :: list value)
+	{
+		list<string> a = [""] :: ["derp"];
+		UTest.AssertStringListEqual(a, ["", "derp"], "Concat string list 3 (list value :: list value)");
+	}
+	
+	handle UTest.RunTests() // Concat string list 4 (list value :: list value)
+	{
+		list<string> a = ["adsk"] :: ["ii"];
+		UTest.AssertStringListEqual(a, ["adsk", "ii"], "Concat string list 4 (list value :: list value)");
+	}
+	
+	handle UTest.RunTests() // Concat string list 5 (list value :: list value)
+	{
+		list<string> a = ["a"] :: ["Bc", "b"];
+		UTest.AssertStringListEqual(a, ["a", "Bc", "b"], "Concat string list 5 (list value :: list value)");
+	}
+	
+	handle UTest.RunTests() // Concat string list 6 (list value :: list value)
+	{
+		list<string> a = ["kkkI", "uue!j"] :: ["99kl_", "c"];
+		UTest.AssertStringListEqual(a, ["kkkI", "uue!j", "99kl_", "c"], "Concat string list 6 (list value :: list value)");
+	}
+	
+	handle UTest.RunTests() // Concat string list 7 (list value :: list value)
+	{
+		list<string> a = ["vnmfxi", "XcU", "8-ccx"] :: ["][", "=?"];
+		UTest.AssertStringListEqual(a, ["vnmfxi", "XcU", "8-ccx", "][", "=?"], "Concat string list 7 (list value :: list value)");
+	}
+	
+	handle UTest.RunTests() // Concat string list 8 (list value :: list value)
+	{
+		list<string> a = ["&%5", "$£k/"] :: ["UP", "DOWN", "lop"];
+		UTest.AssertStringListEqual(a, ["&%5", "$£k/", "UP", "DOWN", "lop"], "Concat string list 8 (list value :: list value)");
+	}
+	
+	handle UTest.RunTests() // Concat string list 9 (list value :: list value)
+	{
+		list<string> a = ["9.6", "64.29", "8.87"] :: ["-772.4", "-8.654", "0.554"];
+		UTest.AssertStringListEqual(a, ["9.6", "64.29", "8.87", "-772.4", "-8.654", "0.554"], "Concat string list 9 (list value :: list value)");
+	}
+	
+	handle UTest.RunTests() // Concat string list 1 (list variable :: list value)
+	{
+		list<string> li = ["tyris"];
+		list<string> a = li :: [];
+		UTest.AssertStringListEqual(a, ["tyris"], "Concat string list 1 (list variable :: list value)");
+	}
+	
+	handle UTest.RunTests() // Concat string list 2 (list variable :: list value)
+	{
+		list<string> li = [];
+		list<string> a = li :: ["LOREM"];
+		UTest.AssertStringListEqual(a, ["LOREM"], "Concat string list 2 (list variable :: list value)");
+	}
+	
+	handle UTest.RunTests() // Concat string list 3 (list variable :: list value)
+	{
+		list<string> li = ["I"];
+		list<string> a = li :: ["p"];
+		UTest.AssertStringListEqual(a, ["I", "p"], "Concat string list 3 (list variable :: list value)");
+	}
+	
+	handle UTest.RunTests() // Concat string list 4 (list variable :: list value)
+	{
+		list<string> li = ["help", "112"];
+		list<string> a = li :: ["911"];
+		UTest.AssertStringListEqual(a, ["help", "112", "911"], "Concat string list 4 (list variable :: list value)");
+	}
+	
+	handle UTest.RunTests() // Concat string list 5 (list variable :: list value)
+	{
+		list<string> li = ["kljIU"];
+		list<string> a = li :: ["88_{", "jk_25"];
+		UTest.AssertStringListEqual(a, ["kljIU", "88_{", "jk_25"], "Concat string list 5 (list variable :: list value)");
+	}
+	
+	handle UTest.RunTests() // Concat string list 6 (list variable :: list value)
+	{
+		list<string> li = ["-_-", ":)"];
+		list<string> a = li :: ["0+2", "¤1!"];
+		UTest.AssertStringListEqual(a, ["-_-", ":)", "0+2", "¤1!"], "Concat string list 6 (list variable :: list value)");
+	}
+	
+	handle UTest.RunTests() // Concat string list 7 (list variable :: list value)
+	{
+		list<string> li = ["8j-_ng", "something", "kj as"];
+		list<string> a = li :: ["99 an 99", "j"];
+		UTest.AssertStringListEqual(a, ["8j-_ng", "something", "kj as", "99 an 99", "j"], "Concat string list 7 (list variable :: list value)");
+	}
+	
+	handle UTest.RunTests() // Concat string list 8 (list variable :: list value)
+	{
+		list<string> li = ["Jsida", "JkU("];
+		list<string> a = li :: ["{0KI", "7&[}", "kjl7/%"];
+		UTest.AssertStringListEqual(a, ["Jsida", "JkU(", "{0KI", "7&[}", "kjl7/%"], "Concat string list 8 (list variable :: list value)");
+	}
+	
+	handle UTest.RunTests() // Concat string list 9 (list variable :: list value)
+	{
+		list<string> li = ["68", "llao", "BAck"];
+		list<string> a = li :: ["8jH", "d", "E"];
+		UTest.AssertStringListEqual(a, ["68", "llao", "BAck", "8jH", "d", "E"], "Concat string list 9 (list variable :: list value)");
+	}
+	
+	handle UTest.RunTests() // Concat string list 1 (list value :: list variable)
+	{
+		list<string> li = [];
+		list<string> a = ["23.2883"] :: li;
+		UTest.AssertStringListEqual(a, ["23.2883"], "Concat string list 1 (list value :: list variable)");
+	}
+	
+	handle UTest.RunTests() // Concat string list 2 (list value :: list variable)
+	{
+		list<string> li = ["D"];
+		list<string> a = [] :: li;
+		UTest.AssertStringListEqual(a, ["D"], "Concat string list 2 (list value :: list variable)");
+	}
+	
+	handle UTest.RunTests() // Concat string list 3 (list value :: list variable)
+	{
+		list<string> li = ["Allure"];
+		list<string> a = ["fOrTh"] :: li;
+		UTest.AssertStringListEqual(a, ["fOrTh", "Allure"], "Concat string list 3 (list value :: list variable)");
+	}
+	
+	handle UTest.RunTests() // Concat string list 4 (list value :: list variable)
+	{
+		list<string> li = ["{_}"];
+		list<string> a = ["hall0", "radio"] :: li;
+		UTest.AssertStringListEqual(a, ["hall0", "radio", "{_}"], "Concat string list 4 (list value :: list variable)");
+	}
+	
+	handle UTest.RunTests() // Concat string list 5 (list value :: list variable)
+	{
+		list<string> li = ["ll(1)", "90"];
+		list<string> a = ["__"] :: li;
+		UTest.AssertStringListEqual(a, ["__", "ll(1)", "90"], "Concat string list 5 (list value :: list variable)");
+	}
+	
+	handle UTest.RunTests() // Concat string list 6 (list value :: list variable)
+	{
+		list<string> li = ["fs_", "yib"];
+		list<string> a = ["==", "+?"] :: li;
+		UTest.AssertStringListEqual(a, ["==", "+?", "fs_", "yib"], "Concat string list 6 (list value :: list variable)");
+	}
+	
+	handle UTest.RunTests() // Concat string list 7 (list value :: list variable)
+	{
+		list<string> li = ["ibyiby", "qwerty"];
+		list<string> a = ["AsD", "K@$@", "loppe"] :: li;
+		UTest.AssertStringListEqual(a, ["AsD", "K@$@", "loppe", "ibyiby", "qwerty"], "Concat string list 7 (list value :: list variable)");
+	}
+	
+	handle UTest.RunTests() // Concat string list 8 (list value :: list variable)
+	{
+		list<string> li = ["", "", ""];
+		list<string> a = ["0", "0"] :: li;
+		UTest.AssertStringListEqual(a, ["0", "0", "", "", ""], "Concat string list 8 (list value :: list variable)");
+	}
+	
+	handle UTest.RunTests() // Concat string list 9 (list value :: list variable)
+	{
+		list<string> li = ["kJushf", "BnmX", "/-/"];
+		list<string> a = ["___", "&&&", "0.0.2.1"] :: li;
+		UTest.AssertStringListEqual(a, ["___", "&&&", "0.0.2.1", "kJushf", "BnmX", "/-/"], "Concat string list 9 (list value :: list variable)");
+	}
+	
+	handle UTest.RunTests() // Concat string list 1 (list variable :: list variable)
+	{
+		list<string> li1 = ["uno"];
+		list<string> li2 = [];
+		list<string> a = li1 :: li2;
+		UTest.AssertStringListEqual(a, ["uno"], "Concat string list 1 (list variable :: list variable)");
+	}
+	
+	handle UTest.RunTests() // Concat string list 2 (list variable :: list variable)
+	{
+		list<string> li1 = [];
+		list<string> li2 = ["a-b-c-d-e"];
+		list<string> a = li1 :: li2;
+		UTest.AssertStringListEqual(a, ["a-b-c-d-e"], "Concat string list 2 (list variable :: list variable)");
+	}
+	
+	handle UTest.RunTests() // Concat string list 3 (list variable :: list variable)
+	{
+		list<string> li1 = ["LLVM"];
+		list<string> li2 = ["Buzzword"];
+		list<string> a = li1 :: li2;
+		UTest.AssertStringListEqual(a, ["LLVM", "Buzzword"], "Concat string list 3 (list variable :: list variable)");
+	}
+	
+	handle UTest.RunTests() // Concat string list 4 (list variable :: list variable)
+	{
+		list<string> li1 = ["lLHbvm", "h7/nm"];
+		list<string> li2 = ["Khsu/9("];
+		list<string> a = li1 :: li2;
+		UTest.AssertStringListEqual(a, ["lLHbvm", "h7/nm", "Khsu/9("], "Concat string list 4 (list variable :: list variable)");
+	}
+	
+	handle UTest.RunTests() // Concat string list 5 (list variable :: list variable)
+	{
+		list<string> li1 = ["00_00"];
+		list<string> li2 = ["jks", "k"];
+		list<string> a = li1 :: li2;
+		UTest.AssertStringListEqual(a, ["00_00", "jks", "k"], "Concat string list 5 (list variable :: list variable)");
+	}
+	
+	handle UTest.RunTests() // Concat string list 6 (list variable :: list variable)
+	{
+		list<string> li1 = ["hvus", "jUs"];
+		list<string> li2 = ["7/7//", "&_52"];
+		list<string> a = li1 :: li2;
+		UTest.AssertStringListEqual(a, ["hvus", "jUs", "7/7//", "&_52"], "Concat string list 6 (list variable :: list variable)");
+	}
+	
+	handle UTest.RunTests() // Concat string list 7 (list variable :: list variable)
+	{
+		list<string> li1 = ["olY", "_iuh(", "9oiu"];
+		list<string> li2 = ["kku", "tys"];
+		list<string> a = li1 :: li2;
+		UTest.AssertStringListEqual(a, ["olY", "_iuh(", "9oiu", "kku", "tys"], "Concat string list 7 (list variable :: list variable)");
+	}
+	
+	handle UTest.RunTests() // Concat string list 8 (list variable :: list variable)
+	{
+		list<string> li1 = ["kfuaBMu", "RbU"];
+		list<string> li2 = ["9u8(/Bm", "[na]", "MNV"];
+		list<string> a = li1 :: li2;
+		UTest.AssertStringListEqual(a, ["kfuaBMu", "RbU", "9u8(/Bm", "[na]", "MNV"], "Concat string list 8 (list variable :: list variable)");
+	}
+	
+	handle UTest.RunTests() // Concat string list 9 (list variable :: list variable)
+	{
+		list<string> li1 = ["Oio()", "()()()()(", "&54:M"];
+		list<string> li2 = ["0==0", ":..::;,", "...---..."];
+		list<string> a = li1 :: li2;
+		UTest.AssertStringListEqual(a, ["Oio()", "()()()()(", "&54:M", "0==0", ":..::;,", "...---..."], "Concat string list 9 (list variable :: list variable)");
+	}
+
+
+	//***************************************************
+	// booleger prepend (12 tests)
+	//***************************************************
+	
+	handle UTest.RunTests() // Prepend bool list 1 (value :: list value)
+	{
+		list<bool> a = true :: [];
+		UTest.AssertBoolListEqual(a, [true], "Prepend bool list 1 (value :: list value)");
+	}
+	
+	handle UTest.RunTests() // Prepend bool list 2 (value :: list value)
+	{
+		list<bool> a = false :: [true];
+		UTest.AssertBoolListEqual(a, [false, true], "Prepend bool list 2 (value :: list value)");
+	}
+	
+	handle UTest.RunTests() // Prepend bool list 3 (value :: list value)
+	{
+		list<bool> a = true :: [false, false];
+		UTest.AssertBoolListEqual(a, [true, false, false], "Prepend bool list 3 (value :: list value)");
+	}
+	
+	handle UTest.RunTests() // Prepend bool list 1 (value :: list variable)
+	{
+		list<bool> li = [];
+		list<bool> a = false :: li;
+		UTest.AssertBoolListEqual(a, [false], "Prepend bool list 1 (value :: list variable)");
+	}
+	
+	handle UTest.RunTests() // Prepend bool list 2 (value :: list variable)
+	{
+		list<bool> li = [true];
+		list<bool> a = false :: li;
+		UTest.AssertBoolListEqual(a, [false, true], "Prepend bool list 2 (value :: list variable)");
+	}
+	
+	handle UTest.RunTests() // Prepend bool list 3 (value :: list variable)
+	{
+		list<bool> li = [false, false];
+		list<bool> a = false :: li;
+		UTest.AssertBoolListEqual(a, [false, false, false], "Prepend bool list 3 (value :: list variable)");
+	}
+	
+	handle UTest.RunTests() // Prepend bool list 1 (variable :: list value)
+	{
+		bool i = true;
+		list<bool> a = i :: [];
+		UTest.AssertBoolListEqual(a, [true], "Prepend bool list 1 (variable :: list value)");
+	}
+	
+	handle UTest.RunTests() // Prepend bool list 2 (variable :: list value)
+	{
+		bool i = true;
+		list<bool> a = i :: [true];
+		UTest.AssertBoolListEqual(a, [true, true], "Prepend bool list 2 (variable :: list value)");
+	}
+	
+	handle UTest.RunTests() // Prepend bool list 3 (variable :: list value)
+	{
+		bool i = false;
+		list<bool> a = i :: [false, true];
+		UTest.AssertBoolListEqual(a, [false, false, true], "Prepend bool list 3 (variable :: list value)");
+	}
+	
+	handle UTest.RunTests() // Prepend bool list 1 (variable :: list variable)
+	{
+		bool i = true;
+		list<bool> li = [];
+		list<bool> a = i :: li;
+		UTest.AssertBoolListEqual(a, [true], "Prepend bool list 1 (variable :: list variable)");
+	}
+	
+	handle UTest.RunTests() // Prepend bool list 2 (variable :: list variable)
+	{
+		bool i = false;
+		list<bool> li = [true];
+		list<bool> a = i :: li;
+		UTest.AssertBoolListEqual(a, [false, true], "Prepend bool list 2 (variable :: list variable)");
+	}
+	
+	handle UTest.RunTests() // Prepend bool list 3 (variable :: list variable)
+	{
+		bool i = true;
+		list<bool> li = [false, false];
+		list<bool> a = i :: li;
+		UTest.AssertBoolListEqual(a, [true, false, false], "Prepend bool list 3 (variable :: list variable)");
+	}
+
+	//***************************************************
+	// booleger append (12 tests)
+	//***************************************************
+	
+	handle UTest.RunTests() // Append bool list 1 (list value :: value)
+	{
+		list<bool> a = [] :: false;
+		UTest.AssertBoolListEqual(a, [false], "Append bool list 1 (list value :: value)");
+	}
+	
+	handle UTest.RunTests() // Append bool list 2 (list value :: value)
+	{
+		list<bool> a = [false] :: true;
+		UTest.AssertBoolListEqual(a, [false, true], "Append bool list 2 (list value :: value)");
+	}
+	
+	handle UTest.RunTests() // Append bool list 3 (list value :: value)
+	{
+		list<bool> a = [false, false] :: false;
+		UTest.AssertBoolListEqual(a, [false, false, false], "Append bool list 3 (list value :: value)");
+	}
+	
+	handle UTest.RunTests() // Append bool list 1 (list variable :: value)
+	{
+		list<bool> li = [];
+		list<bool> a = li :: true;
+		UTest.AssertBoolListEqual(a, [true], "Append bool list 1 (list variable :: value)");
+	}
+	
+	handle UTest.RunTests() // Append bool list 2 (list variable :: value)
+	{
+		list<bool> li = [false];
+		list<bool> a = li :: true;
+		UTest.AssertBoolListEqual(a, [false, true], "Append bool list 2 (list variable :: value)");
+	}
+	
+	handle UTest.RunTests() // Append bool list 3 (list variable :: value)
+	{
+		list<bool> li = [true, false];
+		list<bool> a = li :: true;
+		UTest.AssertBoolListEqual(a, [true, false, true], "Append bool list 3 (list variable :: value)");
+	}
+	
+	handle UTest.RunTests() // Append bool list 1 (list value :: variable)
+	{
+		bool i = false;
+		list<bool> a = [] :: i;
+		UTest.AssertBoolListEqual(a, [false], "Append bool list 1 (list value :: variable)");
+	}
+	
+	handle UTest.RunTests() // Append bool list 2 (list value :: variable)
+	{
+		bool i = true;
+		list<bool> a = [true] :: i;
+		UTest.AssertBoolListEqual(a, [true, true], "Append bool list 2 (list value :: variable)");
+	}
+	
+	handle UTest.RunTests() // Append bool list 3 (list value :: variable)
+	{
+		bool i = false;
+		list<bool> a = [true, true] :: i;
+		UTest.AssertBoolListEqual(a, [true, true, false], "Append bool list 3 (list value :: variable)");
+	}
+	
+	handle UTest.RunTests() // Append bool list 1 (list variable :: variable)
+	{
+		bool i = false;
+		list<bool> li = [];
+		list<bool> a = li :: i;
+		UTest.AssertBoolListEqual(a, [false], "Append bool list 1 (list variable :: variable)");
+	}
+	
+	handle UTest.RunTests() // Append bool list 2 (list variable :: variable)
+	{
+		bool i = false;
+		list<bool> li = [false];
+		list<bool> a = li :: i;
+		UTest.AssertBoolListEqual(a, [false, false], "Append bool list 2 (list variable :: variable)");
+	}
+	
+	handle UTest.RunTests() // Append bool list 3 (list variable :: variable)
+	{
+		bool i = true;
+		list<bool> li = [true, true];
+		list<bool> a = li :: i;
+		UTest.AssertBoolListEqual(a, [true, true, true], "Append bool list 3 (list variable :: variable)");
+	}
+
+	//***************************************************
+	// booleger concat (36 tests)
+	//***************************************************
+	
+	handle UTest.RunTests() // Concat bool list 1 (list value :: list value)
+	{
+		list<bool> a = [false] :: [];
+		UTest.AssertBoolListEqual(a, [false], "Concat bool list 1 (list value :: list value)");
+	}
+	
+	handle UTest.RunTests() // Concat bool list 2 (list value :: list value)
+	{
+		list<bool> a = [] :: [true];
+		UTest.AssertBoolListEqual(a, [true], "Concat bool list 2 (list value :: list value)");
+	}
+	
+	handle UTest.RunTests() // Concat bool list 3 (list value :: list value)
+	{
+		list<bool> a = [true] :: [false];
+		UTest.AssertBoolListEqual(a, [true, false], "Concat bool list 3 (list value :: list value)");
+	}
+	
+	handle UTest.RunTests() // Concat bool list 4 (list value :: list value)
+	{
+		list<bool> a = [false, true] :: [false];
+		UTest.AssertBoolListEqual(a, [false, true, false], "Concat bool list 4 (list value :: list value)");
+	}
+	
+	handle UTest.RunTests() // Concat bool list 5 (list value :: list value)
+	{
+		list<bool> a = [true] :: [true, true];
+		UTest.AssertBoolListEqual(a, [true, true, true], "Concat bool list 5 (list value :: list value)");
+	}
+	
+	handle UTest.RunTests() // Concat bool list 6 (list value :: list value)
+	{
+		list<bool> a = [false, true] :: [false, true];
+		UTest.AssertBoolListEqual(a, [false, true, false, true], "Concat bool list 6 (list value :: list value)");
+	}
+	
+	handle UTest.RunTests() // Concat bool list 7 (list value :: list value)
+	{
+		list<bool> a = [true, true, true] :: [false, false];
+		UTest.AssertBoolListEqual(a, [true, true, true, false, false], "Concat bool list 7 (list value :: list value)");
+	}
+	
+	handle UTest.RunTests() // Concat bool list 8 (list value :: list value)
+	{
+		list<bool> a = [false, false] :: [true, true, true];
+		UTest.AssertBoolListEqual(a, [false, false, true, true, true], "Concat bool list 8 (list value :: list value)");
+	}
+	
+	handle UTest.RunTests() // Concat bool list 9 (list value :: list value)
+	{
+		list<bool> a = [false, true, false] :: [true, false, true];
+		UTest.AssertBoolListEqual(a, [false, true, false, true, false, true], "Concat bool list 9 (list value :: list value)");
+	}
+	
+	handle UTest.RunTests() // Concat bool list 1 (list variable :: list value)
+	{
+		list<bool> li = [true];
+		list<bool> a = li :: [];
+		UTest.AssertBoolListEqual(a, [true], "Concat bool list 1 (list variable :: list value)");
+	}
+	
+	handle UTest.RunTests() // Concat bool list 2 (list variable :: list value)
+	{
+		list<bool> li = [];
+		list<bool> a = li :: [false];
+		UTest.AssertBoolListEqual(a, [false], "Concat bool list 2 (list variable :: list value)");
+	}
+	
+	handle UTest.RunTests() // Concat bool list 3 (list variable :: list value)
+	{
+		list<bool> li = [true];
+		list<bool> a = li :: [true];
+		UTest.AssertBoolListEqual(a, [true, true], "Concat bool list 3 (list variable :: list value)");
+	}
+	
+	handle UTest.RunTests() // Concat bool list 4 (list variable :: list value)
+	{
+		list<bool> li = [false, true];
+		list<bool> a = li :: [false];
+		UTest.AssertBoolListEqual(a, [false, true, false], "Concat bool list 4 (list variable :: list value)");
+	}
+	
+	handle UTest.RunTests() // Concat bool list 5 (list variable :: list value)
+	{
+		list<bool> li = [false];
+		list<bool> a = li :: [false, false];
+		UTest.AssertBoolListEqual(a, [false, false, false], "Concat bool list 5 (list variable :: list value)");
+	}
+	
+	handle UTest.RunTests() // Concat bool list 6 (list variable :: list value)
+	{
+		list<bool> li = [true, true];
+		list<bool> a = li :: [false, false];
+		UTest.AssertBoolListEqual(a, [true, true, false, false], "Concat bool list 6 (list variable :: list value)");
+	}
+	
+	handle UTest.RunTests() // Concat bool list 7 (list variable :: list value)
+	{
+		list<bool> li = [true, false, false];
+		list<bool> a = li :: [false, false];
+		UTest.AssertBoolListEqual(a, [true, false, false, false, false], "Concat bool list 7 (list variable :: list value)");
+	}
+	
+	handle UTest.RunTests() // Concat bool list 8 (list variable :: list value)
+	{
+		list<bool> li = [true, false];
+		list<bool> a = li :: [true, true, true];
+		UTest.AssertBoolListEqual(a, [true, false, true, true, true], "Concat bool list 8 (list variable :: list value)");
+	}
+	
+	handle UTest.RunTests() // Concat bool list 9 (list variable :: list value)
+	{
+		list<bool> li = [false, false, true];
+		list<bool> a = li :: [true, false, false];
+		UTest.AssertBoolListEqual(a, [false, false, true, true, false, false], "Concat bool list 9 (list variable :: list value)");
+	}
+	
+	handle UTest.RunTests() // Concat bool list 1 (list value :: list variable)
+	{
+		list<bool> li = [];
+		list<bool> a = [false] :: li;
+		UTest.AssertBoolListEqual(a, [false], "Concat bool list 1 (list value :: list variable)");
+	}
+	
+	handle UTest.RunTests() // Concat bool list 2 (list value :: list variable)
+	{
+		list<bool> li = [true];
+		list<bool> a = [] :: li;
+		UTest.AssertBoolListEqual(a, [true], "Concat bool list 2 (list value :: list variable)");
+	}
+	
+	handle UTest.RunTests() // Concat bool list 3 (list value :: list variable)
+	{
+		list<bool> li = [false];
+		list<bool> a = [false] :: li;
+		UTest.AssertBoolListEqual(a, [false, false], "Concat bool list 3 (list value :: list variable)");
+	}
+	
+	handle UTest.RunTests() // Concat bool list 4 (list value :: list variable)
+	{
+		list<bool> li = [true];
+		list<bool> a = [true, true] :: li;
+		UTest.AssertBoolListEqual(a, [true, true, true], "Concat bool list 4 (list value :: list variable)");
+	}
+	
+	handle UTest.RunTests() // Concat bool list 5 (list value :: list variable)
+	{
+		list<bool> li = [false, false];
+		list<bool> a = [false] :: li;
+		UTest.AssertBoolListEqual(a, [false, false, false], "Concat bool list 5 (list value :: list variable)");
+	}
+	
+	handle UTest.RunTests() // Concat bool list 6 (list value :: list variable)
+	{
+		list<bool> li = [true, true];
+		list<bool> a = [false, true] :: li;
+		UTest.AssertBoolListEqual(a, [false, true, true, true], "Concat bool list 6 (list value :: list variable)");
+	}
+	
+	handle UTest.RunTests() // Concat bool list 7 (list value :: list variable)
+	{
+		list<bool> li = [false, true];
+		list<bool> a = [true, false, true] :: li;
+		UTest.AssertBoolListEqual(a, [true, false, true, false, true], "Concat bool list 7 (list value :: list variable)");
+	}
+	
+	handle UTest.RunTests() // Concat bool list 8 (list value :: list variable)
+	{
+		list<bool> li = [false, false, false];
+		list<bool> a = [true, true] :: li;
+		UTest.AssertBoolListEqual(a, [true, true, false, false, false], "Concat bool list 8 (list value :: list variable)");
+	}
+	
+	handle UTest.RunTests() // Concat bool list 9 (list value :: list variable)
+	{
+		list<bool> li = [false, false, true];
+		list<bool> a = [false, false, false] :: li;
+		UTest.AssertBoolListEqual(a, [false, false, false, false, false, true], "Concat bool list 9 (list value :: list variable)");
+	}
+	
+	handle UTest.RunTests() // Concat bool list 1 (list variable :: list variable)
+	{
+		list<bool> li1 = [true];
+		list<bool> li2 = [];
+		list<bool> a = li1 :: li2;
+		UTest.AssertBoolListEqual(a, [true], "Concat bool list 1 (list variable :: list variable)");
+	}
+	
+	handle UTest.RunTests() // Concat bool list 2 (list variable :: list variable)
+	{
+		list<bool> li1 = [];
+		list<bool> li2 = [false];
+		list<bool> a = li1 :: li2;
+		UTest.AssertBoolListEqual(a, [false], "Concat bool list 2 (list variable :: list variable)");
+	}
+	
+	handle UTest.RunTests() // Concat bool list 3 (list variable :: list variable)
+	{
+		list<bool> li1 = [true];
+		list<bool> li2 = [true];
+		list<bool> a = li1 :: li2;
+		UTest.AssertBoolListEqual(a, [true, true], "Concat bool list 3 (list variable :: list variable)");
+	}
+	
+	handle UTest.RunTests() // Concat bool list 4 (list variable :: list variable)
+	{
+		list<bool> li1 = [false, true];
+		list<bool> li2 = [false];
+		list<bool> a = li1 :: li2;
+		UTest.AssertBoolListEqual(a, [false, true, false], "Concat bool list 4 (list variable :: list variable)");
+	}
+	
+	handle UTest.RunTests() // Concat bool list 5 (list variable :: list variable)
+	{
+		list<bool> li1 = [false];
+		list<bool> li2 = [false, false];
+		list<bool> a = li1 :: li2;
+		UTest.AssertBoolListEqual(a, [false, false, false], "Concat bool list 5 (list variable :: list variable)");
+	}
+	
+	handle UTest.RunTests() // Concat bool list 6 (list variable :: list variable)
+	{
+		list<bool> li1 = [true, false];
+		list<bool> li2 = [true, false];
+		list<bool> a = li1 :: li2;
+		UTest.AssertBoolListEqual(a, [true, false, true, false], "Concat bool list 6 (list variable :: list variable)");
+	}
+	
+	handle UTest.RunTests() // Concat bool list 7 (list variable :: list variable)
+	{
+		list<bool> li1 = [false, false, true];
+		list<bool> li2 = [true, true];
+		list<bool> a = li1 :: li2;
+		UTest.AssertBoolListEqual(a, [false, false, true, true, true], "Concat bool list 7 (list variable :: list variable)");
+	}
+	
+	handle UTest.RunTests() // Concat bool list 8 (list variable :: list variable)
+	{
+		list<bool> li1 = [true, true];
+		list<bool> li2 = [true, true, true];
+		list<bool> a = li1 :: li2;
+		UTest.AssertBoolListEqual(a, [true, true, true, true, true], "Concat bool list 8 (list variable :: list variable)");
+	}
+	
+	handle UTest.RunTests() // Concat bool list 9 (list variable :: list variable)
+	{
+		list<bool> li1 = [false, false, true];
+		list<bool> li2 = [true, false, true];
+		list<bool> a = li1 :: li2;
+		UTest.AssertBoolListEqual(a, [false, false, true, true, false, true], "Concat bool list 9 (list variable :: list variable)");
 	}
 }
