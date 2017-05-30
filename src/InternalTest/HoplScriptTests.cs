@@ -25,7 +25,8 @@ namespace InternalTest
 		
 		[Theory]
 		[InlineData("./InternalTests/Execution/ArithmeticOperators.hopl")]
-		[InlineData("./InternalTests/Execution/ComparisonOperators.hopl")]
+        [InlineData("./InternalTests/Execution/Assignment.hopl")]
+        [InlineData("./InternalTests/Execution/ComparisonOperators.hopl")]
 		[InlineData("./InternalTests/Execution/LogicalOperators.hopl")]
 		[InlineData("./InternalTests/Execution/Precendece.hopl")]
 		[InlineData("./InternalTests/Execution/TriggerReference.hopl")]

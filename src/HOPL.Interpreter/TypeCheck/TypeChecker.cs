@@ -318,7 +318,7 @@ namespace HOPL.Interpreter.TypeCheck
 					return InterpreterType.ERROR;
 				}
 
-				if (exprType != domain[i])
+				if (!AssignmentAllowed(domain[i], exprType))
 				{
 					currentCallable = upperCallable;
 					return RaiseError(TypeErrorMessage.CALL_ARGMISMATCH, context);

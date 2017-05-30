@@ -1,0 +1,354 @@
+﻿import UTest;
+
+namespace Assignment
+{
+	int tests = 47;
+
+	handle UTest.BeforeTests()
+	{
+		UTest.SetTestCount(tests);
+	}
+	
+	//***************************************************
+	// Integer assignments (5 tests)
+	//***************************************************
+
+	handle UTest.RunTests() // Assign integer 1 (constant value)
+	{
+		int a = 54;
+		UTest.AssertIntEqual(a, 54, "Assign integer 1 (constant value)");
+	}
+
+	handle UTest.RunTests() // Assign integer 2 (constant value)
+	{
+		int a = 1492938;
+		UTest.AssertIntEqual(a, 1492938, "Assign integer 2 (constant value)");
+	}
+
+	handle UTest.RunTests() // Assign integer 3 (constant value)
+	{
+		int a = -2174;
+		UTest.AssertIntEqual(a, -2174, "Assign integer 3 (constant value)");
+	}
+
+	handle UTest.RunTests() // Assign integer 1 (expression)
+	{
+		int a = 23 + 5;
+		UTest.AssertIntEqual(a, 28, "Assign integer 1 (expression)");
+	}
+
+	handle UTest.RunTests() // Assign integer 1 (call)
+	{
+		int a = ReturnsIntTwenty();
+		UTest.AssertIntEqual(a, 20, "Assign integer 1 (call)");
+	}
+
+	int ReturnsIntTwenty()
+	{
+		return 20;
+	}
+	
+	//***************************************************
+	// Float assignments (5 tests)
+	//***************************************************
+
+	handle UTest.RunTests() // Assign float 1 (constant value)
+	{
+		float a = 852.4;
+		UTest.AssertFloatEqual(a, 852.4, "Assign float 1 (constant value)");
+	}
+
+	handle UTest.RunTests() // Assign float 2 (constant value)
+	{
+		float a = 99912.0;
+		UTest.AssertFloatEqual(a, 99912, "Assign float 2 (constant value)");
+	}
+
+	handle UTest.RunTests() // Assign float 3 (constant value)
+	{
+		float a = -0.005;
+		UTest.AssertFloatEqual(a, -0.005, "Assign float 3 (constant value)");
+	}
+
+	handle UTest.RunTests() // Assign float 1 (expression)
+	{
+		float a = 25 * 0.5;
+		UTest.AssertFloatEqual(a, 12.5, "Assign float 1 (expression)");
+	}
+
+	handle UTest.RunTests() // Assign float 1 (call)
+	{
+		float a = ReturnsIntHundredAndOnePointFive();
+		UTest.AssertFloatEqual(a, 101.5, "Assign float 1 (call)");
+	}
+
+	float ReturnsIntHundredAndOnePointFive()
+	{
+		return 101.5;
+	}
+	
+	//***************************************************
+	// String assignments (3 tests)
+	//***************************************************
+
+	handle UTest.RunTests() // Assign string 1 (constant value)
+	{
+		string a = "This is some test text.";
+		UTest.AssertStringEqual(a, "This is some test text.", "Assign string 1 (constant value)");
+	}
+
+	handle UTest.RunTests() // Assign string 2 (constant value)
+	{
+		string a = "54990651-046e-4a45-9c69-e2168f580917";
+		UTest.AssertStringEqual(a, "54990651-046e-4a45-9c69-e2168f580917", "Assign string 2 (constant value)");
+	}
+
+	handle UTest.RunTests() // Assign string 1 (call)
+	{
+		string a = GetHello();
+		UTest.AssertStringEqual(a, "Hello", "Assign string 1 (call)");
+	}
+
+	string GetHello()
+	{
+		return "Hello";
+	}
+	
+	//***************************************************
+	// Boolean assignments (4 tests)
+	//***************************************************
+
+	handle UTest.RunTests() // Assign bool 1 (constant value)
+	{
+		bool a = true;
+		UTest.AssertBoolTrue(a, "Assign bool 1 (constant value)");
+	}
+
+	handle UTest.RunTests() // Assign bool 2 (constant value)
+	{
+		bool a = false;
+		UTest.AssertBoolFalse(a, "Assign bool 2 (constant value)");
+	}
+
+	handle UTest.RunTests() // Assign bool 1 (expression)
+	{
+		bool a = true and false;
+		UTest.AssertBoolFalse(a, "Assign bool 1 (expression)");
+	}
+
+	handle UTest.RunTests() // Assign bool 1 (call)
+	{
+		bool a = GetTrue();
+		UTest.AssertBoolTrue(a, "Assign bool 1 (call)");
+	}
+
+	bool GetTrue()
+	{
+		return true;
+	}
+
+	//***************************************************
+	// Integer list assignments (5 tests)
+	//***************************************************
+	
+	handle UTest.RunTests() // Assign list<int> 1 (constant value)
+	{
+		list<int> a = [];
+		UTest.AssertIntListEqual(a, [], "Assign list<int> 1 (constant value)");
+	}
+
+	handle UTest.RunTests() // Assign list<int> 1 (constant value)
+	{
+		list<int> a = [90];
+		UTest.AssertIntListEqual(a, [90], "Assign list<int> 1 (constant value)");
+	}
+
+	handle UTest.RunTests() // Assign list<int> 2 (constant value)
+	{
+		list<int> a = [-23, 98277];
+		UTest.AssertIntListEqual(a, [-23, 98277], "Assign list<int> 2 (constant value)");
+	}
+
+	handle UTest.RunTests() // Assign list<int> 1 (expression)
+	{
+		list<int> a = 3 :: [1, 2, 3];
+		UTest.AssertIntListEqual(a, [3, 1, 2, 3], "Assign list<int> 1 (expression)");
+	}
+
+	handle UTest.RunTests() // Assign list<int> 1 (call)
+	{
+		list<int> a = GetListOfOneOne();
+		UTest.AssertIntListEqual(a, [1], "Assign list<int> 1 (call)");
+	}
+
+	list<int> GetListOfOneOne()
+	{
+		return [1];
+	}
+
+	//***************************************************
+	// Float list assignments (5 tests)
+	//***************************************************
+	
+	handle UTest.RunTests() // Assign list<float> 1 (constant value)
+	{
+		list<float> a = [];
+		UTest.AssertFloatListEqual(a, [], "Assign list<float> 1 (constant value)");
+	}
+
+	handle UTest.RunTests() // Assign list<float> 1 (constant value)
+	{
+		list<float> a = [90.0];
+		UTest.AssertFloatListEqual(a, [90.0], "Assign list<float> 1 (constant value)");
+	}
+
+	handle UTest.RunTests() // Assign list<float> 2 (constant value)
+	{
+		list<float> a = [0.00009, -921.12385];
+		UTest.AssertFloatListEqual(a, [0.00009, -921.12385], "Assign list<float> 2 (constant value)");
+	}
+
+	handle UTest.RunTests() // Assign list<float> 1 (expression)
+	{
+		list<float> a = 12.34 :: [0.5, 124, 8.9];
+		UTest.AssertFloatListEqual(a, [12.34, 0.5, 124, 8.9], "Assign list<float> 1 (expression)");
+	}
+
+	handle UTest.RunTests() // Assign list<float> 1 (call)
+	{
+		list<float> a = GetListOfTwoThreePointSix();
+		UTest.AssertFloatListEqual(a, [3.6, 3.6], "Assign list<float> 1 (call)");
+	}
+
+	list<float> GetListOfTwoThreePointSix()
+	{
+		return [3.6, 3.6];
+	}
+
+	//***************************************************
+	// String list assignments (5 tests)
+	//***************************************************
+	
+	handle UTest.RunTests() // Assign list<string> 1 (constant value)
+	{
+		list<string> a = [];
+		UTest.AssertStringListEqual(a, [], "Assign list<string> 1 (constant value)");
+	}
+
+	handle UTest.RunTests() // Assign list<string> 1 (constant value)
+	{
+		list<string> a = ["1234567890"];
+		UTest.AssertStringListEqual(a, ["1234567890"], "Assign list<string> 1 (constant value)");
+	}
+
+	handle UTest.RunTests() // Assign list<string> 2 (constant value)
+	{
+		list<string> a = ["LOREM", "IPSUM"];
+		UTest.AssertStringListEqual(a, ["LOREM", "IPSUM"], "Assign list<string> 2 (constant value)");
+	}
+
+	handle UTest.RunTests() // Assign list<string> 1 (expression)
+	{
+		list<string> a = "To be added" :: ["First", "Second"];
+		UTest.AssertStringListEqual(a, ["To be added", "First", "Second"], "Assign list<string> 1 (expression)");
+	}
+
+	handle UTest.RunTests() // Assign list<string> 1 (call)
+	{
+		list<string> a = GetListOfHelloWorldWords();
+		UTest.AssertStringListEqual(a, ["Hello", "World"], "Assign list<string> 1 (call)");
+	}
+
+	list<string> GetListOfHelloWorldWords()
+	{
+		return ["Hello", "World"];
+	}
+
+	//***************************************************
+	// Boolean list assignments (5 tests)
+	//***************************************************
+	
+	handle UTest.RunTests() // Assign list<bool> 1 (constant value)
+	{
+		list<bool> a = [];
+		UTest.AssertBoolListEqual(a, [], "Assign list<bool> 1 (constant value)");
+	}
+
+	handle UTest.RunTests() // Assign list<bool> 1 (constant value)
+	{
+		list<bool> a = [true];
+		UTest.AssertBoolListEqual(a, [true], "Assign list<bool> 1 (constant value)");
+	}
+
+	handle UTest.RunTests() // Assign list<bool> 2 (constant value)
+	{
+		list<bool> a = [false, false];
+		UTest.AssertBoolListEqual(a, [false, false], "Assign list<bool> 2 (constant value)");
+	}
+
+	handle UTest.RunTests() // Assign list<bool> 1 (expression)
+	{
+		list<bool> a = false :: [true, true, true, true];
+		UTest.AssertBoolListEqual(a, [false, true, true, true, true], "Assign list<bool> 1 (expression)");
+	}
+
+	handle UTest.RunTests() // Assign list<bool> 1 (call)
+	{
+		list<bool> a = GetTrueAndFalse();
+		UTest.AssertBoolListEqual(a, [true, false], "Assign list<bool> 1 (call)");
+	}
+
+	list<bool> GetTrueAndFalse()
+	{
+		return [true, false];
+	}
+
+	//***************************************************
+	// Tuple list assignments (9 tests)
+	//***************************************************
+
+	handle UTest.RunTests() // Assign tuple<int> 1 (constant value)
+	{
+		tuple<int> a = {128277};
+		UTest.AssertIntEqual(a[0], 128277, "Assign tuple<int> 1 (constant value)");
+	}
+
+	handle UTest.RunTests() // Assign tuple<float> 1 (constant value)
+	{
+		tuple<float> a = {0.02};
+		UTest.AssertFloatEqual(a[0], 0.02, "Assign tuple<float> 1 (constant value)");
+	}
+
+	handle UTest.RunTests() // Assign tuple<string> 1 (constant value)
+	{
+		tuple<string> a = {"This is a test text"};
+		UTest.AssertStringEqual(a[0], "This is a test text", "Assign tuple<string> 1 (constant value)");
+	}
+
+	handle UTest.RunTests() // Assign tuple<bool> 1 (constant value)
+	{
+		tuple<bool> a = {false};
+		UTest.AssertBoolFalse(a[0], "Assign tuple<bool> 1 (constant value)");
+	}
+
+	handle UTest.RunTests() // Assign tuple<int, float, string, bool> 1 (constant value)
+	{
+		tuple<int, float, string, bool> a = {92451, 22.4, "Another test!", true};
+		UTest.AssertIntEqual(a[0], 92451, "Assign tuple<int, float, string, bool> 1 [0] (constant value)");
+		UTest.AssertFloatEqual(a[1], 22.4, "Assign tuple<int, float, string, bool> 1 [1] (constant value)");
+		UTest.AssertStringEqual(a[2], "Another test!", "Assign tuple<int, float, string, bool> 1 [2] (constant value)");
+		UTest.AssertBoolTrue(a[3], "Assign tuple<int, float, string, bool> 1 [3] (constant value)");
+	}
+
+	handle UTest.RunTests() // Assign tuple 1 (call)
+	{
+		tuple<int, string> a = GetThreeAndHello();
+		UTest.AssertIntEqual(a[0], 3, "Assign tuple 1 [0] (call)");
+		UTest.AssertStringEqual(a[1], "Hello", "Assign tuple 1 [1] (call)");
+	}
+
+	tuple<int, string> GetThreeAndHello()
+	{
+		return {3, "Hello"};
+	}
+}

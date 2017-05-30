@@ -22,6 +22,9 @@
 	  <None Update="InternalTests\Execution\ArithmeticOperators.hopl">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </None>
+	  <None Update="InternalTests\Execution\Assignment.hopl">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
 	  <None Update="InternalTests\Execution\ComparisonOperators.hopl">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </None>
