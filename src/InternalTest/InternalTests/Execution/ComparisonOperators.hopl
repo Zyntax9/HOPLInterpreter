@@ -9,6 +9,10 @@ namespace ComparisonOperators
 		UTest.SetTestCount(tests);
 	}
 
+	//***************************************************
+	// Integer equality (4 tests)
+	//***************************************************
+
 	handle UTest.RunTests() // Integer equal
 	{
 		UTest.AssertBoolTrue(30 == 30, "Integer equal");
@@ -23,6 +27,10 @@ namespace ComparisonOperators
 	{
 		UTest.AssertBoolFalse(2 == 1, "Integer equal (false) 2");
 	}
+
+	//***************************************************
+	// Integer inequality (3 tests)
+	//***************************************************
 
 	handle UTest.RunTests() // Integer inequal 1
 	{
@@ -39,6 +47,10 @@ namespace ComparisonOperators
 		UTest.AssertBoolFalse(36 != 36, "Integer inequal (false)");
 	}
 
+	//***************************************************
+	// Integer less-than (2 tests)
+	//***************************************************
+
 	handle UTest.RunTests() // Integer less
 	{
 		UTest.AssertBoolTrue(84 < 92, "Integer less");
@@ -48,6 +60,10 @@ namespace ComparisonOperators
 	{
 		UTest.AssertBoolFalse(40 < 23, "Integer less (false)");
 	}
+
+	//***************************************************
+	// Integer less-or-equal-to (3 tests)
+	//***************************************************
 
 	handle UTest.RunTests() // Integer less or equal (less)
 	{
@@ -63,6 +79,10 @@ namespace ComparisonOperators
 	{
 		UTest.AssertBoolFalse(40 <= 23, "Integer less or equal (false)");
 	}
+	
+	//***************************************************
+	// Integer greater-than (2 tests)
+	//***************************************************
 
 	handle UTest.RunTests() // Integer greater
 	{
@@ -73,6 +93,10 @@ namespace ComparisonOperators
 	{
 		UTest.AssertBoolFalse(84 > 92, "Integer greater (false)");
 	}
+
+	//***************************************************
+	// Integer geater-or-equal-to (3 tests)
+	//***************************************************
 
 	handle UTest.RunTests() // Integer greater or equal (greater)
 	{
@@ -89,6 +113,10 @@ namespace ComparisonOperators
 		UTest.AssertBoolFalse(84 >= 92, "Integer greater or equal (false)");
 	}
 	
+	//***************************************************
+	// Float equality (3 tests)
+	//***************************************************
+
 	handle UTest.RunTests() // Float equal
 	{
 		UTest.AssertBoolTrue(30.42948 == 30.42948, "Float equal");
@@ -103,6 +131,10 @@ namespace ComparisonOperators
 	{
 		UTest.AssertBoolFalse(30.42048 == 30.42948, "Float equal (false) 2");
 	}
+	
+	//***************************************************
+	// Float inequality (3 tests)
+	//***************************************************
 
 	handle UTest.RunTests() // Float inequal 1
 	{
@@ -118,6 +150,10 @@ namespace ComparisonOperators
 	{
 		UTest.AssertBoolFalse(30.42948 != 30.42948, "Float inequal (false)");
 	}
+	
+	//***************************************************
+	// Float less-than (2 tests)
+	//***************************************************
 
 	handle UTest.RunTests() // Float less
 	{
@@ -128,6 +164,10 @@ namespace ComparisonOperators
 	{
 		UTest.AssertBoolFalse(40.2223 < 23.775, "Float less (false)");
 	}
+	
+	//***************************************************
+	// Float less-or-equal-to (3 tests)
+	//***************************************************
 
 	handle UTest.RunTests() // Float less or equal (less)
 	{
@@ -143,6 +183,10 @@ namespace ComparisonOperators
 	{
 		UTest.AssertBoolFalse(40.2338 <= 23.8984, "Float less or equal (false)");
 	}
+	
+	//***************************************************
+	// Float greater-than (2 tests)
+	//***************************************************
 
 	handle UTest.RunTests() // Float greater
 	{
@@ -153,6 +197,10 @@ namespace ComparisonOperators
 	{
 		UTest.AssertBoolFalse(84.8823 > 92.8827, "Float greater (false)");
 	}
+	
+	//***************************************************
+	// Float greater-or-equal-to (3 tests)
+	//***************************************************
 
 	handle UTest.RunTests() // Float greater or equal (greater)
 	{

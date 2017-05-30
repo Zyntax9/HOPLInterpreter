@@ -1,0 +1,135 @@
+﻿import UTest;
+
+namespace Indexing
+{
+	int tests = 32;
+
+	handle UTest.BeforeTests()
+	{
+		UTest.SetTestCount(tests);
+	}
+	
+	handle UTest.RunTests() // Indexing into a tuple (value[index])
+	{
+		int a = {842, 4.5, "test", false}[0];
+		float b = {842, 4.5, "test", false}[1];
+		string c = {842, 4.5, "test", false}[2];
+		bool d = {842, 4.5, "test", false}[3];
+
+		UTest.AssertIntEqual(a, 842, "Indexing into a tuple [0] (value[index])");
+		UTest.AssertFloatEqual(b, 4.5, "Indexing into a tuple [1] (value[index])");
+		UTest.AssertStringEqual(c, "test", "Indexing into a tuple [2] (value[index])");
+		UTest.AssertBoolFalse(d, "Indexing into a tuple [3] (value[index])");
+	}
+	
+	handle UTest.RunTests() // Indexing into a tuple (variable[index])
+	{
+		tuple<string, int, bool, float> tup = {"Other string", 9538, true, 0.2};
+
+		string a = tup[0];
+		int b = tup[1];
+		bool c = tup[2];
+		float d = tup[3];
+
+		UTest.AssertStringEqual(a, "Other string", "Indexing into a tuple [0] (value[index])");
+		UTest.AssertIntEqual(b, 9538, "Indexing into a tuple [1] (value[index])");
+		UTest.AssertBoolTrue(c, "Indexing into a tuple [2] (value[index])");
+		UTest.AssertFloatEqual(d, 0.2, "Indexing into a tuple [3] (value[index])");
+	}
+	
+	handle UTest.RunTests() // Indexing into a integer list (value[index])
+	{
+		int a = [8829, 7, -2][0];
+		int b = [8829, 7, -2][1];
+		int c = [8829, 7, -2][2];
+
+		UTest.AssertIntEqual(a, 8829, "Indexing into a integer list [0] (value[index])");
+		UTest.AssertIntEqual(b, 7, "Indexing into a integer list [1] (value[index])");
+		UTest.AssertIntEqual(c, -2, "Indexing into a integer list [2] (value[index])");
+	}
+	
+	handle UTest.RunTests() // Indexing into a integer list (variable[index])
+	{
+		list<int> li = [25, -53, -34456];
+
+		int a = li[0];
+		int b = li[1];
+		int c = li[2];
+
+		UTest.AssertIntEqual(a, 25, "Indexing into a integer list [0] (variable[index])");
+		UTest.AssertIntEqual(b, -53, "Indexing into a integer list [1] (variable[index])");
+		UTest.AssertIntEqual(c, -34456, "Indexing into a integer list [2] (variable[index])");
+	}
+	
+	handle UTest.RunTests() // Indexing into a float list (value[index])
+	{
+		float a = [9.2, 82, -0.22][0];
+		float b = [9.2, 82, -0.22][1];
+		float c = [9.2, 82, -0.22][2];
+
+		UTest.AssertFloatEqual(a, 9.2, "Indexing into a float list [0] (value[index])");
+		UTest.AssertFloatEqual(b, 82, "Indexing into a float list [1] (value[index])");
+		UTest.AssertFloatEqual(c, -0.22, "Indexing into a float list [2] (value[index])");
+	}
+	
+	handle UTest.RunTests() // Indexing into a float list (variable[index])
+	{
+		list<float> li = [-2523.78, 9.333, -8844.3];
+
+		float a = li[0];
+		float b = li[1];
+		float c = li[2];
+
+		UTest.AssertFloatEqual(a, -2523.78, "Indexing into a float list [0] (variable[index])");
+		UTest.AssertFloatEqual(b, 9.333, "Indexing into a float list [1] (variable[index])");
+		UTest.AssertFloatEqual(c, -8844.3, "Indexing into a float list [2] (variable[index])");
+	}
+	
+	handle UTest.RunTests() // Indexing into a string list (value[index])
+	{
+		string a = ["Hello", "WORLD", "!"][0];
+		string b = ["Hello", "WORLD", "!"][1];
+		string c = ["Hello", "WORLD", "!"][2];
+
+		UTest.AssertStringEqual(a, "Hello", "Indexing into a string list [0] (value[index])");
+		UTest.AssertStringEqual(b, "WORLD", "Indexing into a string list [1] (value[index])");
+		UTest.AssertStringEqual(c, "!", "Indexing into a string list [2] (value[index])");
+	}
+	
+	handle UTest.RunTests() // Indexing into a string list (variable[index])
+	{
+		list<string> li = ["HLKsalk898-", "901(/%", "/&jfhB 88K"];
+
+		string a = li[0];
+		string b = li[1];
+		string c = li[2];
+
+		UTest.AssertStringEqual(a, "HLKsalk898-", "Indexing into a string list [0] (variable[index])");
+		UTest.AssertStringEqual(b, "901(/%", "Indexing into a string list [1] (variable[index])");
+		UTest.AssertStringEqual(c, "/&jfhB 88K", "Indexing into a string list [2] (variable[index])");
+	}
+	
+	handle UTest.RunTests() // Indexing into a bool list (value[index])
+	{
+		bool a = [true, true, false][0];
+		bool b = [true, true, false][1];
+		bool c = [true, true, false][2];
+
+		UTest.AssertBoolTrue(a, "Indexing into a bool list [0] (value[index])");
+		UTest.AssertBoolTrue(b, "Indexing into a bool list [1] (value[index])");
+		UTest.AssertBoolFalse(c, "Indexing into a bool list [2] (value[index])");
+	}
+	
+	handle UTest.RunTests() // Indexing into a bool list (variable[index])
+	{
+		list<bool> li = [false, true, false];
+
+		bool a = li[0];
+		bool b = li[1];
+		bool c = li[2];
+
+		UTest.AssertBoolFalse(a, "Indexing into a bool list [0] (variable[index])");
+		UTest.AssertBoolTrue(b, "Indexing into a bool list [1] (variable[index])");
+		UTest.AssertBoolFalse(c, "Indexing into a bool list [2] (variable[index])");
+	}
+}

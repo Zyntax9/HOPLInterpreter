@@ -8,6 +8,10 @@ namespace LogicalOperators
 	{
 		UTest.SetTestCount(tests);
 	}
+	
+	//***************************************************
+	// And operator (4 tests)
+	//***************************************************
 
 	handle UTest.RunTests() // And operator (T T)
 	{
@@ -28,6 +32,10 @@ namespace LogicalOperators
 	{
 		UTest.AssertBoolFalse(false and false, "And operator (F F)");
 	}
+	
+	//***************************************************
+	// Or operator (4 tests)
+	//***************************************************
 
 	handle UTest.RunTests() // Or operator (T T)
 	{
@@ -48,6 +56,10 @@ namespace LogicalOperators
 	{
 		UTest.AssertBoolFalse(false or false, "Or operator (F F)");
 	}
+	
+	//***************************************************
+	// Not operator (2 tests)
+	//***************************************************
 
 	handle UTest.RunTests() // Not operator (T)
 	{

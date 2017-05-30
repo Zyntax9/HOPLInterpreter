@@ -26,8 +26,10 @@ namespace InternalTest
 		[Theory]
 		[InlineData("./InternalTests/Execution/ArithmeticOperators.hopl")]
         [InlineData("./InternalTests/Execution/Assignment.hopl")]
+        [InlineData("./InternalTests/Execution/Await.hopl")]
         [InlineData("./InternalTests/Execution/ComparisonOperators.hopl")]
-		[InlineData("./InternalTests/Execution/LogicalOperators.hopl")]
+        [InlineData("./InternalTests/Execution/Indexing.hopl")]
+        [InlineData("./InternalTests/Execution/LogicalOperators.hopl")]
 		[InlineData("./InternalTests/Execution/Precendece.hopl")]
 		[InlineData("./InternalTests/Execution/TriggerReference.hopl")]
 		[InlineData("./InternalTests/Execution/Triggers.hopl")]
@@ -36,7 +38,10 @@ namespace InternalTest
         private void RunFile(string file)
 		{
 			UnitTestNamespace unitTestNamespace = new UnitTestNamespace(file, output);
-			if (!Prepare(file, unitTestNamespace, out InterpretationContext context))
+            UtilityNamespace utilityNamespace = new UtilityNamespace();
+            ISuppliedNamespace[] namespaces = { unitTestNamespace, utilityNamespace };
+
+			if (!Prepare(file, namespaces, out InterpretationContext context))
 				return;
 
 			IThreadPool pool = Interpreter.Run(context, null);
@@ -55,12 +60,12 @@ namespace InternalTest
 
         }
 
-		private static bool Prepare(string file, ISuppliedNamespace unitTestNamespace, out InterpretationContext context)
+		private static bool Prepare(string file, ISuppliedNamespace[] suppliedNamespaces, out InterpretationContext context)
 		{
 			context = null;
 
 			HashSet<string> importPaths = new HashSet<string>();
-			NamespaceSet namespaces = new NamespaceSet(new[] { unitTestNamespace });
+			NamespaceSet namespaces = new NamespaceSet(suppliedNamespaces);
 
 			try
 			{

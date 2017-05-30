@@ -1,0 +1,39 @@
+﻿import UTest;
+import Utility;
+
+namespace Await
+{
+	int tests = 6;
+
+	handle UTest.BeforeTests()
+	{
+		UTest.SetTestCount(tests);
+	}
+
+	trigger<string, int, float, bool> trigger1;
+	bool helper_done_waiting = false;
+	handle UTest.RunTests() // Helper handler
+	{
+		Utility.Sleep(1000); // Give handlers time to run await statement
+		helper_done_waiting = true;
+		trigger1("I'm done sleeping!", 502, 75.2, false);
+	}
+
+	handle UTest.RunTests() // Await without storing arguments
+	{
+		await trigger1;
+
+		UTest.AssertBoolTrue(helper_done_waiting, "Await without storing arguments (helper done)");
+	}
+
+	handle UTest.RunTests() // Await with storing arguments
+	{
+		tuple<string, int, float, bool> a = await trigger1;
+		
+		UTest.AssertBoolTrue(helper_done_waiting, "Await with storing arguments (helper done)");
+		UTest.AssertStringEqual(a[0], "I'm done sleeping!", "Await with storing arguments [0]");
+		UTest.AssertIntEqual(a[1], 502, "Await with storing arguments [1]");
+		UTest.AssertFloatEqual(a[2], 75.2, "Await with storing arguments [2]");
+		UTest.AssertBoolFalse(a[3], "Await with storing arguments [3]");
+	}
+}

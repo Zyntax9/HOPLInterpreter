@@ -9,6 +9,10 @@ namespace ArithmeticOperators
 		UTest.SetTestCount(tests);
 	}
 
+	//***************************************************
+	// Addition (8 tests)
+	//***************************************************
+
 	handle UTest.RunTests() // Integer addition 1
 	{
 		UTest.AssertIntEqual(1 + 2, 3, "Integer addition 1");
@@ -49,6 +53,10 @@ namespace ArithmeticOperators
 		UTest.AssertStringEqual("World" + " Hello", "World Hello", "String addition 2");
 	}
 
+	//***************************************************
+	// Subtraction (6 tests)
+	//***************************************************
+
 	handle UTest.RunTests() // Integer subtraction 1
 	{
 		UTest.AssertIntEqual(1 - 2, -1, "Integer subtraction 1");
@@ -78,6 +86,10 @@ namespace ArithmeticOperators
 	{
 		UTest.AssertFloatEqual(5 - 2.34567, 2.65433, "Int/Float subtraction");
 	}
+
+	//***************************************************
+	// Multiplication (6 tests)
+	//***************************************************
 
 	handle UTest.RunTests() // Integer multiplication 1
 	{
@@ -109,6 +121,10 @@ namespace ArithmeticOperators
 		UTest.AssertFloatEqual(5 * 2.34567, 11.72835, "Int/Float multiplication");
 	}
 
+	//***************************************************
+	// Division (6 tests)
+	//***************************************************
+
 	handle UTest.RunTests() // Integer divison 1
 	{
 		UTest.AssertIntEqual(3 / 7, 0, "Integer divison 1");
@@ -138,6 +154,10 @@ namespace ArithmeticOperators
 	{
 		UTest.AssertFloatEqual(5 / 2.34567, 2.13158713715058, "Int/Float divison");
 	}
+	
+	//***************************************************
+	// Negation (2 tests)
+	//***************************************************
 
 	handle UTest.RunTests() // Integer negation
 	{
