@@ -9,7 +9,7 @@ namespace HOPL.Interpreter.Exceptions
 	{
 		private IEnumerable<ParsingError> errors;
 		public override IEnumerable<IError> Errors { get { return errors; } }
-
+        
 		public override string ErrorName { get { return "Parsing Errors"; } }
 
 		public ParsingErrorsException(IEnumerable<ParsingError> errors) : base()

@@ -10,13 +10,23 @@ using HOPL.Interpreter.Exceptions;
 using HOPL.Interpreter.Api;
 using Xunit;
 using Xunit.Abstractions;
+using HOPL.Interpreter.Errors;
+using HOPL.Interpreter.Errors.Parsing;
 
 namespace InternalTest
 {
     public class HoplScriptTests
-	{
-		private static readonly TimeSpan Timeout = TimeSpan.FromSeconds(50);
+    {
+        private static readonly TimeSpan Timeout = TimeSpan.FromSeconds(50);
         private readonly ITestOutputHelper output;
+
+        public static IEnumerable<object[]> GetErrorFiles()
+        {
+            foreach(ErroneousFile file in ErrorMapping.ErrorFiles)
+            {
+                yield return new object[] { file };
+            }
+        }
 
         public HoplScriptTests(ITestOutputHelper output)
         {
@@ -87,5 +97,44 @@ namespace InternalTest
 			}
 			return true;
 		}
+
+        [Theory]
+        [MemberData(nameof(GetErrorFiles))]
+        public void ExpectError(ErroneousFile file)
+        {
+            HashSet<string> importPaths = new HashSet<string>();
+            NamespaceSet namespaces = new NamespaceSet();
+
+            try
+            {
+                Interpreter.PrepareFile(file.File, importPaths, namespaces);
+                Assert.True(false, $"{file.File} did unexpectedly succeed.");
+                return;
+            }
+            catch (ErrorException e)
+            {
+                Assert.Equal(file.ErrorType, e.ErrorName);
+
+                foreach(ExpectedError expectedError in file.ExpectedErrors)
+                {
+                    Assert.True(ContainsError(e, expectedError), 
+                        $"Errors from preparing {file.File} did not contain error code {expectedError.ErrorCode} at line {expectedError.Line}.");
+                }
+            }
+            catch (Exception e)
+            {
+                Assert.True(false, "Failed due to exception: " + e.Message + e.StackTrace);
+                return;
+            }
+        }
+
+        private bool ContainsError(ErrorException e, ExpectedError expected)
+        {
+            IError errorFound = (from error in e.Errors
+                                 where error.ID == expected.ErrorCode &&
+                                       error.LineNumber == expected.Line
+                                 select error).FirstOrDefault();
+            return errorFound != null;
+        }
 	}
 }

@@ -52,6 +52,14 @@
 	  <None Update="InternalTests\Execution\Unpacking.hopl">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </None>
+	  <None Update="InternalTests\TypeError\OperationTypeMismatch.hopl">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="InternalTests\ExplorationError\" />
+	  <Folder Include="InternalTests\PreparationError\" />
 	</ItemGroup>
 
 </Project>

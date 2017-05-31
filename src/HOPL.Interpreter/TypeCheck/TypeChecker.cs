@@ -355,8 +355,9 @@ namespace HOPL.Interpreter.TypeCheck
 			if (left == InterpreterType.ERROR || right == InterpreterType.ERROR)
 				return InterpreterType.ERROR;
 
-			if (left == InterpreterType.BOOL || right == InterpreterType.BOOL)
-				return RaiseError(TypeErrorMessage.BOOLEAN_MISMATCH, context);
+			if ((left == InterpreterType.BOOL || right == InterpreterType.BOOL) &&
+                context.op.Type != Parser.EQ && context.op.Type != Parser.NEQ)
+				return RaiseError(TypeErrorMessage.NONBOOLEAN_MISMATCH, context);
 
 			if (!(left == InterpreterType.FLOAT && right == InterpreterType.INT ||
 				 left == InterpreterType.INT && right == InterpreterType.FLOAT ||
@@ -1036,12 +1037,16 @@ namespace HOPL.Interpreter.TypeCheck
 
 				if (left != right)
 				{
-					if (left == right.TypeArray[0])
-						return right;
-					else if (right == left.TypeArray[0])
-						return left;
-					else
-						return RaiseError(TypeErrorMessage.CONCAT_LIST, context);
+                    if (left == right.TypeArray[0])
+                        return right;
+                    else if (right == left.TypeArray[0])
+                        return left;
+                    else if (AssignmentAllowed(right, left))
+                        return right;
+                    else if (AssignmentAllowed(left, right))
+                        return left;
+                    else
+                        return RaiseError(TypeErrorMessage.CONCAT_LIST, context);
 				}
 				return left;
 			}

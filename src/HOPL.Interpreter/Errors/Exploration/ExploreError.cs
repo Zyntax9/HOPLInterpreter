@@ -16,7 +16,8 @@ namespace HOPL.Interpreter.Errors.Exploration
 		string IError.Message { get { return Message.message; } }
 		public int ID { get { return Message.id; } }
 
-		public string ErrorTypeName { get { return "Explore Error"; } }
+        public static string ErrorType = "Explore Error";
+        public string ErrorTypeName { get { return ErrorType; } }
 
 		public ExploreError(ExploreErrorMessage message, int lineNumber, int columnNumber, string file)
 		{

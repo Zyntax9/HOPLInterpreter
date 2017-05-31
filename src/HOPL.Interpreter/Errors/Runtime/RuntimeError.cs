@@ -16,7 +16,8 @@ namespace HOPL.Interpreter.Errors.Runtime
 		string IError.Message { get { return Message.message; } }
 		public int ID { get { return Message.id; } }
 
-		public string ErrorTypeName { get { return "Runtime Error"; } }
+        public static string ErrorType = "Runtime Error";
+        public string ErrorTypeName { get { return ErrorType; } }
 
 		public RuntimeError(RuntimeErrorMessage message, int lineNumber, int columnNumber, string file)
 		{

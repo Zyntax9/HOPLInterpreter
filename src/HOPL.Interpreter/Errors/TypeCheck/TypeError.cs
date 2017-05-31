@@ -17,9 +17,11 @@ namespace HOPL.Interpreter.Errors.TypeCheck
 		string IError.Message { get { return Message.message; } }
 		public int ID { get { return Message.id; } }
 
-		public string ErrorTypeName { get { return "Type Error"; } }
+        public static string ErrorType = "Type Error";
+        public string ErrorTypeName { get { return ErrorType; } }
 
-		public TypeError(TypeErrorMessage message, int lineNumber, int columnNumber, string file)
+
+        public TypeError(TypeErrorMessage message, int lineNumber, int columnNumber, string file)
 		{
 			Message = message;
 			LineNumber = lineNumber;

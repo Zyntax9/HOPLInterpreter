@@ -15,7 +15,8 @@ namespace HOPL.Interpreter.Errors.Preparation
 		public int LineNumber { get { return 0; } }
 		public int ColumnNumber { get { return 0; } }
 
-		public string ErrorTypeName { get { return "Preparation Error"; } }
+        public static string ErrorType = "Preparation Error";
+        public string ErrorTypeName { get { return "Preparation Error"; } }
 
 		public PrepareError(PrepareErrorMessage message, string info)
 		{

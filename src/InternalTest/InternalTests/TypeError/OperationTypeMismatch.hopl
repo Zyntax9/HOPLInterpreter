@@ -1,0 +1,932 @@
+﻿namespace TypeMismatch
+{
+	int AdditionMismatch1() // int + string
+	{
+		return 23 + "Hello";
+	}
+	
+	int AdditionMismatch2() // string + int
+	{
+		return "World" + 75;
+	}
+	
+	int AdditionMismatch3() // int_expr + string
+	{
+		return (23 - 3) + "Hello";
+	}
+	
+	int AdditionMismatch4() // string + int_expr
+	{
+		return "World" + 75 * 17;
+	}
+	
+	float AdditionMismatch5() // float + string
+	{
+		return 7.5 + "k";
+	}
+	
+	float AdditionMismatch6() // string + float
+	{
+		return "d" + 2.01;
+	}
+	
+	float AdditionMismatch7() // float_expr + string
+	{
+		return 7.5 * 3.2 + "dolar";
+	}
+	
+	float AdditionMismatch8() // string + float_expr
+	{
+		return "lorem" + (2.01 - 5.2);
+	}
+	
+	int AdditionMismatch9() // int + bool
+	{
+		return 23 + true;
+	}
+	
+	int AdditionMismatch10() // string + bool
+	{
+		return true + 75;
+	}
+	
+	int AdditionMismatch11() // int_expr + string
+	{
+		return (23 - 3) + false;
+	}
+	
+	int AdditionMismatch12() // string + int_expr
+	{
+		return true + 75 * 17;
+	}
+	
+	float AdditionMismatch13() // float + bool
+	{
+		return 7.5 + false;
+	}
+	
+	float AdditionMismatch14() // bool + float
+	{
+		return true + 2.01;
+	}
+	
+	float AdditionMismatch15() // float_expr + bool
+	{
+		return 7.5 * 3.2 + false;
+	}
+	
+	float AdditionMismatch16() // bool + float_expr
+	{
+		return true + (2.01 - 5.2);
+	}
+	
+	int NumericalMismatch17() // int - string
+	{
+		return 23 - "Hello";
+	}
+	
+	int NumericalMismatch18() // string - int
+	{
+		return "World" - 75;
+	}
+	
+	int NumericalMismatch19() // int_expr - string
+	{
+		return (23 - 3) - "Hello";
+	}
+	
+	int NumericalMismatch20() // string - int_expr
+	{
+		return "World" - 75 * 17;
+	}
+	
+	float NumericalMismatch21() // float - string
+	{
+		return 7.5 - "k";
+	}
+	
+	float NumericalMismatch22() // string - float
+	{
+		return "d" - 2.01;
+	}
+	
+	float NumericalMismatch23() // float_expr - string
+	{
+		return 7.5 / 3.2 - "dolar";
+	}
+	
+	float NumericalMismatch24() // string - float_expr
+	{
+		return "lorem" - (2.01 - 5.2);
+	}
+	
+	int NumericalMismatch25() // int - bool
+	{
+		return 23 - true;
+	}
+	
+	int NumericalMismatch26() // string - bool
+	{
+		return true - 75;
+	}
+	
+	int NumericalMismatch27() // int_expr - string
+	{
+		return (23 - 3) - false;
+	}
+	
+	int NumericalMismatch28() // string - int_expr
+	{
+		return true - (75 - 17);
+	}
+	
+	float NumericalMismatch29() // float - bool
+	{
+		return 7.5 - false;
+	}
+	
+	float NumericalMismatch30() // bool - float
+	{
+		return true - 2.01;
+	}
+	
+	float NumericalMismatch31() // float_expr - bool
+	{
+		return 7.5 * 3.2 - false;
+	}
+	
+	float NumericalMismatch32() // bool - float_expr
+	{
+		return true - (2.01 - 5.2);
+	}
+	
+	int NumericalMismatch33() // int * string
+	{
+		return 23 * "Hello";
+	}
+	
+	int NumericalMismatch34() // string * int
+	{
+		return "World" * 75;
+	}
+	
+	int NumericalMismatch35() // int_expr * string
+	{
+		return (23 - 3) * "Hello";
+	}
+	
+	int NumericalMismatch36() // string * int_expr
+	{
+		return "World" * 75 * 17;
+	}
+	
+	float NumericalMismatch37() // float * string
+	{
+		return 7.5 * "k";
+	}
+	
+	float NumericalMismatch38() // string * float
+	{
+		return "d" * 2.01;
+	}
+	
+	float NumericalMismatch39() // float_expr * string
+	{
+		return 7.5 / 3.2 * "dolar";
+	}
+	
+	float NumericalMismatch40() // string * float_expr
+	{
+		return "lorem" * (2.01 - 5.2);
+	}
+	
+	int NumericalMismatch41() // int * bool
+	{
+		return 23 * true;
+	}
+	
+	int NumericalMismatch42() // string * bool
+	{
+		return true * 75;
+	}
+	
+	int NumericalMismatch43() // int_expr * string
+	{
+		return (23 - 3) * false;
+	}
+	
+	int NumericalMismatch44() // string * int_expr
+	{
+		return true * (75 - 17);
+	}
+	
+	float NumericalMismatch45() // float * bool
+	{
+		return 7.5 * false;
+	}
+	
+	float NumericalMismatch46() // bool * float
+	{
+		return true * 2.01;
+	}
+	
+	float NumericalMismatch47() // float_expr * bool
+	{
+		return 7.5 * 3.2 * false;
+	}
+	
+	float NumericalMismatch48() // bool * float_expr
+	{
+		return true * (2.01 - 5.2);
+	}
+	
+	int NumericalMismatch49() // int / string
+	{
+		return 23 / "Hello";
+	}
+	
+	int NumericalMismatch50() // string / int
+	{
+		return "World" / 75;
+	}
+	
+	int NumericalMismatch51() // int_expr / string
+	{
+		return (23 - 3) / "Hello";
+	}
+	
+	int NumericalMismatch52() // string / int_expr
+	{
+		return "World" / 75 * 17;
+	}
+	
+	float NumericalMismatch53() // float / string
+	{
+		return 7.5 / "k";
+	}
+	
+	float NumericalMismatch54() // string / float
+	{
+		return "d" / 2.01;
+	}
+	
+	float NumericalMismatch55() // float_expr / string
+	{
+		return 7.5 / 3.2 / "dolar";
+	}
+	
+	float NumericalMismatch56() // string / float_expr
+	{
+		return "lorem" / (2.01 - 5.2);
+	}
+	
+	int NumericalMismatch57() // int / bool
+	{
+		return 23 / true;
+	}
+	
+	int NumericalMismatch58() // string / bool
+	{
+		return true / 75;
+	}
+	
+	int NumericalMismatch59() // int_expr / string
+	{
+		return (23 - 3) / false;
+	}
+	
+	int NumericalMismatch60() // string / int_expr
+	{
+		return true / (75 - 17);
+	}
+	
+	float NumericalMismatch61() // float / bool
+	{
+		return 7.5 / false;
+	}
+	
+	float NumericalMismatch62() // bool / float
+	{
+		return true / 2.01;
+	}
+	
+	float NumericalMismatch63() // float_expr / bool
+	{
+		return 7.5 * 3.2 / false;
+	}
+	
+	float NumericalMismatch64() // bool / float_expr
+	{
+		return true / (2.01 - 5.2);
+	}
+
+	int NumericalMismatch65() // string - string
+	{
+		return "Hello" - "World";
+	}
+
+	int NumericalMismatch66() // string * string
+	{
+		return "HELLO" * "WORLD";
+	}
+
+	int NumericalMismatch67() // string / string
+	{
+		return "Lorem" * "ipsum";
+	}
+
+	int NumericalMismatch68() // bool - bool
+	{
+		return true - false;
+	}
+
+	int NumericalMismatch69() // bool * bool
+	{
+		return false * false;
+	}
+
+	int NumericalMismatch70() // bool / bool
+	{
+		return false / true;
+	}
+	
+	float AdditionMismatch72() // bool + bool
+	{
+		return true + false;
+	}
+
+	bool BooleanMismatch73() // bool and int
+	{
+		return true and 10;
+	}
+
+	bool BooleanMismatch74() // int and bool
+	{
+		return 75 and false;
+	}
+
+	bool BooleanMismatch75() // bool or int
+	{
+		return false or 235;
+	}
+
+	bool BooleanMismatch76() // int or bool
+	{
+		return 95223 or true;
+	}
+
+	bool BooleanMismatch77() // int and int
+	{
+		return 992 and 74;
+	}
+
+	bool BooleanMismatch78() // int or int
+	{
+		return 8822 or 7777333;
+	}
+
+	bool NotBooleanMismatch79() // not int
+	{
+		return not 62;
+	}
+
+	bool BooleanMismatch80() // bool and float
+	{
+		return true and 30.2;
+	}
+
+	bool BooleanMismatch81() // float and bool
+	{
+		return 0.5 and false;
+	}
+
+	bool BooleanMismatch82() // bool or float
+	{
+		return false or 100.0002;
+	}
+
+	bool BooleanMismatch83() // float or bool
+	{
+		return 0.0 or true;
+	}
+
+	bool BooleanMismatch84() // float and float
+	{
+		return 8.32 and 9934.3;
+	}
+
+	bool BooleanMismatch85() // float or float
+	{
+		return 0.0002 or 1.2;
+	}
+
+	bool NotBooleanMismatch86() // not float
+	{
+		return not 33.5;
+	}
+
+	bool BooleanMismatch87() // bool and string
+	{
+		return true and "j";
+	}
+
+	bool BooleanMismatch88() // string and bool
+	{
+		return "h" and false;
+	}
+
+	bool BooleanMismatch89() // bool or string
+	{
+		return false or "test";
+	}
+
+	bool BooleanMismatch90() // string or bool
+	{
+		return "t" or true;
+	}
+
+	bool BooleanMismatch91() // string and string
+	{
+		return "lorem" and "ipsum";
+	}
+
+	bool BooleanMismatch92() // string or string
+	{
+		return "hello" or "world";
+	}
+
+	bool NotBooleanMismatch93() // not string
+	{
+		return not "not";
+	}
+
+	bool NonBooleanMismatch94() // bool <= int
+	{
+		return true <= 52;
+	}
+
+	bool NonBooleanMismatch95() // int <= bool
+	{
+		return 843 <= false;
+	}
+
+	bool NonBooleanMismatch96() // bool >= int
+	{
+		return false >= 882;
+	}
+
+	bool NonBooleanMismatch97() // int >= bool
+	{
+		return 882 >= true;
+	}
+
+	bool NonBooleanMismatch98() // bool < int
+	{
+		return false < 882;
+	}
+
+	bool NonBooleanMismatch99() // int < bool
+	{
+		return 9 < true;
+	}
+
+	bool NonBooleanMismatch100() // bool > int
+	{
+		return true > 8;
+	}
+
+	bool NonBooleanMismatch101() // int > bool
+	{
+		return 773 > false;
+	}
+
+	bool NonBooleanMismatch102() // bool <= float
+	{
+		return true <= 8233.43;
+	}
+
+	bool NonBooleanMismatch103() // float <= bool
+	{
+		return 0.002 <= false;
+	}
+
+	bool NonBooleanMismatch104() // bool >= float
+	{
+		return true >= 8.34;
+	}
+
+	bool NonBooleanMismatch105() // float >= bool
+	{
+		return 5.2 >= true;
+	}
+
+	bool NonBooleanMismatch106() // bool < float
+	{
+		return false < 88.3;
+	}
+
+	bool NonBooleanMismatch107() // float < bool
+	{
+		return 4.32 < false;
+	}
+
+	bool NonBooleanMismatch108() // bool > float
+	{
+		return true > 09.002;
+	}
+
+	bool NonBooleanMismatch109() // float > bool
+	{
+		return 88.4 > false;
+	}
+
+	bool NonBooleanMismatch110() // bool <= string
+	{
+		return true <= "a";
+	}
+
+	bool NonBooleanMismatch111() // string <= bool
+	{
+		return "8%¤" <= false;
+	}
+
+	bool NonBooleanMismatch112() // bool >= string
+	{
+		return true >= "kja";
+	}
+
+	bool NonBooleanMismatch113() // string >= bool
+	{
+		return "((" >= true;
+	}
+
+	bool NonBooleanMismatch114() // bool < string
+	{
+		return false < "Aj";
+	}
+
+	bool NonBooleanMismatch115() // string < bool
+	{
+		return "  " < false;
+	}
+
+	bool NonBooleanMismatch116() // bool > string
+	{
+		return true > "";
+	}
+
+	bool NonBooleanMismatch117() // string > bool
+	{
+		return "()" > false;
+	}
+
+	bool CompExprMismatch118() // int == string
+	{
+		return 52243 == "52243";
+	}
+
+	bool CompExprMismatch119() // string == int
+	{
+		return "herp" == 883;
+	}
+
+	bool CompExprMismatch120() // int == bool
+	{
+		return 52243 == true;
+	}
+
+	bool CompExprMismatch121() // bool == int
+	{
+		return false == 883;
+	}
+
+	bool CompExprMismatch122() // float == string
+	{
+		return 9.234 == "lorem";
+	}
+
+	bool CompExprMismatch123() // string == float
+	{
+		return "8824.22" == 8824.22;
+	}
+
+	bool CompExprMismatch124() // float == bool
+	{
+		return 51.23 == false;
+	}
+
+	bool CompExprMismatch125() // bool == float
+	{
+		return true == 46.44;
+	}
+
+	bool CompExprMismatch126() // bool == string
+	{
+		return false == "test";
+	}
+
+	bool CompExprMismatch127() // string == bool
+	{
+		return "8824.22" == false;
+	}
+
+	bool CompExprMismatch128() // int != string
+	{
+		return 52243 != "52243";
+	}
+
+	bool CompExprMismatch129() // string != int
+	{
+		return "herp" != 883;
+	}
+
+	bool CompExprMismatch130() // int != bool
+	{
+		return 52243 != true;
+	}
+
+	bool CompExprMismatch131() // bool != int
+	{
+		return false != 883;
+	}
+
+	bool CompExprMismatch132() // float != string
+	{
+		return 9.234 != "lorem";
+	}
+
+	bool CompExprMismatch133() // string != float
+	{
+		return "8824.22" != 8824.22;
+	}
+
+	bool CompExprMismatch134() // float != bool
+	{
+		return 51.23 != false;
+	}
+
+	bool CompExprMismatch135() // bool != float
+	{
+		return true != 46.44;
+	}
+
+	bool CompExprMismatch136() // bool != string
+	{
+		return false != "test";
+	}
+
+	bool CompExprMismatch137() // string != bool
+	{
+		return "8824.22" != false;
+	}
+
+	bool CompExprMismatch138() // int <= string
+	{
+		return 52243 <= "52243";
+	}
+
+	bool CompExprMismatch139() // string <= int
+	{
+		return "herp" <= 883;
+	}
+
+	bool CompExprMismatch140() // float <= string
+	{
+		return 9.234 <= "lorem";
+	}
+
+	bool CompExprMismatch141() // string <= float
+	{
+		return "8824.22" <= 8824.22;
+	}
+
+	bool CompExprMismatch142() // int >= string
+	{
+		return 52243 >= "52243";
+	}
+
+	bool CompExprMismatch143() // string >= int
+	{
+		return "herp" >= 883;
+	}
+
+	bool CompExprMismatch144() // float >= string
+	{
+		return 9.234 >= "lorem";
+	}
+
+	bool CompExprMismatch145() // string >= float
+	{
+		return "8824.22" >= 8824.22;
+	}
+
+	bool CompExprMismatch146() // int < string
+	{
+		return 52243 < "52243";
+	}
+
+	bool CompExprMismatch147() // string < int
+	{
+		return "herp" < 883;
+	}
+
+	bool CompExprMismatch148() // float < string
+	{
+		return 9.234 < "lorem";
+	}
+
+	bool CompExprMismatch149() // string < float
+	{
+		return "8824.22" < 8824.22;
+	}
+
+	bool CompExprMismatch150() // int > string
+	{
+		return 52243 > "52243";
+	}
+
+	bool CompExprMismatch151() // string > int
+	{
+		return "herp" > 883;
+	}
+
+	bool CompExprMismatch152() // float > string
+	{
+		return 9.234 > "lorem";
+	}
+
+	bool CompExprMismatch153() // string > float
+	{
+		return "8824.22" > 8824.22;
+	}
+
+	int NegMismatch154() // neg bool
+	{
+		return -true;
+	}
+
+	int NegMismatch155() // neg string
+	{
+		return -true;
+	}
+
+	list<int> ConcatMismatch156() // float :: list<int>
+	{
+		return 0.002 :: [924];
+	}
+
+	list<int> ConcatMismatch157() // string :: list<int>
+	{
+		return "9" :: [8823];
+	}
+
+	list<int> ConcatMismatch158() // bool :: list<int>
+	{
+		return false :: [5];
+	}
+
+	list<float> ConcatMismatch159() // string :: list<float>
+	{
+		return "9" :: [88.23];
+	}
+
+	list<float> ConcatMismatch160() // bool :: list<float>
+	{
+		return false :: [5.0002];
+	}
+
+	list<string> ConcatMismatch161() // int :: list<string>
+	{
+		return 9912 :: ["x"];
+	}
+
+	list<string> ConcatMismatch162() // float :: list<string>
+	{
+		return 0.0222 :: ["kjj"];
+	}
+
+	list<string> ConcatMismatch163() // bool :: list<string>
+	{
+		return false :: ["ljia"];
+	}
+
+	list<string> ConcatMismatch164() // int :: list<bool>
+	{
+		return 9912 :: [true];
+	}
+
+	list<bool> ConcatMismatch165() // float :: list<bool>
+	{
+		return 0.0222 :: [false];
+	}
+
+	list<bool> ConcatMismatch166() // string :: list<bool>
+	{
+		return "true" :: [true];
+	}
+
+	list<int> CompExprMismatch167() // list<int> :: float
+	{
+		return [33] :: 5.23;
+	}
+
+	list<int> ConcatMismatch168() // list<int> :: string
+	{
+		return [9924] :: "t";
+	}
+
+	list<int> ConcatMismatch169() // list<int> :: bool
+	{
+		return [99] :: true;
+	}
+
+	list<float> ConcatMismatch170() // list<float> :: string
+	{
+		return [971.233] :: "t";
+	}
+
+	list<float> ConcatMismatch171() // list<float> :: bool
+	{
+		return [9.9] :: true;
+	}
+
+	list<string> CompExprMismatch172() // list<string> :: int
+	{
+		return ["hello"] :: 4;
+	}
+
+	list<string> ConcatMismatch173() // list<string> :: float
+	{
+		return [","] :: 52.3;
+	}
+
+	list<string> ConcatMismatch174() // list<string> :: bool
+	{
+		return ["(94"] :: true;
+	}
+
+	list<bool> CompExprMismatch175() // list<bool> :: int
+	{
+		return [false] :: 4;
+	}
+
+	list<bool> ConcatMismatch176() // list<bool> :: float
+	{
+		return [true] :: 52.3;
+	}
+
+	list<bool> ConcatMismatch177() // list<bool> :: string
+	{
+		return [false] :: "false";
+	}
+
+	list<bool> ConcatMismatch178() // list<int> :: list<string>
+	{
+		return [52] :: ["23"];
+	}
+
+	list<bool> ConcatMismatch179() // list<string> :: list<int>
+	{
+		return ["kjasd!"] :: [423];
+	}
+
+	list<bool> ConcatMismatch180() // list<int> :: list<bool>
+	{
+		return [52] :: [true];
+	}
+
+	list<bool> ConcatMismatch181() // list<bool> :: list<int>
+	{
+		return [true] :: [423];
+	}
+
+	list<bool> ConcatMismatch182() // list<string> :: list<float>
+	{
+		return ["52.23"] :: [4.23];
+	}
+
+	list<bool> ConcatMismatch183() // list<float> :: list<string>
+	{
+		return [5.2] :: ["kjads"];
+	}
+
+	list<bool> ConcatMismatch184() // list<string> :: list<bool>
+	{
+		return ["true"] :: [false];
+	}
+
+	list<bool> ConcatMismatch185() // list<bool> :: list<string>
+	{
+		return [true] :: ["kjads"];
+	}
+
+	list<bool> ConcatMismatch186() // list<float> :: list<bool>
+	{
+		return [999.999] :: [false];
+	}
+
+	list<bool> ConcatMismatch187() // list<bool> :: list<float>
+	{
+		return [true] :: [5.2];
+	}
+}

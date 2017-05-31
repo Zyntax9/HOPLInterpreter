@@ -13,7 +13,8 @@ namespace HOPL.Interpreter.Errors.Parsing
 
 		public int ID { get { return 0; } }
 
-		public string ErrorTypeName { get { return "Parsing Error"; } }
+        public static string ErrorType = "Parsing Error";
+        public string ErrorTypeName { get { return ErrorType; } }
 		
 		public ParsingError(string message, IToken token, int line, int column, string file)
 		{
