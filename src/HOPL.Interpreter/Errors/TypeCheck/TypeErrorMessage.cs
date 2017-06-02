@@ -38,7 +38,7 @@
 		public static readonly TypeErrorMessage INDEX_LINT = new TypeErrorMessage(28, "Index must be of integer value.");
 		public static readonly TypeErrorMessage INDEX_TCINT = new TypeErrorMessage(29, "Index of tuple must be of constant integer value.");
 		public static readonly TypeErrorMessage INDEX_TOOR = new TypeErrorMessage(30, "Index out of tuple range.");
-		public static readonly TypeErrorMessage ARG_SHADOW = new TypeErrorMessage(31, "Argument cannot have the same name as a global entity in the same namespace.");
+		public static readonly TypeErrorMessage ARG_SHADOW = new TypeErrorMessage(31, "Argument cannot shadow other argument.");
 		public static readonly TypeErrorMessage ADDI_MISMATCH = new TypeErrorMessage(32, "Both sides must be either both be numerical or both be string literals.");
 		public static readonly TypeErrorMessage CONCAT_RIGHTM = new TypeErrorMessage(33, "Right side of append must be the same type as the inner type of the left-side list.");
 		public static readonly TypeErrorMessage CONCAT_LEFTM = new TypeErrorMessage(34, "Left side of append must be the same type as the inner type of the right-side list.");

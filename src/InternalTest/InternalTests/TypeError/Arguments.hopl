@@ -1,0 +1,301 @@
+﻿namespace Arguments
+{
+	int Function1(int a, string b)
+	{
+		return a;
+	}
+
+	int ArgumentCount1() // Function -2 arguments
+	{
+		return Function1();
+	}
+
+	int ArgumentCount2() // Function -1 argument
+	{
+		return Function1(10);
+	}
+
+	int ArgumentCount3() // Function +1 argument (int)
+	{
+		return Function1(10, "hello", 30);
+	}
+
+	int ArgumentCount4() // Function +1 argument (float)
+	{
+		return Function1(10, "hello", 2.3);
+	}
+
+	int ArgumentCount5() // Function +1 argument (float)
+	{
+		return Function1(10, "hello", "int");
+	}
+
+	int ArgumentCount6() // Function +1 argument (float)
+	{
+		return Function1(10, "hello", false);
+	}
+
+	int ArgumentCount7() // Function +2 arguments
+	{
+		return Function1(10, "hello", false, "hello!");
+	}
+
+	trigger<float, bool> trigger1;
+
+	int ArgumentCount8() // Trigger -2 arguments
+	{
+		trigger1();
+		return 1;
+	}
+
+	int ArgumentCount9() // Trigger -1 arguments
+	{
+		trigger1(2.3);
+		return 1;
+	}
+
+	int ArgumentCount10() // Trigger +1 arguments (int)
+	{
+		trigger1(2.3, false, 5);
+		return 1;
+	}
+
+	int ArgumentCount11() // Trigger +1 arguments (float)
+	{
+		trigger1(2.3, false, 23.23);
+		return 1;
+	}
+
+	int ArgumentCount12() // Trigger +1 arguments (string)
+	{
+		trigger1(2.3, false, "test");
+		return 1;
+	}
+
+	int ArgumentCount13() // Trigger +1 arguments (bool)
+	{
+		trigger1(2.3, false, false);
+		return 1;
+	}
+
+	int ArgumentCount14() // Trigger +2 arguments
+	{
+		trigger1(2.3, false, 4, 4);
+		return 1;
+	}
+
+	handle trigger1() {} // Handler -2 arguments
+
+	handle trigger1(float a) {} // Handler -1 arguments
+
+	handle trigger1(float a, bool b, int c) {} // Handler +1 arguments (int)
+
+	handle trigger1(float a, bool b, float c) {} // Handler +1 arguments (float)
+
+	handle trigger1(float a, bool b, string c) {} // Handler +1 arguments (string)
+
+	handle trigger1(float a, bool b, bool c) {} // Handler +1 arguments (bool)
+
+	handle trigger1(float a, bool b, string c, float d) {} // Handler +2 arguments
+	
+	int ArgShadow15(int a, int a) { return 1; } // Arg shadow func (int and int)
+	
+	int ArgShadow16(int a, float a) { return 1; } // Arg shadow func (int and float)
+	
+	int ArgShadow17(int a, string a) { return 1; } // Arg shadow func (int and string)
+	
+	int ArgShadow18(int a, bool a) { return 1; } // Arg shadow func (int and bool)
+	
+	int ArgShadow19(float a, int a) { return 1; } // Arg shadow func (float and int)
+	
+	int ArgShadow20(float a, float a) { return 1; } // Arg shadow func (float and float)
+	
+	int ArgShadow21(float a, string a) { return 1; } // Arg shadow func (float and string)
+	
+	int ArgShadow22(float a, bool a) { return 1; } // Arg shadow func (float and bool)
+	
+	int ArgShadow23(string a, int a) { return 1; } // Arg shadow func (string and int)
+	
+	int ArgShadow24(string a, float a) { return 1; } // Arg shadow func (string and float)
+	
+	int ArgShadow25(string a, string a) { return 1; } // Arg shadow func (string and string)
+	
+	int ArgShadow26(string a, bool a) { return 1; } // Arg shadow func (string and bool)
+	
+	int ArgShadow27(bool a, int a) { return 1; } // Arg shadow func (bool and int)
+	
+	int ArgShadow28(bool a, float a) { return 1; } // Arg shadow func (bool and float)
+	
+	int ArgShadow29(bool a, string a) { return 1; } // Arg shadow func (bool and string)
+	
+	int ArgShadow30(bool a, bool a) { return 1; } // Arg shadow func (bool and bool)
+
+	trigger<int, int> triggershadow1;
+	trigger<int, float> triggershadow2;
+	trigger<int, string> triggershadow3;
+	trigger<int, bool> triggershadow4;
+	trigger<float, int> triggershadow5;
+	trigger<float, float> triggershadow6;
+	trigger<float, string> triggershadow7;
+	trigger<float, bool> triggershadow8;
+	trigger<string, int> triggershadow9;
+	trigger<string, float> triggershadow10;
+	trigger<string, string> triggershadow11;
+	trigger<string, bool> triggershadow12;
+	trigger<bool, int> triggershadow13;
+	trigger<bool, float> triggershadow14;
+	trigger<bool, string> triggershadow15;
+	trigger<bool, bool> triggershadow16;
+
+	handle triggershadow1(int a, int a) {} // Arg shadow trigger (int and int)
+
+	handle triggershadow2(int a, float a) {} // Arg shadow trigger (int and float)
+
+	handle triggershadow3(int a, string a) {} // Arg shadow trigger (int and string)
+
+	handle triggershadow4(int a, bool a) {} // Arg shadow trigger (int and bool)
+
+	handle triggershadow5(float a, int a) {} // Arg shadow trigger (float and int)
+
+	handle triggershadow6(float a, float a) {} // Arg shadow trigger (float and float)
+
+	handle triggershadow7(float a, string a) {} // Arg shadow trigger (float and string)
+
+	handle triggershadow8(float a, bool a) {} // Arg shadow trigger (float and bool)
+
+	handle triggershadow9(string a, int a) {} // Arg shadow trigger (string and int)
+
+	handle triggershadow10(string a, float a) {} // Arg shadow trigger (string and float)
+
+	handle triggershadow11(string a, string a) {} // Arg shadow trigger (string and string)
+
+	handle triggershadow12(string a, bool a) {} // Arg shadow trigger (string and bool)
+
+	handle triggershadow13(bool a, int a) {} // Arg shadow trigger (bool and int)
+
+	handle triggershadow14(bool a, float a) {} // Arg shadow trigger (bool and float)
+
+	handle triggershadow15(bool a, string a) {} // Arg shadow trigger (bool and string)
+
+	handle triggershadow16(bool a, bool a) {} // Arg shadow trigger (bool and bool)
+
+	int argfunc1(int a) { return 1; }
+	int argfunc2(float a) { return 1; }
+	int argfunc3(string a) { return 1; }
+	int argfunc4(bool a) { return 1; }
+
+	int CallArgMismatch1() { return argfunc1(3.2); } // Arg mismatch in call (float as int)
+
+	int CallArgMismatch2() { return argfunc1("test"); } // Arg mismatch in call (string as int)
+
+	int CallArgMismatch3() { return argfunc1(false); } // Arg mismatch in call (bool as int)
+
+	int CallArgMismatch4() { return argfunc2("test"); } // Arg mismatch in call (string as float)
+
+	int CallArgMismatch5() { return argfunc2(false); } // Arg mismatch in call (bool as float)
+
+	int CallArgMismatch6() { return argfunc3(3); } // Arg mismatch in call (int as string)
+
+	int CallArgMismatch7() { return argfunc3(6.123); } // Arg mismatch in call (float as string)
+
+	int CallArgMismatch8() { return argfunc3(true); } // Arg mismatch in call (bool as string)
+
+	int CallArgMismatch9() { return argfunc4(3); } // Arg mismatch in call (int as bool)
+
+	int CallArgMismatch10() { return argfunc4(6.123); } // Arg mismatch in call (float as bool)
+
+	int CallArgMismatch11() { return argfunc4("true"); } // Arg mismatch in call (string as bool)
+
+	trigger<int> argtrigger1;
+	trigger<float> argtrigger2;
+	trigger<string> argtrigger3;
+	trigger<bool> argtrigger4;
+
+	int CallArgMismatch12() // Arg mismatch in call (float as int)
+	{
+		argtrigger1(3.2);
+		return 1;
+	}
+
+	int CallArgMismatch13() // Arg mismatch in call (string as int)
+	{
+		argtrigger1("1");
+		return 1;
+	}
+
+	int CallArgMismatch14() // Arg mismatch in call (bool as int)
+	{
+		argtrigger1(true);
+		return 1;
+	}
+
+	int CallArgMismatch15() // Arg mismatch in call (string as float)
+	{
+		argtrigger2("1");
+		return 1;
+	}
+
+	int CallArgMismatch16() // Arg mismatch in call (bool as float)
+	{
+		argtrigger2(true);
+		return 1;
+	}
+
+	int CallArgMismatch17() // Arg mismatch in call (int as string)
+	{
+		argtrigger3(89812);
+		return 1;
+	}
+
+	int CallArgMismatch18() // Arg mismatch in call (float as string)
+	{
+		argtrigger3(882.75);
+		return 1;
+	}
+
+	int CallArgMismatch19() // Arg mismatch in call (bool as string)
+	{
+		argtrigger3(false);
+		return 1;
+	}
+
+	int CallArgMismatch20() // Arg mismatch in call (int as bool)
+	{
+		argtrigger4(772);
+		return 1;
+	}
+
+	int CallArgMismatch21() // Arg mismatch in call (float as bool)
+	{
+		argtrigger4(0.00002);
+		return 1;
+	}
+
+	int CallArgMismatch22() // Arg mismatch in call (string as bool)
+	{
+		argtrigger4("false");
+		return 1;
+	}
+
+	handle argtrigger1(float a) { } // Arg mismatch in handler (float as int)
+
+	handle argtrigger1(string a) { } // Arg mismatch in handler (string as int)
+
+	handle argtrigger1(bool a) { } // Arg mismatch in handler (bool as int)
+
+	handle argtrigger2(string a) { } // Arg mismatch in handler (string as float)
+
+	handle argtrigger2(bool a) { } // Arg mismatch in handler (bool as float)
+
+	handle argtrigger3(int a) { } // Arg mismatch in handler (int as string)
+
+	handle argtrigger3(float a) { } // Arg mismatch in handler (float as string)
+
+	handle argtrigger3(bool a) { } // Arg mismatch in handler (bool as string)
+
+	handle argtrigger4(int a) { } // Arg mismatch in handler (int as bool)
+
+	handle argtrigger4(float a) { } // Arg mismatch in handler (float as bool)
+
+	handle argtrigger4(string a) { } // Arg mismatch in handler (string as bool)
+}
