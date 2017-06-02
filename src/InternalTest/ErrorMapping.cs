@@ -312,6 +312,155 @@ namespace InternalTest
                     new ExpectedError() { ErrorCode = 13, Line = 300 }
                 }
             },
+            new ErroneousFile()
+            {
+                File = "./InternalTests/TypeError/Undeclared.hopl",
+                ErrorType = "Type Errors",
+                ExpectedErrors = new ExpectedError[]
+                {
+                    new ExpectedError() { ErrorCode = 14, Line = 5 },
+                    new ExpectedError() { ErrorCode = 14, Line = 10 },
+                    new ExpectedError() { ErrorCode = 14, Line = 15 },
+                    new ExpectedError() { ErrorCode = 14, Line = 20 },
+                    new ExpectedError() { ErrorCode = 5, Line = 25 },
+                    new ExpectedError() { ErrorCode = 5, Line = 30 },
+                    new ExpectedError() { ErrorCode = 5, Line = 35 },
+                    new ExpectedError() { ErrorCode = 5, Line = 40 },
+                    new ExpectedError() { ErrorCode = 10, Line = 46 },
+                    new ExpectedError() { ErrorCode = 10, Line = 53 },
+                    new ExpectedError() { ErrorCode = 10, Line = 60 },
+                    new ExpectedError() { ErrorCode = 10, Line = 67 },
+                }
+            },
+            new ErroneousFile()
+            {
+                File = "./InternalTests/TypeError/Indexing.hopl",
+                ErrorType = "Type Errors",
+                ExpectedErrors = new ExpectedError[]
+                {
+                    new ExpectedError() { ErrorCode = 26, Line = 5 },
+                    new ExpectedError() { ErrorCode = 26, Line = 10 },
+                    new ExpectedError() { ErrorCode = 26, Line = 15 },
+                    new ExpectedError() { ErrorCode = 26, Line = 20 },
+                    new ExpectedError() { ErrorCode = 27, Line = 25 },
+                    new ExpectedError() { ErrorCode = 28, Line = 32 },
+                    new ExpectedError() { ErrorCode = 28, Line = 38 },
+                    new ExpectedError() { ErrorCode = 28, Line = 43 },
+                    new ExpectedError() { ErrorCode = 28, Line = 49 },
+                    new ExpectedError() { ErrorCode = 28, Line = 54 },
+                    new ExpectedError() { ErrorCode = 28, Line = 60 },
+                    new ExpectedError() { ErrorCode = 29, Line = 68 },
+                    new ExpectedError() { ErrorCode = 29, Line = 73 },
+                    new ExpectedError() { ErrorCode = 29, Line = 79 },
+                    new ExpectedError() { ErrorCode = 29, Line = 84 },
+                    new ExpectedError() { ErrorCode = 29, Line = 90 },
+                    new ExpectedError() { ErrorCode = 29, Line = 95 },
+                    new ExpectedError() { ErrorCode = 29, Line = 101 },
+                    new ExpectedError() { ErrorCode = 30, Line = 106 },
+                    new ExpectedError() { ErrorCode = 30, Line = 111 },
+                    new ExpectedError() { ErrorCode = 30, Line = 116 },
+                    new ExpectedError() { ErrorCode = 30, Line = 121 },
+                }
+            },
+            new ErroneousFile()
+            {
+                File = "./InternalTests/TypeError/Callables.hopl",
+                ErrorType = "Type Errors",
+                ExpectedErrors = new ExpectedError[]
+                {
+                    new ExpectedError() { ErrorCode = 18, Line = 7 },
+                    new ExpectedError() { ErrorCode = 18, Line = 13 },
+                    new ExpectedError() { ErrorCode = 18, Line = 18 },
+                    new ExpectedError() { ErrorCode = 18, Line = 24 },
+                    new ExpectedError() { ErrorCode = 18, Line = 29 },
+                    new ExpectedError() { ErrorCode = 18, Line = 35 },
+                    new ExpectedError() { ErrorCode = 18, Line = 40 },
+                    new ExpectedError() { ErrorCode = 18, Line = 46 },
+                    new ExpectedError() { ErrorCode = 12, Line = 54 },
+                    new ExpectedError() { ErrorCode = 12, Line = 56 },
+                    new ExpectedError() { ErrorCode = 12, Line = 58 },
+                    new ExpectedError() { ErrorCode = 12, Line = 60 },
+                    new ExpectedError() { ErrorCode = 19, Line = 62 },
+                    new ExpectedError() { ErrorCode = 19, Line = 64 },
+                    new ExpectedError() { ErrorCode = 19, Line = 66 },
+                    new ExpectedError() { ErrorCode = 19, Line = 68 },
+                    new ExpectedError() { ErrorCode = 19, Line = 70 },
+                    new ExpectedError() { ErrorCode = 19, Line = 72 },
+                    new ExpectedError() { ErrorCode = 19, Line = 74 },
+                    new ExpectedError() { ErrorCode = 19, Line = 76 },
+                    new ExpectedError() { ErrorCode = 19, Line = 78 },
+                    new ExpectedError() { ErrorCode = 19, Line = 80 },
+                }
+            },
+            new ErroneousFile()
+            {
+                File = "./InternalTests/TypeError/Unpacking.hopl",
+                ErrorType = "Type Errors",
+                ExpectedErrors = new ExpectedError[]
+                {
+                    new ExpectedError() { ErrorCode = 37, Line = 12 },
+                    new ExpectedError() { ErrorCode = 37, Line = 18 },
+                    new ExpectedError() { ErrorCode = 37, Line = 24 },
+                    new ExpectedError() { ErrorCode = 37, Line = 30 },
+                    new ExpectedError() { ErrorCode = 37, Line = 36 },
+                    new ExpectedError() { ErrorCode = 38, Line = 42 },
+                    new ExpectedError() { ErrorCode = 38, Line = 48 },
+                    new ExpectedError() { ErrorCode = 38, Line = 54 },
+                    new ExpectedError() { ErrorCode = 39, Line = 60 },
+                    new ExpectedError() { ErrorCode = 39, Line = 66 },
+                    new ExpectedError() { ErrorCode = 39, Line = 72 },
+                }
+            },
+            new ErroneousFile()
+            {
+                File = "./InternalTests/TypeError/Variables.hopl",
+                ErrorType = "Type Errors",
+                ExpectedErrors = new ExpectedError[]
+                {
+                    new ExpectedError() { ErrorCode = 40, Line = 10 },
+                    new ExpectedError() { ErrorCode = 40, Line = 16 },
+                    new ExpectedError() { ErrorCode = 40, Line = 22 },
+                    new ExpectedError() { ErrorCode = 40, Line = 28 },
+                    new ExpectedError() { ErrorCode = 20, Line = 35 },
+                    new ExpectedError() { ErrorCode = 20, Line = 42 },
+                    new ExpectedError() { ErrorCode = 20, Line = 49 },
+                    new ExpectedError() { ErrorCode = 20, Line = 56 },
+                    new ExpectedError() { ErrorCode = 20, Line = 63 },
+                    new ExpectedError() { ErrorCode = 20, Line = 70 },
+                    new ExpectedError() { ErrorCode = 20, Line = 77 },
+                    new ExpectedError() { ErrorCode = 20, Line = 84 },
+                    new ExpectedError() { ErrorCode = 20, Line = 91 },
+                    new ExpectedError() { ErrorCode = 20, Line = 98 },
+                    new ExpectedError() { ErrorCode = 20, Line = 105 },
+                    new ExpectedError() { ErrorCode = 20, Line = 112 },
+                    new ExpectedError() { ErrorCode = 20, Line = 119 },
+                    new ExpectedError() { ErrorCode = 20, Line = 126 },
+                    new ExpectedError() { ErrorCode = 20, Line = 133 },
+                    new ExpectedError() { ErrorCode = 20, Line = 140 },
+                    new ExpectedError() { ErrorCode = 21, Line = 146 },
+                    new ExpectedError() { ErrorCode = 21, Line = 152 },
+                    new ExpectedError() { ErrorCode = 21, Line = 158 },
+                    new ExpectedError() { ErrorCode = 21, Line = 164 },
+                    new ExpectedError() { ErrorCode = 21, Line = 170 },
+                    new ExpectedError() { ErrorCode = 21, Line = 176 },
+                    new ExpectedError() { ErrorCode = 21, Line = 182 },
+                    new ExpectedError() { ErrorCode = 21, Line = 188 },
+                    new ExpectedError() { ErrorCode = 21, Line = 194 },
+                    new ExpectedError() { ErrorCode = 21, Line = 200 },
+                    new ExpectedError() { ErrorCode = 21, Line = 206 },
+                    new ExpectedError() { ErrorCode = 7, Line = 213 },
+                    new ExpectedError() { ErrorCode = 7, Line = 220 },
+                    new ExpectedError() { ErrorCode = 7, Line = 227 },
+                    new ExpectedError() { ErrorCode = 7, Line = 234 },
+                    new ExpectedError() { ErrorCode = 7, Line = 241 },
+                    new ExpectedError() { ErrorCode = 7, Line = 248 },
+                    new ExpectedError() { ErrorCode = 7, Line = 255 },
+                    new ExpectedError() { ErrorCode = 7, Line = 262 },
+                    new ExpectedError() { ErrorCode = 7, Line = 269 },
+                    new ExpectedError() { ErrorCode = 7, Line = 276 },
+                    new ExpectedError() { ErrorCode = 7, Line = 283 },
+                }
+            },
         };
     }
 }

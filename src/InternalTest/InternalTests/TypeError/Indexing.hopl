@@ -1,0 +1,123 @@
+﻿namespace Indexing
+{
+	int IndexingLORT1() // int[index]
+	{
+		return (1)[23];
+	}
+	
+	int IndexingLORT2() // float[index]
+	{
+		return (3.224)[9];
+	}
+	
+	int IndexingLORT3() // string[index]
+	{
+		return ("Hello!")[9123];
+	}
+	
+	int IndexingLORT4() // bool[index]
+	{
+		return (false)[9123];
+	}
+	
+	int IndexingEmpty() // [][index]
+	{
+		return [][2];
+	}
+
+	list<int> list1 = [1,2,3,4];
+
+	int IndexingInt1() // list<int>[float val]
+	{
+		return list1[3.2];
+	}
+
+	int IndexingInt2() // list<int>[float var]
+	{
+		float a = 82.1;
+		return list1[a];
+	}
+
+	int IndexingInt3() // list<int>[string val]
+	{
+		return list1["test"];
+	}
+
+	int IndexingInt4() // list<int>[string var]
+	{
+		string a = "1";
+		return list1[a];
+	}
+
+	int IndexingInt5() // list<int>[bool val]
+	{
+		return list1[false];
+	}
+
+	int IndexingInt6() // list<int>[bool var]
+	{
+		bool a = true;
+		return list1[a];
+	}
+
+	tuple<int, string, float, bool> tuple1 = {3, "t", 8.2, true};
+
+	int IndexingConst1() // tuple[int var]
+	{
+		int a = 3;
+		return tuple1[a];
+	}
+
+	int IndexingConst2() // tuple[float val]
+	{
+		return tuple1[8.2];
+	}
+
+	int IndexingConst3() // tuple[float var]
+	{
+		float a = 6.9;
+		return tuple1[a];
+	}
+
+	int IndexingConst4() // tuple[string val]
+	{
+		return tuple1["1"];
+	}
+
+	int IndexingConst5() // tuple[string var]
+	{
+		string a = "3";
+		return tuple1[a];
+	}
+
+	int IndexingConst6() // tuple[bool val]
+	{
+		return tuple1[false];
+	}
+
+	int IndexingConst7() // tuple[bool var]
+	{
+		bool a = true;
+		return tuple1[a];
+	}
+
+	int OutOfTupleRange1() // tuple[int < 0]
+	{
+		return tuple1[-1];
+	}
+
+	int OutOfTupleRange2() // tuple[int < 0]
+	{
+		return tuple1[-2];
+	}
+
+	int OutOfTupleRange3() // tuple[int == length of tuple]
+	{
+		return tuple1[4];
+	}
+
+	int OutOfTupleRange4() // tuple[int >= length of tuple]
+	{
+		return tuple1[5];
+	}
+}

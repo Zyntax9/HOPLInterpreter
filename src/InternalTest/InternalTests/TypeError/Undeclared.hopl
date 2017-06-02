@@ -1,0 +1,70 @@
+﻿namespace Undeclared
+{
+	int NamespaceMissing1() // As int
+	{
+		return UndefinedNamespace1.a;
+	}
+
+	float NamespaceMissing2() // As float
+	{
+		return UndefinedNamespace2.b;
+	}
+
+	string NamespaceMissing3() // As string
+	{
+		return UndefinedNamespace3.c;
+	}
+
+	bool NamespaceMissing4() // As bool
+	{
+		return UndefinedNamespace4.d;
+	}
+
+	int UndeclaredVariable1() // As int
+	{
+		return undeclared_int;
+	}
+
+	int UndeclaredVariable2() // As float
+	{
+		return undeclared_float;
+	}
+
+	int UndeclaredVariable3() // As string
+	{
+		return undeclared_string;
+	}
+
+	int UndeclaredVariable4() // As bool
+	{
+		return undeclared_bool;
+	}
+
+	int NotCallable1() // Calling int
+	{
+		int a;
+		a();
+		return 1;
+	}
+
+	int NotCallable2() // Calling float
+	{
+		float a;
+		a();
+		return 1;
+	}
+
+	int NotCallable3() // Calling string
+	{
+		string a;
+		a();
+		return 1;
+	}
+
+	int NotCallable4() // Calling bool
+	{
+		bool a;
+		a();
+		return 1;
+	}
+}

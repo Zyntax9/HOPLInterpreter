@@ -17,12 +17,10 @@
 		// Context-specific messages
 		public static readonly TypeErrorMessage ASSIGN_MISMATCH = new TypeErrorMessage(7, "Variable type does not match the assigned value type.");
 		public static readonly TypeErrorMessage CALL_ARGMISMATCH = new TypeErrorMessage(8, "Argument type does not match the correct type.");
-		public static readonly TypeErrorMessage CALLABLE_NOTFOUND = new TypeErrorMessage(9, "Callable does not exists.");
 		public static readonly TypeErrorMessage CALLABLE_NOTCALLABLE = new TypeErrorMessage(10, "Token is not a callable entity.");
 		public static readonly TypeErrorMessage COMPEXPR_MISMATCH = new TypeErrorMessage(11, "Both sides must either be of same type or be a combination of int and float.");
 		public static readonly TypeErrorMessage HANDLERDEC_NOTTRIGGER = new TypeErrorMessage(12, "Token is not a trigger.");
 		public static readonly TypeErrorMessage HANDLERDEC_ARGMISMATCH = new TypeErrorMessage(13, "Handler variables must have the same type as those defined by the trigger.");
-		public static readonly TypeErrorMessage VAREXPR_GLOBALMISSING = new TypeErrorMessage(15, "Global entity used without having been defined.");
 		public static readonly TypeErrorMessage NEG_NUMMISMATCH = new TypeErrorMessage(16, "Negated expression must be numerical.");
 		public static readonly TypeErrorMessage NOT_BOOLMISMATCH = new TypeErrorMessage(17, "\"not\"-statements can only be applied to boolean values.");
 		public static readonly TypeErrorMessage RETURN_TRIGGERVAL = new TypeErrorMessage(18, "Return statement in a trigger must not contain return value.");

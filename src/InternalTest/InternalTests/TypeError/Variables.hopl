@@ -1,0 +1,286 @@
+﻿namespace Variables
+{
+	const int c1;
+	const float c2;
+	const string c3;
+	const bool c4;
+
+	int AssignConst1() // Reassign constant int variable
+	{
+		c1 = 3;
+		return 1;
+	}
+
+	int AssignConst2() // Reassign constant float variable
+	{
+		c2 = 3.992;
+		return 1;
+	}
+
+	int AssignConst3() // Reassign constant string variable
+	{
+		c3 = "const";
+		return 1;
+	}
+
+	int AssignConst4() // Reassign constant bool variable
+	{
+		c4 = false;
+		return 1;
+	}
+
+	int ReassignVar1() // Redeclare variable (int and int)
+	{
+		int a;
+		int a;
+		return 1;
+	}
+
+	int ReassignVar2() // Redeclare variable (int and float)
+	{
+		int a;
+		float a;
+		return 1;
+	}
+
+	int ReassignVar3() // Redeclare variable (int and string)
+	{
+		int a;
+		string a;
+		return 1;
+	}
+
+	int ReassignVar4() // Redeclare variable (int and bool)
+	{
+		int a;
+		bool a;
+		return 1;
+	}
+
+	int ReassignVar5() // Redeclare variable (float and int)
+	{
+		float a;
+		int a;
+		return 1;
+	}
+
+	int ReassignVar6() // Redeclare variable (float and float)
+	{
+		float a;
+		float a;
+		return 1;
+	}
+
+	int ReassignVar7() // Redeclare variable (float and string)
+	{
+		float a;
+		string a;
+		return 1;
+	}
+
+	int ReassignVar8() // Redeclare variable (float and bool)
+	{
+		float a;
+		bool a;
+		return 1;
+	}
+
+	int ReassignVar9() // Redeclare variable (string and int)
+	{
+		string a;
+		int a;
+		return 1;
+	}
+
+	int ReassignVar10() // Redeclare variable (string and float)
+	{
+		string a;
+		float a;
+		return 1;
+	}
+
+	int ReassignVar11() // Redeclare variable (string and string)
+	{
+		string a;
+		string a;
+		return 1;
+	}
+
+	int ReassignVar12() // Redeclare variable (string and bool)
+	{
+		string a;
+		bool a;
+		return 1;
+	}
+
+	int ReassignVar13() // Redeclare variable (bool and int)
+	{
+		bool a;
+		int a;
+		return 1;
+	}
+
+	int ReassignVar14() // Redeclare variable (bool and float)
+	{
+		bool a;
+		float a;
+		return 1;
+	}
+
+	int ReassignVar15() // Redeclare variable (bool and string)
+	{
+		bool a;
+		string a;
+		return 1;
+	}
+
+	int ReassignVar16() // Redeclare variable (bool and bool)
+	{
+		bool a;
+		bool a;
+		return 1;
+	}
+
+	int DeclareMismatch1() // Assign wrong type (int = float)
+	{
+		int a = 3.2;
+		return 1;
+	}
+
+	int DeclareMismatch2() // Assign wrong type (int = string)
+	{
+		int a = "10";
+		return 1;
+	}
+
+	int DeclareMismatch3() // Assign wrong type (int = bool)
+	{
+		int a = false;
+		return 1;
+	}
+
+	int DeclareMismatch4() // Assign wrong type (float = string)
+	{
+		float a = "10.02";
+		return 1;
+	}
+
+	int DeclareMismatch5() // Assign wrong type (float = bool)
+	{
+		float a = true;
+		return 1;
+	}
+
+	int DeclareMismatch6() // Assign wrong type (string = int)
+	{
+		string a = 8213;
+		return 1;
+	}
+
+	int DeclareMismatch7() // Assign wrong type (string = float)
+	{
+		string a = 324.222;
+		return 1;
+	}
+
+	int DeclareMismatch8() // Assign wrong type (string = bool)
+	{
+		string a = false;
+		return 1;
+	}
+
+	int DeclareMismatch9() // Assign wrong type (bool = int)
+	{
+		bool a = 0;
+		return 1;
+	}
+
+	int DeclareMismatch10() // Assign wrong type (bool = float)
+	{
+		bool a = 0.0002;
+		return 1;
+	}
+
+	int DeclareMismatch11() // Assign wrong type (bool = string)
+	{
+		bool a = "false";
+		return 1;
+	}
+
+	int AssignMismatch1() // Assign wrong type (int = float)
+	{
+		int a;
+		a = 3.2;
+		return 1;
+	}
+
+	int AssignMismatch2() // Assign wrong type (int = string)
+	{
+		int a;
+		a = "10";
+		return 1;
+	}
+
+	int AssignMismatch3() // Assign wrong type (int = bool)
+	{
+		int a;
+		a = false;
+		return 1;
+	}
+
+	int AssignMismatch4() // Assign wrong type (float = string)
+	{
+		float a;
+		a = "10.02";
+		return 1;
+	}
+
+	int AssignMismatch5() // Assign wrong type (float = bool)
+	{
+		float a;
+		a = true;
+		return 1;
+	}
+
+	int AssignMismatch6() // Assign wrong type (string = int)
+	{
+		string a;
+		a = 8213;
+		return 1;
+	}
+
+	int AssignMismatch7() // Assign wrong type (string = float)
+	{
+		string a;
+		a = 324.222;
+		return 1;
+	}
+
+	int AssignMismatch8() // Assign wrong type (string = bool)
+	{
+		string a;
+		a = false;
+		return 1;
+	}
+
+	int AssignMismatch9() // Assign wrong type (bool = int)
+	{
+		bool a;
+		a = 0;
+		return 1;
+	}
+
+	int AssignMismatch10() // Assign wrong type (bool = float)
+	{
+		bool a;
+		a = 0.0002;
+		return 1;
+	}
+
+	int AssignMismatch11() // Assign wrong type (bool = string)
+	{
+		bool a;
+		a = "false";
+		return 1;
+	}
+}

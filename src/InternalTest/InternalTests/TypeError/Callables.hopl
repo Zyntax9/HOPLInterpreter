@@ -1,0 +1,83 @@
+﻿namespace Callables
+{
+	trigger<> trigger1;
+
+	handle trigger1() // Trigger return int val
+	{
+		return 214;
+	}
+
+	handle trigger1() // Trigger return int var
+	{
+		int a = 812442;
+		return a;
+	}
+
+	handle trigger1() // Trigger return float val
+	{
+		return 0.002;
+	}
+
+	handle trigger1() // Trigger return float var
+	{
+		float a = 4.8;
+		return a;
+	}
+
+	handle trigger1() // Trigger return string val
+	{
+		return "0";
+	}
+
+	handle trigger1() // Trigger return string var
+	{
+		string a = "";
+		return a;
+	}
+
+	handle trigger1() // Trigger return bool val
+	{
+		return false;
+	}
+
+	handle trigger1() // Trigger return bool var
+	{
+		bool a = true;
+		return a;
+	}
+
+	int a;
+	float b;
+	string c;
+	bool d;
+
+	handle a() {} // Handle non-trigger int
+
+	handle b() {} // Handle non-trigger float
+
+	handle c() {} // Handle non-trigger string
+
+	handle d() {} // Handle non-trigger bool
+
+	int ReturnMismatch1() { return 3.2; } // int func return float
+
+	int ReturnMismatch2() { return "8"; } // int func return string
+
+	int ReturnMismatch3() { return true; } // int func return bool
+
+	float ReturnMismatch4() { return "882.32"; } // float func return string
+
+	float ReturnMismatch5() { return true; } // float func return bool
+
+	string ReturnMismatch6() { return 998772; } // string func return int
+
+	string ReturnMismatch7() { return 882.12; } // string func return float
+
+	string ReturnMismatch8() { return false; } // string func return bool
+
+	bool ReturnMismatch9() { return 0; } // bool func return int
+
+	bool ReturnMismatch10() { return 0.0005; } // bool func return float
+
+	bool ReturnMismatch11() { return "true"; } // bool func return string
+}

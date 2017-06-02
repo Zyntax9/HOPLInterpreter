@@ -1,0 +1,75 @@
+﻿namespace Unpacking
+{
+	tuple<int, float, string, bool> tup = {0, 0.0002, "0.00004", false};
+	int a;
+	float b;
+	string c;
+	bool d;
+	list<int> e = [1,2,3];
+
+	int UnpackNonTuple1() // Unpack non-tuple int
+	{
+		{int f} = a;
+		return 1;
+	}
+
+	int UnpackNonTuple2() // Unpack non-tuple float
+	{
+		{float f} = b;
+		return 1;
+	}
+
+	int UnpackNonTuple3() // Unpack non-tuple string
+	{
+		{string f} = c;
+		return 1;
+	}
+
+	int UnpackNonTuple4() // Unpack non-tuple bool
+	{
+		{bool f} = d;
+		return 1;
+	}
+
+	int UnpackNonTuple5() // Unpack non-tuple list
+	{
+		{int f_1, int f_2, int f_3} = e;
+		return 1;
+	}
+
+	int UnpackTooFew1() // Unpack 5 of 4
+	{
+		{int f_1, float f_2, string f_3, bool f_4, int f_5} = tup;
+		return 1;
+	}
+
+	int UnpackTooFew2() // Unpack 6 of 4
+	{
+		{int f_1, float f_2, string f_3, bool f_4, int f_5, string f_6} = tup;
+		return 1;
+	}
+
+	int UnpackTooFew3() // Unpack 8 of 4
+	{
+		{int f_1, float f_2, string f_3, bool f_4, int f_5, string f_6, float f_7} = tup;
+		return 1;
+	}
+
+	int UnpackTooMany1() // Unpack 1 of 4
+	{
+		{int f_1} = tup;
+		return 1;
+	}
+
+	int UnpackTooMany2() // Unpack 2 of 4
+	{
+		{int f_1, float f_2} = tup;
+		return 1;
+	}
+
+	int UnpackTooMany3() // Unpack 3 of 4
+	{
+		{int f_1, float f_2, string f_3} = tup;
+		return 1;
+	}
+}

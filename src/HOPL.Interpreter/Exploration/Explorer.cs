@@ -164,6 +164,7 @@ namespace HOPL.Interpreter.Exploration
 			catch (DuplicateGlobalEntityException)
 			{
 				Errors.Add(ExploreErrorMessage.GV_DUPL, context, currentFile);
+                return;
 			}
 
             if (gv.Required)
