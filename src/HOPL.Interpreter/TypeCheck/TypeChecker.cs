@@ -963,7 +963,7 @@ namespace HOPL.Interpreter.TypeCheck
 			if (exprType.TypeOf != InterpreterType.Types.LIST)
 				return RaiseError(TypeErrorMessage.FOREACH_LIST, context);
 
-			if (!exprType.IsEmptyList && exprType.TypeArray[0] != iteratorType)
+			if (!exprType.IsEmptyList && !AssignmentAllowed(iteratorType, exprType.TypeArray[0]))
 				return RaiseError(TypeErrorMessage.FOREACH_ITERMISMATCH, context);
 
 			Argument iteratorVar = new Argument(iteratorName, iteratorType);

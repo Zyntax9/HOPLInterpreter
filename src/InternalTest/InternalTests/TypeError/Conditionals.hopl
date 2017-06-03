@@ -1,0 +1,195 @@
+﻿namespace Conditionals
+{
+	int ForeachNotList1() // Foreach-loop over non-list (int val)
+	{
+		foreach(int a in 4) { }
+		return 1;
+	}
+	
+	int ForeachNotList2() // Foreach-loop over non-list (int var)
+	{
+		int l;
+		foreach(int a in l) { }
+		return 1;
+	}
+	
+	int ForeachNotList3() // Foreach-loop over non-list (float val)
+	{
+		foreach(float a in 4.2) { }
+		return 1;
+	}
+	
+	int ForeachNotList4() // Foreach-loop over non-list (float var)
+	{
+		float l;
+		foreach(float a in l) { }
+		return 1;
+	}
+	
+	int ForeachNotList5() // Foreach-loop over non-list (string val)
+	{
+		foreach(string a in "not a list") { }
+		return 1;
+	}
+	
+	int ForeachNotList6() // Foreach-loop over non-list (strings var)
+	{
+		string l;
+		foreach(string a in l) { }
+		return 1;
+	}
+	
+	int ForeachNotList7() // Foreach-loop over non-list (bool val)
+	{
+		foreach(bool a in true) { }
+		return 1;
+	}
+	
+	int ForeachNotList8() // Foreach-loop over non-list (bool var)
+	{
+		bool l;
+		foreach(bool a in l) { }
+		return 1;
+	}
+	
+	int ForeachIterMismatch1() // Foreach-loop iterator type mismatch (string on list<int>)
+	{
+		foreach(string a in [1,2,3,4]) { }
+		return 1;
+	}
+	
+	int ForeachIterMismatch2() // Foreach-loop iterator type mismatch (bool on list<int>)
+	{
+		foreach(bool a in [1,2,3,4]) { }
+		return 1;
+	}
+	
+	int ForeachIterMismatch3() // Foreach-loop iterator type mismatch (int on list<float>)
+	{
+		foreach(int a in [1,2.2,3,4]) { }
+		return 1;
+	}
+	
+	int ForeachIterMismatch4() // Foreach-loop iterator type mismatch (string on list<float>)
+	{
+		foreach(string a in [1,2.2,3,4]) { }
+		return 1;
+	}
+	
+	int ForeachIterMismatch5() // Foreach-loop iterator type mismatch (bool on list<float>)
+	{
+		foreach(bool a in [1,2.2,3,4]) { }
+		return 1;
+	}
+	
+	int ForeachIterMismatch6() // Foreach-loop iterator type mismatch (int on list<string>)
+	{
+		foreach(int a in ["1","2","3","4"]) { }
+		return 1;
+	}
+	
+	int ForeachIterMismatch7() // Foreach-loop iterator type mismatch (float on list<string>)
+	{
+		foreach(float a in ["1","2","3","4"]) { }
+		return 1;
+	}
+	
+	int ForeachIterMismatch8() // Foreach-loop iterator type mismatch (bool on list<string>)
+	{
+		foreach(bool a in ["1","2","3","4"]) { }
+		return 1;
+	}
+	
+	int ForeachIterMismatch9() // Foreach-loop iterator type mismatch (int on list<bool>)
+	{
+		foreach(int a in [true, true, false, false]) { }
+		return 1;
+	}
+	
+	int ForeachIterMismatch10() // Foreach-loop iterator type mismatch (float on list<bool>)
+	{
+		foreach(float a in [true, true, false, false]) { }
+		return 1;
+	}
+	
+	int ForeachIterMismatch11() // Foreach-loop iterator type mismatch (string on list<bool>)
+	{
+		foreach(string a in [true, true, false, false]) { }
+		return 1;
+	}
+
+	int NeededBoolStatements1() // int in if-statement
+	{
+		if(3) {}
+		return 1;
+	}
+
+	int NeededBoolStatements2() // int in else-if-statement
+	{
+		if(true) {} 
+		else if(28) {}
+		return 1;
+	}
+
+	int NeededBoolStatements3() // int in condition of for-statement
+	{
+		for(;82;) {}
+		return 1;
+	}
+
+	int NeededBoolStatements4() // int in condition of while-statement
+	{
+		while(8) {}
+		return 1;
+	}
+
+	int NeededBoolStatements5() // float in if-statement
+	{
+		if(921.23) {}
+		return 1;
+	}
+
+	int NeededBoolStatements6() // float in else-if-statement
+	{
+		if(true) {} 
+		else if(0.0001) {}
+		return 1;
+	}
+
+	int NeededBoolStatements7() // float in condition of for-statement
+	{
+		for(;99.99;) {}
+		return 1;
+	}
+
+	int NeededBoolStatements8() // float in condition of while-statement
+	{
+		while(1.1) {}
+		return 1;
+	}
+
+	int NeededBoolStatements9() // string in if-statement
+	{
+		if("true") {}
+		return 1;
+	}
+
+	int NeededBoolStatements10() // string in else-if-statement
+	{
+		if(true) {} 
+		else if("hello!") {}
+		return 1;
+	}
+
+	int NeededBoolStatements11() // string in condition of for-statement
+	{
+		for(;"lorem";) {}
+		return 1;
+	}
+
+	int NeededBoolStatements12() // string in condition of while-statement
+	{
+		while("IPSUM") {}
+		return 1;
+	}
+}
