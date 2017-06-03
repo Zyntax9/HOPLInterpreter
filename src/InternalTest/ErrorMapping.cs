@@ -10,6 +10,7 @@ namespace InternalTest
     public struct ErroneousFile
     {
         public string File { get; set; }
+        public string[] ImportPaths { get; set; }
         public string ErrorType { get; set; }
         public ExpectedError[] ExpectedErrors { get; set; }
     }
@@ -498,6 +499,66 @@ namespace InternalTest
                     new ExpectedError() { ErrorCode = 6, Line = 180 },
                     new ExpectedError() { ErrorCode = 6, Line = 186 },
                     new ExpectedError() { ErrorCode = 6, Line = 192 },
+                }
+            },
+            new ErroneousFile()
+            {
+                File = "./InternalTests/ExplorationError/GlobalVars.hopl",
+                ErrorType = "Explore Errors",
+                ExpectedErrors = new ExpectedError[]
+                {
+                    new ExpectedError() { ErrorCode = 1, Line = 4 },
+                    new ExpectedError() { ErrorCode = 1, Line = 7 },
+                    new ExpectedError() { ErrorCode = 1, Line = 10 },
+                    new ExpectedError() { ErrorCode = 1, Line = 13 },
+                    new ExpectedError() { ErrorCode = 1, Line = 16 },
+                    new ExpectedError() { ErrorCode = 1, Line = 19 },
+                    new ExpectedError() { ErrorCode = 1, Line = 22 },
+                    new ExpectedError() { ErrorCode = 1, Line = 25 },
+                    new ExpectedError() { ErrorCode = 1, Line = 28 },
+                    new ExpectedError() { ErrorCode = 1, Line = 31 },
+                    new ExpectedError() { ErrorCode = 1, Line = 34 },
+                    new ExpectedError() { ErrorCode = 1, Line = 37 },
+                    new ExpectedError() { ErrorCode = 1, Line = 40 },
+                    new ExpectedError() { ErrorCode = 1, Line = 43 },
+                    new ExpectedError() { ErrorCode = 1, Line = 46 },
+                    new ExpectedError() { ErrorCode = 1, Line = 49 },
+                }
+            },
+            new ErroneousFile()
+            {
+                File = "./InternalTests/ExplorationError/Functions.hopl",
+                ErrorType = "Explore Errors",
+                ExpectedErrors = new ExpectedError[]
+                {
+                    new ExpectedError() { ErrorCode = 2, Line = 4 },
+                    new ExpectedError() { ErrorCode = 2, Line = 7 },
+                    new ExpectedError() { ErrorCode = 2, Line = 10 },
+                    new ExpectedError() { ErrorCode = 2, Line = 13 },
+                    new ExpectedError() { ErrorCode = 2, Line = 16 },
+                    new ExpectedError() { ErrorCode = 2, Line = 19 },
+                    new ExpectedError() { ErrorCode = 2, Line = 22 },
+                    new ExpectedError() { ErrorCode = 2, Line = 25 },
+                    new ExpectedError() { ErrorCode = 2, Line = 28 },
+                    new ExpectedError() { ErrorCode = 2, Line = 31 },
+                    new ExpectedError() { ErrorCode = 2, Line = 34 },
+                    new ExpectedError() { ErrorCode = 2, Line = 37 },
+                    new ExpectedError() { ErrorCode = 2, Line = 40 },
+                    new ExpectedError() { ErrorCode = 2, Line = 43 },
+                    new ExpectedError() { ErrorCode = 2, Line = 46 },
+                    new ExpectedError() { ErrorCode = 2, Line = 49 },
+                    new ExpectedError() { ErrorCode = 3, Line = 51 },
+                    new ExpectedError() { ErrorCode = 3, Line = 53 },
+                }
+            },
+            new ErroneousFile()
+            {
+                File = "./InternalTests/ExplorationError/Alias.hopl",
+                ImportPaths = new string[1] {"./InternalTests/ExplorationError/Libraries"},
+                ErrorType = "Explore Errors",
+                ExpectedErrors = new ExpectedError[]
+                {
+                    new ExpectedError() { ErrorCode = 4, Line = 2 },
                 }
             },
         };

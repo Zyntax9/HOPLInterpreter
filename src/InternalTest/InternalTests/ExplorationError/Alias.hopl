@@ -1,0 +1,6 @@
+﻿import Library1;
+import Library2 as Library1;
+
+namespace Alias
+{
+}

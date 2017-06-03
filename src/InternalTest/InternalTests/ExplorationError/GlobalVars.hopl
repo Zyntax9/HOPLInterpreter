@@ -1,0 +1,50 @@
+﻿namespace GlobalVars.hopl
+{
+	int gv1;
+	int gv1;
+	
+	int gv2;
+	float gv2;
+	
+	int gv3;
+	string gv3;
+	
+	int gv4;
+	bool gv4;
+	
+	float gv5;
+	int gv5;
+	
+	float gv6;
+	float gv6;
+	
+	float gv7;
+	string gv7;
+	
+	float gv8;
+	bool gv8;
+	
+	string gv9;
+	int gv9;
+	
+	string gv10;
+	float gv10;
+	
+	string gv11;
+	string gv11;
+	
+	string gv12;
+	bool gv12;
+	
+	bool gv13;
+	int gv13;
+	
+	bool gv14;
+	float gv14;
+	
+	bool gv15;
+	string gv15;
+	
+	bool gv16;
+	bool gv16;
+}

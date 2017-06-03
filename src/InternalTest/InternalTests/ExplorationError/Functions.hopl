@@ -1,0 +1,57 @@
+﻿namespace Functions
+{
+	int Func1() { return 1; }
+	int Func1() { return 1; }
+	
+	int Func2() { return 1; }
+	float Func2() { return 1.1; }
+	
+	int Func3() { return 1; }
+	string Func3() { return "1"; }
+	
+	int Func4() { return 1; }
+	bool Func4() { return true; }
+	
+	float Func5() { return 1.1; }
+	int Func5() { return 1; }
+	
+	float Func6() { return 1.1; }
+	float Func6() { return 1.1; }
+	
+	float Func7() { return 1.1; }
+	string Func7() { return "1"; }
+	
+	float Func8() { return 1.1; }
+	bool Func8() { return true; }
+	
+	string Func9() { return "1"; }
+	int Func9() { return 1; }
+	
+	string Func10() { return "1"; }
+	float Func10() { return 1.1; }
+	
+	string Func11() { return "1"; }
+	string Func11() { return "1"; }
+	
+	string Func12() { return "1"; }
+	bool Func12() { return true; }
+	
+	bool Func13() { return true; }
+	int Func13() { return 1; }
+	
+	bool Func14() { return true; }
+	float Func14() { return 1.1; }
+	
+	bool Func15() { return true; }
+	string Func15() { return "1"; }
+	
+	bool Func16() { return true; }
+	bool Func16() { return true; }
+
+	int NoPaths() { }
+
+	int IfPathReturn()
+	{
+		if(true) { return 1; }
+	}
+}

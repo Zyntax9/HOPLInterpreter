@@ -52,6 +52,21 @@
 	  <None Update="InternalTests\Execution\Unpacking.hopl">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </None>
+	  <None Update="InternalTests\ExplorationError\Alias.hopl">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	  <None Update="InternalTests\ExplorationError\Functions.hopl">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	  <None Update="InternalTests\ExplorationError\GlobalVars.hopl">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	  <None Update="InternalTests\ExplorationError\Libraries\Library1.hopl">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	  <None Update="InternalTests\ExplorationError\Libraries\Library2.hopl">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
 	  <None Update="InternalTests\TypeError\Arguments.hopl">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </None>
@@ -79,7 +94,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="InternalTests\ExplorationError\" />
 	  <Folder Include="InternalTests\PreparationError\" />
 	</ItemGroup>
 

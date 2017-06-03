@@ -103,6 +103,8 @@ namespace InternalTest
         public void ExpectError(ErroneousFile file)
         {
             HashSet<string> importPaths = new HashSet<string>();
+            if (file.ImportPaths != null)
+                importPaths = new HashSet<string>(file.ImportPaths);
             NamespaceSet namespaces = new NamespaceSet();
 
             try
