@@ -1,0 +1,6 @@
+﻿namespace RecursiveGlobalEntity
+{
+	int a = b;
+	int b = c;
+	int c = a;
+}

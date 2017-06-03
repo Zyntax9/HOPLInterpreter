@@ -67,6 +67,24 @@
 	  <None Update="InternalTests\ExplorationError\Libraries\Library2.hopl">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </None>
+	  <None Update="InternalTests\PreparationError\AwaitDependencyDirect.hopl">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	  <None Update="InternalTests\PreparationError\AwaitDependencyIndirect.hopl">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	  <None Update="InternalTests\PreparationError\ImportRequired.hopl">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	  <None Update="InternalTests\PreparationError\Libraries\ContainsRequired.hopl">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	  <None Update="InternalTests\PreparationError\RecursiveGlobalEntity.hopl">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	  <None Update="InternalTests\PreparationError\UnknownImport.hopl">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
 	  <None Update="InternalTests\TypeError\Arguments.hopl">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </None>
@@ -91,10 +109,6 @@
 	  <None Update="InternalTests\TypeError\Variables.hopl">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </None>
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Folder Include="InternalTests\PreparationError\" />
 	</ItemGroup>
 
 </Project>

@@ -1,0 +1,11 @@
+﻿namespace AwaitDependencyIndirect
+{
+	bool a = Func1();
+
+	trigger<> trigger1;
+	bool Func1()
+	{
+		await trigger1;
+		return true;
+	}
+}

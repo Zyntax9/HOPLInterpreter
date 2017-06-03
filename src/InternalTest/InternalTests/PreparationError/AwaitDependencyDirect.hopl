@@ -1,0 +1,6 @@
+﻿namespace AwaitDependencyDirect
+{
+	trigger<float, string> trigger1;
+
+	tuple<float, string> a = await trigger1;
+}

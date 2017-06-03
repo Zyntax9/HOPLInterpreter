@@ -9,7 +9,7 @@ namespace HOPL.Interpreter.NamespaceMapping
 {
 	public class NamespaceMapper
 	{
-		const string extension = ".txt";
+		const string extension = ".hopl";
 
 		public static NamespaceFileMap MapNamespaces(ISet<string> importPaths)
 		{

@@ -561,6 +561,52 @@ namespace InternalTest
                     new ExpectedError() { ErrorCode = 4, Line = 2 },
                 }
             },
+            new ErroneousFile()
+            {
+                File = "./InternalTests/PreparationError/UnknownImport.hopl",
+                ErrorType = "Prepare Errors",
+                ExpectedErrors = new ExpectedError[]
+                {
+                    new ExpectedError() { ErrorCode = 1, Line = 0 },
+                }
+            },
+            new ErroneousFile()
+            {
+                File = "./InternalTests/PreparationError/ImportRequired.hopl",
+                ImportPaths = new string[1] {"./InternalTests/PreparationError/Libraries"},
+                ErrorType = "Prepare Errors",
+                ExpectedErrors = new ExpectedError[]
+                {
+                    new ExpectedError() { ErrorCode = 2, Line = 0 },
+                }
+            },
+            new ErroneousFile()
+            {
+                File = "./InternalTests/PreparationError/RecursiveGlobalEntity.hopl",
+                ErrorType = "Prepare Errors",
+                ExpectedErrors = new ExpectedError[]
+                {
+                    new ExpectedError() { ErrorCode = 3, Line = 0 },
+                }
+            },
+            new ErroneousFile()
+            {
+                File = "./InternalTests/PreparationError/AwaitDependencyDirect.hopl",
+                ErrorType = "Prepare Errors",
+                ExpectedErrors = new ExpectedError[]
+                {
+                    new ExpectedError() { ErrorCode = 4, Line = 0 },
+                }
+            },
+            new ErroneousFile()
+            {
+                File = "./InternalTests/PreparationError/AwaitDependencyIndirect.hopl",
+                ErrorType = "Prepare Errors",
+                ExpectedErrors = new ExpectedError[]
+                {
+                    new ExpectedError() { ErrorCode = 4, Line = 0 },
+                }
+            },
         };
     }
 }
