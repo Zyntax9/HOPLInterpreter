@@ -2,7 +2,7 @@
 
 namespace Unpacking
 {
-	int tests = 42;
+	int tests = 52;
 
 	handle UTest.BeforeTests()
 	{
@@ -53,6 +53,46 @@ namespace Unpacking
 			{"another", 75, ["first", "Second"], true, 2.89};
 
 		{string a, int b, list<string> c, bool d, float e} = tup;
+		 
+		UTest.AssertStringEqual(a, tup[0], "Unpack to new var by var 2 (string)");
+		UTest.AssertIntEqual(b, tup[1], "Unpack to new var by var 2 (int)");
+		UTest.AssertStringListEqual(c, tup[2], "Unpack to new var by var 2 (list)");
+		UTest.AssertBoolEqual(d, tup[3], "Unpack to new var by var 2 (bool)");
+		UTest.AssertFloatEqual(e, tup[4], "Unpack to new var by var 2 (float)");
+	}
+	
+	handle UTest.RunTests() // Unpack to var by var 1
+	{
+		int a;
+		float b;
+		bool c;
+		string d;
+		list<int> e;
+
+		tuple<int, float, bool, string, list<int>> tup =
+			{82, 34.2, false, "test1", [2, 96]};
+
+		{a, b, c, d, e} = tup;
+
+		UTest.AssertIntEqual(a, tup[0], "Unpack to new var by var 1 (int)");
+		UTest.AssertFloatEqual(b, tup[1], "Unpack to new var by var 1 (float)");
+		UTest.AssertBoolEqual(c, tup[2], "Unpack to new var by var 1 (bool)");
+		UTest.AssertStringEqual(d, tup[3], "Unpack to new var by var 1 (string)");
+		UTest.AssertIntListEqual(e, tup[4], "Unpack to new var by var 1 (list)");
+	}
+	
+	handle UTest.RunTests() // Unpack to var by var 2
+	{
+		string a;
+		int b;
+		list<string> c;
+		bool d;
+		float e;
+
+		tuple<string, int, list<string>, bool, float> tup =
+			{"another", 75, ["first", "Second"], true, 2.89};
+
+		{a, b, c, d, e} = tup;
 		 
 		UTest.AssertStringEqual(a, tup[0], "Unpack to new var by var 2 (string)");
 		UTest.AssertIntEqual(b, tup[1], "Unpack to new var by var 2 (int)");

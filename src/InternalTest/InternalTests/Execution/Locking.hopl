@@ -1,0 +1,29 @@
+﻿import UTest;
+import Utility;
+
+namespace Locking
+{
+	int tests = 1;
+
+	handle UTest.BeforeTests()
+	{
+		UTest.SetTestCount(tests);
+	}
+
+	int a = 1;
+	trigger<> RunOther;
+
+	handle UTest.RunTests() // Locking
+	{
+		lock(a)
+		{
+			Utility.Sleep(200);
+			UTest.AssertIntEqual(a, 1, "Locking");
+		}
+	}
+
+	handle RunOther()
+	{
+		a = 5;
+	}
+}

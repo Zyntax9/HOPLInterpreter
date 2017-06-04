@@ -601,8 +601,10 @@ namespace HOPL.Interpreter.Interpretation
 		public InterpreterValue VisitFor([NotNull] Parser.ForContext context)
 		{
 			currentScope.PushDepth();
+            
+            if (context.declare != null)
+			    VisitVarDec(context.declare);
 
-			VisitVarDec(context.declare);
 			while ((bool)VisitExpr(context.predicate).Value)
 			{
 				if (cancelToken.IsCancellationRequested)
@@ -616,7 +618,8 @@ namespace HOPL.Interpreter.Interpretation
 					return bodyValue;
 				}
 
-				VisitAssign(context.reeval);
+                if(context.reeval != null)
+				    VisitAssign(context.reeval);
 			}
 
 			currentScope.PopDepth();
@@ -746,8 +749,12 @@ namespace HOPL.Interpreter.Interpretation
 				if (elifpred)
 					return elifBodyValue;
 			}
-			
-			return VisitElse(context.@else());
+
+            Parser.ElseContext @else = context.@else();
+            if(@else != null)
+                return VisitElse(@else);
+
+            return null;
 		}
 
 		public InterpreterValue VisitIgnoreUnpacked([NotNull] Parser.IgnoreUnpackedContext context)

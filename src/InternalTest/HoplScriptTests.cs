@@ -38,39 +38,46 @@ namespace InternalTest
         [InlineData("./InternalTests/Execution/Assignment.hopl")]
         [InlineData("./InternalTests/Execution/Await.hopl")]
         [InlineData("./InternalTests/Execution/ComparisonOperators.hopl")]
+        [InlineData("./InternalTests/Execution/Conditionals.hopl")]
         [InlineData("./InternalTests/Execution/Indexing.hopl")]
+        [InlineData("./InternalTests/Execution/ListOperators.hopl")]
+        [InlineData("./InternalTests/Execution/Locking.hopl")]
         [InlineData("./InternalTests/Execution/LogicalOperators.hopl")]
 		[InlineData("./InternalTests/Execution/Precendece.hopl")]
 		[InlineData("./InternalTests/Execution/TriggerReference.hopl")]
 		[InlineData("./InternalTests/Execution/Triggers.hopl")]
         [InlineData("./InternalTests/Execution/Unpacking.hopl")]
-        [InlineData("./InternalTests/Execution/ListOperators.hopl")]
         private void RunFile(string file)
 		{
-			UnitTestNamespace unitTestNamespace = new UnitTestNamespace(file, output);
-            UtilityNamespace utilityNamespace = new UtilityNamespace();
-            ISuppliedNamespace[] namespaces = { unitTestNamespace, utilityNamespace };
-
-			if (!Prepare(file, namespaces, out InterpretationContext context))
-				return;
-
-			IThreadPool pool = Interpreter.Run(context, null);
-			unitTestNamespace.Run();
-
-			DateTime startTime = DateTime.Now;
-			while (!unitTestNamespace.IsComplete() && DateTime.Now - startTime < Timeout)
-				Thread.Sleep(100);
-			pool.StopAndJoin();
-
-			if (DateTime.Now - startTime >= Timeout)
-				Assert.True(false, $"Timeout on {file}");
-			
-			if (unitTestNamespace.TestCount != unitTestNamespace.SuccessCount)
-				Assert.True(false, $"Test/Success mismatch ({unitTestNamespace.TestCount}/{unitTestNamespace.SuccessCount})");
-
+            RunInPool(file, null); // Run in dynamic pool
+            RunInPool(file, 2); // Run in static pool (size=2)
         }
 
-		private static bool Prepare(string file, ISuppliedNamespace[] suppliedNamespaces, out InterpretationContext context)
+        private void RunInPool(string file, int? threadMax = null)
+        {
+            UnitTestNamespace unitTestNamespace = new UnitTestNamespace(file, output);
+            UtilityNamespace utilityNamespace = new UtilityNamespace();
+
+            ISuppliedNamespace[] namespaces = { unitTestNamespace, utilityNamespace };
+
+            Prepare(file, namespaces, out InterpretationContext context);
+
+            IThreadPool pool = Interpreter.Run(context, new Dictionary<string, object>(), threadMax);
+            unitTestNamespace.Run();
+
+            DateTime startTime = DateTime.Now;
+            while (!unitTestNamespace.IsComplete() && DateTime.Now - startTime < Timeout)
+                Thread.Sleep(100);
+            pool.StopAndJoin();
+
+            if (DateTime.Now - startTime >= Timeout)
+                Assert.True(false, $"Timeout on {file} ({unitTestNamespace.SuccessCount}/{unitTestNamespace.TestCount})");
+
+            if (unitTestNamespace.TestCount != unitTestNamespace.SuccessCount)
+                Assert.True(false, $"Test/Success mismatch ({unitTestNamespace.SuccessCount}/{unitTestNamespace.TestCount})");
+        }
+
+		private static void Prepare(string file, ISuppliedNamespace[] suppliedNamespaces, out InterpretationContext context)
 		{
 			context = null;
 
@@ -88,14 +95,11 @@ namespace InternalTest
 					.Aggregate((current, next) => current + "\n" + next);
 
 				Assert.True(false, errors);
-				return false;
 			}
 			catch (Exception e)
 			{
 				Assert.True(false, "Failed due to exception: " + e.Message + e.StackTrace);
-				return false;
 			}
-			return true;
 		}
 
         [Theory]

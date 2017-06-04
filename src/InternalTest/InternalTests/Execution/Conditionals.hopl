@@ -1,0 +1,224 @@
+﻿import UTest;
+
+namespace Conditionals
+{
+	int tests = 14;
+
+	handle UTest.BeforeTests()
+	{
+		UTest.SetTestCount(tests);
+	}
+	
+	handle UTest.RunTests() // If statement (true)
+	{
+		bool branch_hit = false;
+		if(true)
+		{
+			UTest.AssertBoolTrue(true, "If statement (true)");
+			branch_hit = true;
+		}
+
+		if(not branch_hit)
+		{
+			UTest.AssertBoolTrue(false, "If statement (true)");
+		}
+	}
+	
+	handle UTest.RunTests() // If statement (false)
+	{
+		bool branch_hit = false;
+		if(false)
+		{
+			UTest.AssertBoolTrue(false, "If statement (false)");
+			branch_hit = true;
+		}
+
+		if(not branch_hit)
+		{
+			UTest.AssertBoolTrue(true, "If statement (false)");
+		}
+	}
+	
+	handle UTest.RunTests() // Elif statement (if false, elif true)
+	{
+		bool branch_hit = false;
+		if(false)
+		{
+			UTest.AssertBoolTrue(false, "Elif statement (if false, elif true) (if)");
+			branch_hit = true;
+		}
+		else if(true)
+		{
+			UTest.AssertBoolTrue(true, "Elif statement (if false, elif true)");
+			branch_hit = true;
+		}
+
+		if(not branch_hit)
+		{
+			UTest.AssertBoolTrue(false, "Elif statement (if false, elif true) (both false)");
+		}
+	}
+	
+	handle UTest.RunTests() // Elif statement (if true, elif true)
+	{
+		bool branch_hit = false;
+		if(true)
+		{
+			UTest.AssertBoolTrue(true, "Elif statement (if true, elif true)");
+			branch_hit = true;
+		}
+		else if(true)
+		{
+			UTest.AssertBoolTrue(false, "Elif statement (if true, elif true) (elif)");
+			branch_hit = true;
+		}
+
+		if(not branch_hit)
+		{
+			UTest.AssertBoolTrue(false, "Elif statement (if true, elif true) (both false)");
+		}
+	}
+	
+	handle UTest.RunTests() // Else statement (if false, elif false, else)
+	{
+		bool branch_hit = false;
+		if(false)
+		{
+			UTest.AssertBoolTrue(false, "Else statement (if false, elif false, else) (if)");
+			branch_hit = true;
+		}
+		else if(false)
+		{
+			UTest.AssertBoolTrue(false, "Else statement (if false, elif false, else) (elif)");
+			branch_hit = true;
+		}
+		else
+		{
+			UTest.AssertBoolTrue(true, "Else statement (if false, elif false, else)");
+			branch_hit = true;
+		}
+
+		if(not branch_hit)
+		{
+			UTest.AssertBoolTrue(false, "Else statement (if false, elif false, else true) (both false)");
+		}
+	}
+	
+	handle UTest.RunTests() // Else statement (if true, elif false, else)
+	{
+		bool branch_hit = false;
+		if(true)
+		{
+			UTest.AssertBoolTrue(true, "Else statement (if true, elif false, else)");
+			branch_hit = true;
+		}
+		else if(false)
+		{
+			UTest.AssertBoolTrue(false, "Else statement (if true, elif false, else) (elif)");
+			branch_hit = true;
+		}
+		else
+		{
+			UTest.AssertBoolTrue(false, "Else statement (if true, elif false, else) (else)");
+			branch_hit = true;
+		}
+
+		if(not branch_hit)
+		{
+			UTest.AssertBoolTrue(false, "Else statement (if true, elif false, else true) (both false)");
+		}
+	}
+	
+	handle UTest.RunTests() // Else statement (if false, elif true, else)
+	{
+		bool branch_hit = false;
+		if(false)
+		{
+			UTest.AssertBoolTrue(false, "Else statement (if false, elif true, else) (if)");
+			branch_hit = true;
+		}
+		else if(true)
+		{
+			UTest.AssertBoolTrue(true, "Else statement (if false, elif true, else)");
+			branch_hit = true;
+		}
+		else
+		{
+			UTest.AssertBoolTrue(false, "Else statement (if false, elif true, else) (else)");
+			branch_hit = true;
+		}
+
+		if(not branch_hit)
+		{
+			UTest.AssertBoolTrue(false, "Else statement (if false, elif true, else true) (both false)");
+		}
+	}
+	
+	handle UTest.RunTests() // While statement (i < 5)
+	{
+		int i = 0;
+		while(i < 5)
+		{
+			i = i + 1;
+		}
+		UTest.AssertIntEqual(i, 5, "While statement (i < 5)");
+	}
+	
+	handle UTest.RunTests() // While statement (i > 0)
+	{
+		int i = 0;
+		while(i > 0)
+		{
+			i = i + 1;
+		}
+		UTest.AssertIntEqual(i, 0, "While statement (i < 5)");
+	}
+	
+	handle UTest.RunTests() // Foreach statement
+	{
+		int sum = 0;
+		foreach(int x in [1,2,3,4])
+		{
+			sum = sum + x;
+		}
+		UTest.AssertIntEqual(sum, 10, "Foreach statement");
+	}
+	
+	handle UTest.RunTests() // For statement (Dec inside, expr inside)
+	{
+		int last_i = 0;
+		for(int i = 0; i < 5; i = i + 1)
+		{
+			last_i = i;
+		}
+		UTest.AssertIntEqual(last_i, 4, "For statement (Dec inside, expr inside)");
+	}
+	
+	handle UTest.RunTests() // For statement (Dec outside, expr inside)
+	{
+		int i = 0;
+		for(; i < 5; i = i + 1) { /*UTest.DebugInt(i);*/ }
+		UTest.AssertIntEqual(i, 5, "For statement (Dec outside, expr inside)");
+	}
+	
+	handle UTest.RunTests() // For statement (Dec inside, expr outside)
+	{
+		int last_i = 0;
+		for(int i = 0; i < 5;)
+		{
+			last_i = i;
+			i = i + 1;
+		}
+		UTest.AssertIntEqual(last_i, 4, "For statement (Dec inside, expr outside)");
+	}
+	
+	handle UTest.RunTests() // For statement (Dec outside, expr outside)
+	{
+		int i = 0;
+		for(;i < 5;) 
+		{
+			i = i + 1;
+		}
+		UTest.AssertIntEqual(i, 5, "For statement (Dec outside, expr outside)");
+	}
+}

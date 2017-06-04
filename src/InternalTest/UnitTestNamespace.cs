@@ -59,6 +59,8 @@ namespace InternalTest
 				else
 				{
 					SuccessCount++;
+                    lock (consoleLock)
+                        output.WriteLine($"Completed {location}");
 				}
 			}
 			return assert;
@@ -77,11 +79,18 @@ namespace InternalTest
 			RunTests.Fire(new object[0]);
 		}
 
+        public void Reset()
+        {
+            TestCount = 0;
+		    FailCount = 0;
+            SuccessCount = 0;
+        }
+
 		public bool IsComplete()
 		{
 			bool done = false;
 			lock (countLock)
-				done = SuccessCount + FailCount >= TestCount;
+				done = (SuccessCount + FailCount) >= TestCount;
 			return done;
 		}
 

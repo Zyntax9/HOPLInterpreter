@@ -14,7 +14,7 @@ namespace HOPL.Interpreter.Interpretation.ThreadPool
 		private Queue<HandlerContext> queue = new Queue<HandlerContext>();
         private CancellationTokenSource cancelSource;
         private CancellationToken cancelToken;
-		public bool Running { get { return cancelToken.IsCancellationRequested; } }
+		public bool Running { get { return !cancelToken.IsCancellationRequested; } }
 
 		private Task[] pool;
 		private LinkedList<AwaitingThread> awaiting = new LinkedList<AwaitingThread>();
