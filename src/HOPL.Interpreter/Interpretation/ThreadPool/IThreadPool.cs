@@ -8,13 +8,13 @@ namespace HOPL.Interpreter.Interpretation.ThreadPool
 	public interface IThreadPool
 	{
 		bool Running { get; }
+        RuntimeErrorEventHandler RuntimeErrorHandler { get; set; }
 
-		event RuntimeErrorEventHandler RuntimeErrorEvent;
-
-		void QueueHandler(HandlerContext context);
+        void QueueHandler(HandlerContext context);
 		int GetQueuedCount();
 		void Stop();
 		void StopAndJoin();
 		object[] Await(Api.SuppliedTrigger trigger);
+
 	}
 }

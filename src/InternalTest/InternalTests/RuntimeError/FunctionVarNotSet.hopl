@@ -1,0 +1,10 @@
+﻿import UTest;
+
+namespace FunctionVarNotSet
+{
+	handle UTest.RunTests()
+	{
+		int<string> f;
+		int a = f("hello");
+	}
+}

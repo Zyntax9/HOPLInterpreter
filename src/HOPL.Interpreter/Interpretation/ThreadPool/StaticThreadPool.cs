@@ -20,9 +20,9 @@ namespace HOPL.Interpreter.Interpretation.ThreadPool
 		private LinkedList<AwaitingThread> awaiting = new LinkedList<AwaitingThread>();
 		private Queue<AwaitingThread> ready = new Queue<AwaitingThread>();
 
-		public event RuntimeErrorEventHandler RuntimeErrorEvent;
+        public RuntimeErrorEventHandler RuntimeErrorHandler { get; set; }
 
-		public StaticThreadPool(int poolSize)
+        public StaticThreadPool(int poolSize)
 		{
 			pool = new Task[poolSize];
             cancelSource = new CancellationTokenSource();
@@ -68,10 +68,10 @@ namespace HOPL.Interpreter.Interpretation.ThreadPool
 				{
 					executor.ExecuteHandler(handler.Handler.Context);
 				}
-				catch (RuntimeErrorException e)
-				{
-					RuntimeErrorEvent?.Invoke(this, (RuntimeError)e.Errors.First());
-				}
+                catch(RuntimeErrorException e)
+                {
+                    RuntimeErrorHandler(this, (RuntimeError)e.Errors.FirstOrDefault());
+                }
 				catch (ExecutorInterruptException) { }
 			}
 		}

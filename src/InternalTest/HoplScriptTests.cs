@@ -11,18 +11,26 @@ using HOPL.Interpreter.Api;
 using Xunit;
 using Xunit.Abstractions;
 using HOPL.Interpreter.Errors;
-using HOPL.Interpreter.Errors.Parsing;
+using HOPL.Interpreter.Errors.Runtime;
 
 namespace InternalTest
 {
     public class HoplScriptTests
     {
-        private static readonly TimeSpan Timeout = TimeSpan.FromSeconds(50);
+        private static readonly TimeSpan Timeout = TimeSpan.FromSeconds(10);
         private readonly ITestOutputHelper output;
 
-        public static IEnumerable<object[]> GetErrorFiles()
+        public static IEnumerable<object[]> GetPreprocessErrorFiles()
         {
-            foreach(ErroneousFile file in ErrorMapping.ErrorFiles)
+            foreach(ErroneousFile file in ErrorMapping.PreprocessingErrorFiles)
+            {
+                yield return new object[] { file };
+            }
+        }
+
+        public static IEnumerable<object[]> GetRuntimeErrorFiles()
+        {
+            foreach (ErroneousFile file in ErrorMapping.RuntimeErrorFiles)
             {
                 yield return new object[] { file };
             }
@@ -103,8 +111,8 @@ namespace InternalTest
 		}
 
         [Theory]
-        [MemberData(nameof(GetErrorFiles))]
-        public void ExpectError(ErroneousFile file)
+        [MemberData(nameof(GetPreprocessErrorFiles))]
+        public void ExpectPreprocessError(ErroneousFile file)
         {
             HashSet<string> importPaths = new HashSet<string>();
             if (file.ImportPaths != null)
@@ -115,7 +123,6 @@ namespace InternalTest
             {
                 Interpreter.PrepareFile(file.File, importPaths, namespaces);
                 Assert.True(false, $"{file.File} did unexpectedly succeed.");
-                return;
             }
             catch (ErrorException e)
             {
@@ -124,13 +131,12 @@ namespace InternalTest
                 foreach(ExpectedError expectedError in file.ExpectedErrors)
                 {
                     Assert.True(ContainsError(e, expectedError), 
-                        $"Errors from preparing {file.File} did not contain error code {expectedError.ErrorCode} at line {expectedError.Line}.");
+                        $"Preprocess errors from preparing {file.File} did not contain error code {expectedError.ErrorCode} at line {expectedError.Line}.");
                 }
             }
             catch (Exception e)
             {
                 Assert.True(false, "Failed due to exception: " + e.Message + e.StackTrace);
-                return;
             }
         }
 
@@ -142,5 +148,47 @@ namespace InternalTest
                                  select error).FirstOrDefault();
             return errorFound != null;
         }
-	}
+
+        [Theory]
+        [MemberData(nameof(GetRuntimeErrorFiles))]
+        public void ExpectRuntimeError(ErroneousFile file)
+        {
+            HashSet<string> importPaths = new HashSet<string>();
+            if (file.ImportPaths != null)
+                importPaths = new HashSet<string>(file.ImportPaths);
+            
+            UnitTestNamespace unitTestNamespace = new UnitTestNamespace(file.File, output);
+            NamespaceSet namespaces = new NamespaceSet(new ISuppliedNamespace[] { unitTestNamespace });
+
+            try
+            {
+                InterpretationContext context = Interpreter.PrepareFile(file.File, importPaths, namespaces);
+            
+                IThreadPool pool = Interpreter.Run(context, new Dictionary<string, object>());
+
+                RuntimeError error = null;
+                pool.RuntimeErrorHandler += (obj, e) => error = e;
+
+                unitTestNamespace.Run();
+
+                DateTime startTime = DateTime.Now;
+                while (error == null && DateTime.Now - startTime < Timeout)
+                    Thread.Sleep(100);
+                pool.StopAndJoin();
+
+                if(error == null)
+                    Assert.True(false, $"{file.File} did unexpectedly succeed or get stuck.");
+
+                ExpectedError expectedError = file.ExpectedErrors.FirstOrDefault();
+
+                Assert.True(error.ID == expectedError.ErrorCode && error.LineNumber == expectedError.Line,
+                    $"Runtime error from running {file.File} did not contain error code {expectedError.ErrorCode} at line {expectedError.Line}.");
+            }
+            catch (Exception e)
+            {
+                Assert.True(false, "Failed due to exception: " + e.Message + e.StackTrace);
+                return;
+            }
+        }
+    }
 }

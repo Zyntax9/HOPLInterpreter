@@ -1,0 +1,10 @@
+﻿import UTest;
+
+namespace IndexOutOfRangeHigh
+{
+	handle UTest.RunTests()
+	{
+		list<int> l = [1,2,3,4];
+		int a = l[4];
+	}
+}

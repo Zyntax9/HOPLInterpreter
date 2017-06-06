@@ -95,6 +95,18 @@
 	  <None Update="InternalTests\PreparationError\UnknownImport.hopl">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </None>
+	  <None Update="InternalTests\RuntimeError\DivisionByZero.hopl">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	  <None Update="InternalTests\RuntimeError\FunctionVarNotSet.hopl">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	  <None Update="InternalTests\RuntimeError\IndexOutOfRangeHigh.hopl">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	  <None Update="InternalTests\RuntimeError\IndexOutOfRangeLow.hopl">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
 	  <None Update="InternalTests\TypeError\Arguments.hopl">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </None>

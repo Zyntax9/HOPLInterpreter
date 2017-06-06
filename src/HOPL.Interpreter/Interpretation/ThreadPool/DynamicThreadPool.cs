@@ -17,9 +17,9 @@ namespace HOPL.Interpreter.Interpretation.ThreadPool
 
         private LinkedList<Task> pool = new LinkedList<Task>();
 
-		public event RuntimeErrorEventHandler RuntimeErrorEvent;
+        public RuntimeErrorEventHandler RuntimeErrorHandler { get; set; }
 
-		public DynamicThreadPool()
+        public DynamicThreadPool()
         {
             cancelSource = new CancellationTokenSource();
             cancelToken = cancelSource.Token;
@@ -33,15 +33,17 @@ namespace HOPL.Interpreter.Interpretation.ThreadPool
 			try
 			{
 				executor.ExecuteHandler(tcontext.Handler.Handler.Context);
-			}
-			catch (RuntimeErrorException e)
-			{
-				RuntimeErrorEvent?.Invoke(this, (RuntimeError)e.Errors.First());
-			}
-			catch (ExecutorInterruptException) { }
-
-			lock (pool)
-				pool.Remove(tcontext.ThreadNode);
+            }
+            catch (RuntimeErrorException e)
+            {
+                RuntimeErrorHandler(this, (RuntimeError)e.Errors.FirstOrDefault());
+            }
+            catch (ExecutorInterruptException) { }
+            finally
+            {
+                lock (pool)
+                    pool.Remove(tcontext.ThreadNode);
+            }
 		}
 
 		public void QueueHandler(HandlerContext context)

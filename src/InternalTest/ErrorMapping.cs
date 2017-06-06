@@ -23,7 +23,7 @@ namespace InternalTest
 
     public static class ErrorMapping
     {
-        public static ErroneousFile[] ErrorFiles { get; set; } =
+        public static ErroneousFile[] PreprocessingErrorFiles { get; set; } =
         {
             new ErroneousFile()
             {
@@ -607,6 +607,46 @@ namespace InternalTest
                     new ExpectedError() { ErrorCode = 4, Line = 0 },
                 }
             },
+        };
+
+        public static ErroneousFile[] RuntimeErrorFiles { get; set; } =
+        {
+            new ErroneousFile()
+            {
+                File = "./InternalTests/RuntimeError/FunctionVarNotSet.hopl",
+                ErrorType = "Runtime Errors",
+                ExpectedErrors = new ExpectedError[]
+                {
+                    new ExpectedError() { ErrorCode = 1, Line = 8 },
+                }
+            },
+            new ErroneousFile()
+            {
+                File = "./InternalTests/RuntimeError/IndexOutOfRangeHigh.hopl",
+                ErrorType = "Runtime Errors",
+                ExpectedErrors = new ExpectedError[]
+                {
+                    new ExpectedError() { ErrorCode = 2, Line = 8 },
+                }
+            },
+            new ErroneousFile()
+            {
+                File = "./InternalTests/RuntimeError/IndexOutOfRangeLow.hopl",
+                ErrorType = "Runtime Errors",
+                ExpectedErrors = new ExpectedError[]
+                {
+                    new ExpectedError() { ErrorCode = 2, Line = 8 },
+                }
+            },
+            new ErroneousFile()
+            {
+                File = "./InternalTests/RuntimeError/DivisionByZero.hopl",
+                ErrorType = "Runtime Errors",
+                ExpectedErrors = new ExpectedError[]
+                {
+                    new ExpectedError() { ErrorCode = 3, Line = 7 },
+                }
+            }
         };
     }
 }

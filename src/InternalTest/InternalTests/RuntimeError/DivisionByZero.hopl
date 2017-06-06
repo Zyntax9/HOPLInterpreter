@@ -1,0 +1,9 @@
+﻿import UTest;
+
+namespace DivisionByZero
+{
+	handle UTest.RunTests()
+	{
+		float a = 22.1 / 0.0;
+	}
+}

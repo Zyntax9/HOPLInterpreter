@@ -185,7 +185,7 @@ namespace HOPL.Interpreter.Interpretation
 		{
 			int indexVal = (int)index.Value;
 
-			if (indexVal < 0 || indexVal > val.Count)
+			if (indexVal < 0 || indexVal >= val.Count)
 			{
 				RuntimeError error = new RuntimeError(RuntimeErrorMessage.INDEX_OUT, context, currentFile);
 				throw new RuntimeErrorException(error);
@@ -430,7 +430,7 @@ namespace HOPL.Interpreter.Interpretation
 
 				if (function == null)
 				{
-					RuntimeError error = new RuntimeError(RuntimeErrorMessage.FUNC_UNINIT, context, function.File);
+					RuntimeError error = new RuntimeError(RuntimeErrorMessage.FUNC_UNINIT, context, currentFile);
 					throw new RuntimeErrorException(error);
 				}
 
@@ -811,7 +811,15 @@ namespace HOPL.Interpreter.Interpretation
 				case Parser.MULT:
 					return left * right;
 				case Parser.DIV:
-					return left / right;
+                    try
+                    {
+                        return left / right;
+                    }
+                    catch (DivideByZeroException)
+                    {
+                        RuntimeError error = new RuntimeError(RuntimeErrorMessage.DIV_ZERO, context, currentFile);
+                        throw new RuntimeErrorException(error);
+                    }
 				default:
 					throw new InvalidOperationException();
 			}

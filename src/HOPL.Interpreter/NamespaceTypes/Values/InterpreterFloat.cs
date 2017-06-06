@@ -31,9 +31,13 @@ namespace HOPL.Interpreter.NamespaceTypes.Values
 
 		protected override InterpreterValue Divide(InterpreterValue other)
 		{
-			if (other.Value is int)
-				return new InterpreterFloat(value / Convert.ToSingle((int)other.Value));
-			return new InterpreterFloat(value / (float)other.Value);
+            float otherValue = other.Value is int ? 
+                Convert.ToSingle((int)other.Value) : (float)other.Value;
+
+            if (otherValue == 0.0)
+                throw new DivideByZeroException();
+
+			return new InterpreterFloat(value / otherValue);
 		}
 
 		protected override InterpreterValue Negate()
