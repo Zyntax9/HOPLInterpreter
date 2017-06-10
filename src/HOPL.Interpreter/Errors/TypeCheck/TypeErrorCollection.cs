@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using Antlr4.Runtime;
 
 namespace HOPL.Interpreter.Errors.TypeCheck
 {
-	public class TypeErrorCollection : List<TypeError>
+    public class TypeErrorCollection : List<TypeError>
 	{
 		public TypeErrorCollection() : base() { }
 

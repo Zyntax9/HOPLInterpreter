@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using Antlr4.Runtime.Misc;
 using Parser = HOPL.Grammar.HOPLGrammarParser;
 using HOPL.Interpreter.NamespaceTypes;
@@ -9,7 +6,7 @@ using Antlr4.Runtime;
 
 namespace HOPL.Interpreter.Exploration
 {
-	public class VariableDependencyExplorer : DependencyExplorer
+    public class VariableDependencyExplorer : DependencyExplorer
 	{
 		public VariableDependencyExplorer(ImportAccessTable accessTable, string filename, NamespaceString @namespace)
 			: base(accessTable, filename, @namespace)

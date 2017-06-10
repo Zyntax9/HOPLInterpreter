@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace HOPL.Interpreter.Errors.Preparation
+﻿namespace HOPL.Interpreter.Errors.Preparation
 {
-	public class PrepareError : IError
+    public class PrepareError : IError
 	{
 		public PrepareErrorMessage Message { get; protected set; }
 		public string Info { get; protected set; }

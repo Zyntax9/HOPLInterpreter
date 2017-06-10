@@ -1,12 +1,9 @@
 ﻿using HOPL.Interpreter.Exceptions;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace HOPL.Interpreter.Exploration
 {
-	public class DependencyGraph
+    public class DependencyGraph
 	{
 		public enum Color { WHITE, GRAY, BLACK }
 

@@ -5,11 +5,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Api = HOPL.Interpreter.Api;
 
 namespace HOPL.Interpreter.Interpretation.ThreadPool
 {
-	public class DynamicThreadPool : IThreadPool
+    public class DynamicThreadPool : IThreadPool
     {
         private CancellationTokenSource cancelSource;
         private CancellationToken cancelToken;

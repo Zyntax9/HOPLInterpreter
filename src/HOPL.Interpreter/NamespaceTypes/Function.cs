@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Antlr4.Runtime.Tree;
-using Parser = HOPL.Grammar.HOPLGrammarParser;
+﻿using Parser = HOPL.Grammar.HOPLGrammarParser;
 
 namespace HOPL.Interpreter.NamespaceTypes
 {
-	public class Function : IFunction
+    public class Function : IFunction
 	{
 		public string Name { get; protected set; }
 		public string File { get; protected set; }

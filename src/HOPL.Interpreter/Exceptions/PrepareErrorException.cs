@@ -1,11 +1,10 @@
-﻿using System;
-using HOPL.Interpreter.Errors.Preparation;
+﻿using HOPL.Interpreter.Errors.Preparation;
 using System.Collections.Generic;
 using HOPL.Interpreter.Errors;
 
 namespace HOPL.Interpreter.Exceptions
 {
-	public class PrepareErrorException : ErrorException
+    public class PrepareErrorException : ErrorException
 	{
 		private PrepareError error;
 		public override IEnumerable<IError> Errors { get { return new PrepareError[] { error }; } }

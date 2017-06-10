@@ -5,11 +5,10 @@ using HOPL.Grammar;
 using Parser = HOPL.Grammar.HOPLGrammarParser;
 using HOPL.Interpreter.NamespaceTypes;
 using HOPL.Interpreter.Errors.Exploration;
-using System;
 
 namespace HOPL.Interpreter.Exploration
 {
-	public class Explorer : HOPLGrammarBaseListener
+    public class Explorer : HOPLGrammarBaseListener
 	{
 		public NamespaceSet Namespaces { get; protected set; } = new NamespaceSet();
 		// Filename -many-> Import namespace access

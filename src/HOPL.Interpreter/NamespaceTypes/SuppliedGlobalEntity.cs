@@ -1,16 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Reflection;
 using HOPL.Interpreter.Api.Attributes;
-using HOPL.Interpreter.Api;
 using HOPL.Interpreter.NamespaceTypes.Values;
 using HOPL.Grammar;
 
 namespace HOPL.Interpreter.NamespaceTypes
 {
-	public class SuppliedGlobalEntity : IGlobalEntity
+    public class SuppliedGlobalEntity : IGlobalEntity
 	{
 		public bool Constant { get { return true; } }
 		public bool Required { get { return false; } }

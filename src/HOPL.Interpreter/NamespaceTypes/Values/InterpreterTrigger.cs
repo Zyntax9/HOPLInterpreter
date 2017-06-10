@@ -1,10 +1,9 @@
 ﻿using HOPL.Interpreter.Interpretation;
 using System;
-using Api = HOPL.Interpreter.Api;
 
 namespace HOPL.Interpreter.NamespaceTypes.Values
 {
-	public class InterpreterTrigger : InterpreterValue<Api.SuppliedTrigger>, IInterpreterTriggerable
+    public class InterpreterTrigger : InterpreterValue<Api.SuppliedTrigger>, IInterpreterTriggerable
 	{
 		public override object Value
 		{

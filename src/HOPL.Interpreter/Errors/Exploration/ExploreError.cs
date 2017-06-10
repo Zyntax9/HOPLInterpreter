@@ -1,12 +1,8 @@
 ﻿using Antlr4.Runtime;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace HOPL.Interpreter.Errors.Exploration
 {
-	public class ExploreError : IError
+    public class ExploreError : IError
 	{
 		public ExploreErrorMessage Message { get; protected set; }
 		public int LineNumber { get; protected set; }

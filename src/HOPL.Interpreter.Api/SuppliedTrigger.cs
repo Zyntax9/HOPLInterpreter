@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Reflection;
-
-namespace HOPL.Interpreter.Api
+﻿namespace HOPL.Interpreter.Api
 {
-	public delegate void TriggerEventHandler(object sender, object[] arguments, bool triggeredInternal);
+    public delegate void TriggerEventHandler(object sender, object[] arguments, bool triggeredInternal);
 
 	public class SuppliedTrigger
 	{

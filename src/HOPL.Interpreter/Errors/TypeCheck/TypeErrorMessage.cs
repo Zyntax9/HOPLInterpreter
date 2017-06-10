@@ -18,7 +18,7 @@
 		public static readonly TypeErrorMessage ASSIGN_MISMATCH = new TypeErrorMessage(7, "Variable type does not match the assigned value type.");
 		public static readonly TypeErrorMessage CALL_ARGMISMATCH = new TypeErrorMessage(8, "Argument type does not match the correct type.");
 		public static readonly TypeErrorMessage CALLABLE_NOTCALLABLE = new TypeErrorMessage(10, "Token is not a callable entity.");
-		public static readonly TypeErrorMessage COMPEXPR_MISMATCH = new TypeErrorMessage(11, "Both sides must either be of same type or be a combination of int and float.");
+		public static readonly TypeErrorMessage COMPEXPR_MISMATCH = new TypeErrorMessage(11, "Both sides must either both be string, int, float, or be a combination of int and float.");
 		public static readonly TypeErrorMessage HANDLERDEC_NOTTRIGGER = new TypeErrorMessage(12, "Token is not a trigger.");
 		public static readonly TypeErrorMessage HANDLERDEC_ARGMISMATCH = new TypeErrorMessage(13, "Handler variables must have the same type as those defined by the trigger.");
 		public static readonly TypeErrorMessage NEG_NUMMISMATCH = new TypeErrorMessage(16, "Negated expression must be numerical.");

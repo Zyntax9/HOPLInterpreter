@@ -1,10 +1,9 @@
 ﻿using HOPL.Interpreter.NamespaceTypes;
-using System;
 using System.Collections.Generic;
 
 namespace HOPL.Interpreter.Exploration
 {
-	public class ImportAccessTable : Dictionary<string, HashSet<Import>>
+    public class ImportAccessTable : Dictionary<string, HashSet<Import>>
 	{
 		public ImportAccessTable() : base() { }
 

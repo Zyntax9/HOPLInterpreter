@@ -1,9 +1,8 @@
-﻿using System;
-using Antlr4.Runtime;
+﻿using Antlr4.Runtime;
 
 namespace HOPL.Interpreter.Errors.Parsing
 {
-	public class ParsingError : IError
+    public class ParsingError : IError
 	{
 		public string Message { get; protected set; }
 		public IToken Token { get; protected set; }

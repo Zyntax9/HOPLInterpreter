@@ -1,12 +1,9 @@
 ﻿using HOPL.Interpreter.Exceptions;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace HOPL.Interpreter.NamespaceTypes
 {
-	public abstract class Scope<T>
+    public abstract class Scope<T>
 	{
 		public int Depth { get; protected set; } = 0;
 		public Namespace TopNamespace { get; protected set; }

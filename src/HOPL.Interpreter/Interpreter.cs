@@ -13,11 +13,10 @@ using HOPL.Interpreter.Errors.Preparation;
 using HOPL.Interpreter.Interpretation.ThreadPool;
 using HOPL.Interpreter.Interpretation;
 using HOPL.Interpreter.NamespaceTypes.Values;
-using Api = HOPL.Interpreter.Api;
 
 namespace HOPL.Interpreter
 {
-	public class Interpreter
+    public class Interpreter
 	{
 		public Interpreter()
 		{ }

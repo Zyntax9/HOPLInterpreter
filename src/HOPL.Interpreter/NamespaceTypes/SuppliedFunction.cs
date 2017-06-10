@@ -1,13 +1,9 @@
 ﻿using HOPL.Interpreter.Api.Attributes;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Threading.Tasks;
 
 namespace HOPL.Interpreter.NamespaceTypes
 {
-	public class SuppliedFunction : IFunction
+    public class SuppliedFunction : IFunction
 	{
 		public string Name { get; protected set; }
 		public string File { get { return "External"; } }

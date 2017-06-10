@@ -1,13 +1,6 @@
-﻿using HOPL.Interpreter.Errors.Runtime;
-using HOPL.Interpreter.Exceptions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace HOPL.Interpreter.NamespaceTypes.Values
+﻿namespace HOPL.Interpreter.NamespaceTypes.Values
 {
-	public class InterpreterInt : InterpreterValue<int>
+    public class InterpreterInt : InterpreterValue<int>
 	{
 		public InterpreterInt() : base(0) { }
 

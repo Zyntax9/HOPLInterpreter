@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Antlr4.Runtime.Misc;
+﻿using Antlr4.Runtime.Misc;
 using Parser = HOPL.Grammar.HOPLGrammarParser;
 using HOPL.Grammar;
 
 namespace HOPL.Interpreter.Exploration
 {
-	public class ReturnChecker : HOPLGrammarBaseVisitor<bool>
+    public class ReturnChecker : HOPLGrammarBaseVisitor<bool>
 	{
 		public bool Check(Parser.FunctionDecContext context)
 		{

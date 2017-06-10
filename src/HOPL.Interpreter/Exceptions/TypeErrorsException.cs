@@ -1,14 +1,10 @@
-﻿using HOPL.Interpreter.TypeCheck;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using HOPL.Interpreter.Errors.TypeCheck;
 using HOPL.Interpreter.Errors;
 
 namespace HOPL.Interpreter.Exceptions
 {
-	public class TypeErrorsException : ErrorException
+    public class TypeErrorsException : ErrorException
 	{
 		private TypeErrorCollection errors;
 		public override IEnumerable<IError> Errors { get { return errors; } }

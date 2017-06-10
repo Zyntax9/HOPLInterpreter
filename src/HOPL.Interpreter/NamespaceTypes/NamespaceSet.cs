@@ -1,8 +1,6 @@
 ﻿using HOPL.Interpreter.Exceptions;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Reflection;
 using Parser = HOPL.Grammar.HOPLGrammarParser;
 using HOPL.Interpreter.Api.Attributes;
@@ -11,7 +9,7 @@ using System.Collections;
 
 namespace HOPL.Interpreter.NamespaceTypes
 {
-	public class NamespaceSet : IEnumerable<KeyValuePair<string, Namespace>>
+    public class NamespaceSet : IEnumerable<KeyValuePair<string, Namespace>>
 	{
 		private Dictionary<string, Namespace> namespaces = new Dictionary<string, Namespace>();
 		public Namespace this[string namespaceID] { get { return Get(namespaceID); } }

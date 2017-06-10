@@ -1,11 +1,10 @@
 ﻿using HOPL.Interpreter.Errors;
 using HOPL.Interpreter.Errors.Parsing;
-using System;
 using System.Collections.Generic;
 
 namespace HOPL.Interpreter.Exceptions
 {
-	public class ParsingErrorsException : ErrorException
+    public class ParsingErrorsException : ErrorException
 	{
 		private IEnumerable<ParsingError> errors;
 		public override IEnumerable<IError> Errors { get { return errors; } }

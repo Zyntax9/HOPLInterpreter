@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using System.IO;
 using HOPL.Interpreter.Api.Attributes;
 using HOPL.Interpreter.Api;
 using System.Threading;
-using System.Diagnostics;
 using Xunit.Abstractions;
 
 namespace InternalTest

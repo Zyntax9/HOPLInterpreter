@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Antlr4.Runtime.Misc;
 using Parser = HOPL.Grammar.HOPLGrammarParser;
 using HOPL.Interpreter.NamespaceTypes;
@@ -7,7 +6,7 @@ using Antlr4.Runtime;
 
 namespace HOPL.Interpreter.Exploration
 {
-	public class FunctionDependencyExplorer : DependencyExplorer
+    public class FunctionDependencyExplorer : DependencyExplorer
 	{
 		private Stack<HashSet<string>> scope = new Stack<HashSet<string>>();
 

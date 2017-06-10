@@ -2,12 +2,11 @@
 using System;
 using System.Collections;
 using System.Reflection;
-using Api = HOPL.Interpreter.Api;
 using Parser = HOPL.Grammar.HOPLGrammarParser;
 
 namespace HOPL.Interpreter.NamespaceTypes.Values
 {
-	public abstract class InterpreterValue
+    public abstract class InterpreterValue
 	{
 		public virtual object Value { get; }
 

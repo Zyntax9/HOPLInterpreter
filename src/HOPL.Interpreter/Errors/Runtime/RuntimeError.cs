@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Antlr4.Runtime;
+﻿using Antlr4.Runtime;
 
 namespace HOPL.Interpreter.Errors.Runtime
 {
-	public class RuntimeError : IError
+    public class RuntimeError : IError
 	{
 		public RuntimeErrorMessage Message { get; protected set; }
 		public int LineNumber { get; protected set; }

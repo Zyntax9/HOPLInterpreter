@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace HOPL.Interpreter.Errors.Runtime
+﻿namespace HOPL.Interpreter.Errors.Runtime
 {
-	public class RuntimeErrorMessage
+    public class RuntimeErrorMessage
 	{
 		public readonly int id;
 		public readonly string message;

@@ -1,10 +1,8 @@
-﻿using HOPL.Interpreter.Exceptions;
-using HOPL.Interpreter.NamespaceTypes;
-using System.Collections.Generic;
+﻿using HOPL.Interpreter.NamespaceTypes;
 
 namespace HOPL.Interpreter.TypeCheck
 {
-	public class TypeScope : Scope<InterpreterType>
+    public class TypeScope : Scope<InterpreterType>
 	{
 		public TypeScope(Namespace topNamespace) : base(topNamespace) { }
 

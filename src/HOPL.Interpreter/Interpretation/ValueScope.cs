@@ -1,13 +1,9 @@
 ﻿using HOPL.Interpreter.NamespaceTypes;
 using HOPL.Interpreter.NamespaceTypes.Values;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace HOPL.Interpreter.Interpretation
 {
-	public class ValueScope : Scope<InterpreterValue>
+    public class ValueScope : Scope<InterpreterValue>
 	{
 		public ValueScope(Namespace topNamespace) : base(topNamespace) { }
 

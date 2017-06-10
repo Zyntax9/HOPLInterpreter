@@ -1,15 +1,10 @@
-﻿using HOPL.Interpreter.Exploration;
-using HOPL.Interpreter.TypeCheck;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using HOPL.Interpreter.TypeCheck;
 using System.Reflection;
-using System.Threading.Tasks;
 using Parser = HOPL.Grammar.HOPLGrammarParser;
 
 namespace HOPL.Interpreter.NamespaceTypes
 {
-	public class Argument
+    public class Argument
 	{
 		public string Name { get; protected set; }
 		public InterpreterType Type { get; protected set; }

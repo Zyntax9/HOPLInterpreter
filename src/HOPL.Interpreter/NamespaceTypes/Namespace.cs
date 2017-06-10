@@ -4,14 +4,12 @@ using HOPL.Interpreter.NamespaceTypes.Values;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
-using System.Threading.Tasks;
 using Parser = HOPL.Grammar.HOPLGrammarParser;
 using System.Collections;
 
 namespace HOPL.Interpreter.NamespaceTypes
 {
-	public class Namespace : IEnumerable<KeyValuePair<string, IGlobalEntity>>
+    public class Namespace : IEnumerable<KeyValuePair<string, IGlobalEntity>>
 	{
 		private const char SEPERATOR = '.';
 

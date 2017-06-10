@@ -1,13 +1,10 @@
-﻿using Api = HOPL.Interpreter.Api;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace HOPL.Interpreter.Interpretation.ThreadPool
 {
-	public delegate void ReadyEventHandler(AwaitingThread waiter);
+    public delegate void ReadyEventHandler(AwaitingThread waiter);
 
     public class AwaitingThread
     {

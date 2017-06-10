@@ -361,7 +361,10 @@ namespace HOPL.Interpreter.TypeCheck
 
 			if (!(left == InterpreterType.FLOAT && right == InterpreterType.INT ||
 				 left == InterpreterType.INT && right == InterpreterType.FLOAT ||
-				 left == right))
+				 left == right && 
+                 (left.TypeOf == InterpreterType.Types.INT ||
+                  left.TypeOf == InterpreterType.Types.STRING ||
+                  left.TypeOf == InterpreterType.Types.FLOAT)))
 				return RaiseError(TypeErrorMessage.COMPEXPR_MISMATCH, context);
 
 			return InterpreterType.BOOL;

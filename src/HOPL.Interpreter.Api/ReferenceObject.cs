@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace HOPL.Interpreter.Api
+﻿namespace HOPL.Interpreter.Api
 {
     public class ReferenceObject
     {

@@ -1,14 +1,12 @@
-﻿using Api = HOPL.Interpreter.Api;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
-using System.Linq;
 using HOPL.Interpreter.Interpretation;
 using System;
 
 namespace HOPL.Interpreter.NamespaceTypes.Values
 {
-	public class InterpreterList : InterpreterValue<List<InterpreterValue>>, IInterpreterTriggerable
+    public class InterpreterList : InterpreterValue<List<InterpreterValue>>, IInterpreterTriggerable
 	{
 		private Lock eventLock = new Lock();
 		private event Api.TriggerEventHandler triggerFire;

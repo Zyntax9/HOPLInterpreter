@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace HOPL.Interpreter.NamespaceTypes.Values
+﻿namespace HOPL.Interpreter.NamespaceTypes.Values
 {
-	public class InterpreterString : InterpreterValue<string>
+    public class InterpreterString : InterpreterValue<string>
 	{
 		public InterpreterString() : base("") { }
 

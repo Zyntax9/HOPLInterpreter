@@ -1,16 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Reflection;
 using System.Collections;
 using HOPL.Interpreter.Exceptions;
-using Api = HOPL.Interpreter.Api;
 
 namespace HOPL.Interpreter.NamespaceTypes
 {
 
-	public class InterpreterType
+    public class InterpreterType
 	{
 		public enum Types { NONE, INT, FLOAT, STRING, BOOL, LIST, TUPLE, TRIGGER, FUNCTION, IGNORE, ERROR };
 

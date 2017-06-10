@@ -22,7 +22,7 @@
 
   <ItemGroup>
     <PackageReference Include="Antlr4" Version="4.6.1-beta002" />
-    <PackageReference Include="HOPL.Grammar" Version="1.0.0-build10015" />
+    <PackageReference Include="HOPL.Grammar" Version="1.0.0-build10016" />
   </ItemGroup>
 
 </Project>
